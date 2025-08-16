@@ -1688,4 +1688,64 @@ namespace TravelingSalesman.Core
         }
     }
 }
-PS C:\code\TSP>
+PS C:\code\TSP> Set-Location "C:\code\tsp"; git status; git remote show origin; git clean -dfx; tree /F; Set-Location "C:\code\TSP\TravelingSalesman.ConsoleApp\"; dotnet run
+On branch master
+Your branch is ahead of 'origin/master' by 5 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+* remote origin
+  Fetch URL: git@github.com:kusl/tsp.git
+  Push  URL: git@github.com:kusl/tsp.git
+  HEAD branch: master
+  Remote branch:
+    master tracked
+  Local branch configured for 'git pull':
+    master merges with remote master
+  Local ref configured for 'git push':
+    master pushes to master (fast-forwardable)
+Folder PATH listing
+Volume serial number is BE05-6605
+C:.
+│   .dockerignore
+│   .gitattributes
+│   .gitignore
+│   Directory.Build.props
+│   Dockerfile
+│   LICENSE.txt
+│   README.md
+│   TSP.sln
+│
+├───.github
+│   └───workflows
+│           build.yml
+│           release.yml
+│
+├───scripts
+│       cat.ps1
+│       PowerShell.txt
+│
+├───TravelingSalesman.ConsoleApp
+│   │   Program.cs
+│   │   TravelingSalesman.ConsoleApp.csproj
+│   │
+│   └───Properties
+│           launchSettings.json
+│
+└───TravelingSalesman.Core
+        TravelingSalesman.Core.csproj
+        TravelingSalesmanLibrary.cs
+
+Using launch settings from C:\code\TSP\TravelingSalesman.ConsoleApp\Properties\launchSettings.json...
+Restore complete (1.6s)
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+  TravelingSalesman.Core failed with 4 error(s) (0.9s)
+    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(516,34): error CS1519: Invalid token '`' in a member declaration
+    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(516,34): error CS1056: Unexpected character '`'
+    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(528,47): error CS1519: Invalid token '`' in a member declaration
+    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(528,47): error CS1056: Unexpected character '`'
+
+Build failed with 4 error(s) in 4.1s
+
+The build failed. Fix the build errors and run again.
+PS C:\code\TSP\TravelingSalesman.ConsoleApp>
