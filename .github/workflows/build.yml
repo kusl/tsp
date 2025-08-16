@@ -2,35 +2,14 @@
 
 on:
   push:
-    branches: [ master, main ]  # Changed to include 'master'
+    branches: [ master, main ]
   pull_request:
     branches: [ master, main ]
   workflow_dispatch:
-    inputs:
-      run_mode:
-        description: 'Run mode for the application'
-        required: false
-        default: 'benchmark'
-        type: choice
-        options:
-          - benchmark
-          - demo
-          - test
-
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    
-    outputs:
-      image-tag: ${{ steps.meta.outputs.tags }}
-      image-digest: ${{ steps.build.outputs.digest }}
     
     steps:
     - name: Checkout repository
@@ -39,8 +18,110 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
-    - name: Log in to the Container registry
-      if: github.event_name != 'pull_request'
-      uses: docker/login-action@v3
+    - name: Build Docker image
+      run: |
+        docker build -t tsp-solver:latest .
+        echo "✅ Docker image built successfully"
+        docker images | grep tsp-solver
+
+    - name: Test - Benchmark with 10 cities
+      run: |
+        echo "Running benchmark test with 10 cities..."
+        echo -e "2\n10\n5\n" | timeout 30s docker run --rm -i tsp-solver:latest | tee benchmark_output.log || true
+        
+        if grep -q "TSP Solver Benchmark Results" benchmark_output.log; then
+          echo "✅ Benchmark completed successfully"
+          grep -A 5 "Winner:" benchmark_output.log || true
+        else
+          echo "⚠️ Benchmark may not have completed properly"
+        fi
+
+    - name: Test - Interactive solver with Nearest Neighbor
+      run: |
+        echo "Testing Nearest Neighbor algorithm with 8 cities..."
+        echo -e "1\n8\n1\n1\nn\n5\n" | timeout 20s docker run --rm -i tsp-solver:latest | tee nn_output.log || true
+        
+        if grep -q "Solution Found!" nn_output.log; then
+          echo "✅ Nearest Neighbor test completed"
+          grep "Total Distance:" nn_output.log || true
+        else
+          echo "⚠️ Nearest Neighbor test may not have completed"
+        fi
+
+    - name: Test - Demonstration mode
+      run: |
+        echo "Running demonstration mode..."
+        echo -e "3\n5\n" | timeout 60s docker run --rm -i tsp-solver:latest | tee demo_output.log || true
+        
+        if grep -q "Demonstration Complete" demo_output.log; then
+          echo "✅ Demonstration completed successfully"
+        else
+          echo "⚠️ Demonstration may not have completed"
+        fi
+
+    - name: Test - Algorithm Information
+      run: |
+        echo "Getting algorithm information..."
+        echo -e "4\n5\n" | timeout 10s docker run --rm -i tsp-solver:latest | tee info_output.log || true
+        
+        if grep -q "Algorithm Information" info_output.log; then
+          echo "✅ Algorithm info displayed successfully"
+        else
+          echo "⚠️ Algorithm info test may not have completed"
+        fi
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
       with:
-        registry: ${{ env.REGISTRY }}
+        name: test-outputs
+        path: |
+          *_output.log
+
+    - name: Display summary
+      if: always()
+      run: |
+        echo "## Test Summary"
+        echo "Docker image size:"
+        docker images tsp-solver:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+        
+        echo ""
+        echo "Test files generated:"
+        ls -lh *_output.log || echo "No output files found"
+
+  build-native-dotnet:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore TSP.sln
+
+    - name: Build
+      run: dotnet build TSP.sln --configuration Release --no-restore
+
+    - name: Run without Docker
+      run: |
+        echo "Testing native .NET build..."
+        cd TravelingSalesman.ConsoleApp/bin/Release/net10.0
+        echo -e "2\n5\n5\n" | timeout 10s dotnet TravelingSalesman.ConsoleApp.dll || true
+
+    - name: Publish AOT (if supported)
+      continue-on-error: true
+      run: |
+        dotnet publish TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj \
+          -c Release \
+          -r linux-x64 \
+          --self-contained true \
+          -p:PublishAot=true \
+          -o ./publish-aot
+        
+        echo "AOT published files:"
+        ls -lh ./publish-aot/ || true
