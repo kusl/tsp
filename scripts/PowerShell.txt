@@ -1,8 +1,7 @@
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is ahead of 'origin/master' by 12 commits.
-  (use "git push" to publish your local commits)
+Your branch is up to date with 'origin/master'.
 
 nothing to commit, working tree clean
 * remote origin
@@ -14,12 +13,7 @@ nothing to commit, working tree clean
   Local branch configured for 'git pull':
     master merges with remote master
   Local ref configured for 'git push':
-    master pushes to master (fast-forwardable)
-Removing TravelingSalesman.ConsoleApp/bin/
-Removing TravelingSalesman.ConsoleApp/logs/
-Removing TravelingSalesman.ConsoleApp/obj/
-Removing TravelingSalesman.Core/bin/
-Removing TravelingSalesman.Core/obj/
+    master pushes to master (up to date)
 Folder PATH listing
 Volume serial number is BE05-6605
 C:.
@@ -2032,4 +2026,4 @@ namespace TravelingSalesman.Core
         }
     }
 }
-PS C:\code\TSP>
+PS C:\code\TSP> C:\code\TSP\scripts\cat.ps1
