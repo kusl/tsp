@@ -21,7 +21,7 @@ namespace TravelingSalesman.ConsoleApp
 
         static async Task Main(string[] args)
         {
-            Console.Title = "Traveling Salesman Problem Solver";
+            // Don't set Console.Title - it's intrusive
             PrintHeader();
 
             try
@@ -56,6 +56,7 @@ namespace TravelingSalesman.ConsoleApp
                     {
                         Console.WriteLine("\nPress any key to return to main menu...");
                         Console.ReadKey();
+                        Console.WriteLine(); // Add newline after keypress
                     }
                 }
             }
@@ -69,21 +70,17 @@ namespace TravelingSalesman.ConsoleApp
 
         static void PrintHeader()
         {
-            Console.Clear();
+            Console.WriteLine(); // Space from previous output
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine(@"
-╔═══════════════════════════════════════════════════════════════╗
-║          TRAVELING SALESMAN PROBLEM SOLVER v1.0              ║
-║                  .NET 9 Implementation                        ║
-╚═══════════════════════════════════════════════════════════════╝");
+            Console.WriteLine("╔═══════════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║          TRAVELING SALESMAN PROBLEM SOLVER v1.0              ║");
+            Console.WriteLine("║                  .NET 9 Implementation                        ║");
+            Console.WriteLine("╚═══════════════════════════════════════════════════════════════╝");
             Console.ResetColor();
         }
 
         static int ShowMainMenu()
         {
-            Console.Clear();
-            PrintHeader();
-
             Console.WriteLine("\n📍 Main Menu:\n");
             Console.WriteLine("  1. Interactive Solver - Solve custom TSP instances");
             Console.WriteLine("  2. Algorithm Benchmark - Compare all algorithms");
@@ -103,7 +100,6 @@ namespace TravelingSalesman.ConsoleApp
 
         static async Task RunInteractiveSolver()
         {
-            Console.Clear();
             PrintSectionHeader("Interactive TSP Solver");
 
             // Get number of cities
@@ -171,11 +167,14 @@ namespace TravelingSalesman.ConsoleApp
 
             Console.WriteLine($"\n🔄 Running {solver.Name} algorithm...\n");
 
-            // Setup progress reporting
-            var progressBar = new ProgressBar();
+            // Setup progress reporting - use simple dots instead of overwriting
+            var progressCount = 0;
             solver.ProgressChanged += (s, e) =>
             {
-                progressBar.Update(e.Message, e.CurrentBestDistance);
+                if (progressCount++ % 10 == 0)
+                {
+                    Console.Write(".");
+                }
             };
 
             // Solve
@@ -222,7 +221,6 @@ namespace TravelingSalesman.ConsoleApp
 
         static async Task RunBenchmark()
         {
-            Console.Clear();
             PrintSectionHeader("Algorithm Benchmark");
 
             Console.Write("\nNumber of cities for benchmark (10-30): ");
@@ -241,23 +239,9 @@ namespace TravelingSalesman.ConsoleApp
             var benchmark = new TspBenchmark();
             var solvers = TspSolverFactory.CreateAllSolvers();
 
-            var cts = new CancellationTokenSource();
-            var progressTask = Task.Run(async () =>
-            {
-                var spinner = new[] { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" };
-                var i = 0;
-                while (!cts.Token.IsCancellationRequested)
-                {
-                    Console.Write($"\r{spinner[i++ % spinner.Length]} Processing...");
-                    await Task.Delay(100);
-                }
-            });
-
+            Console.Write("Processing: ");
             var results = await benchmark.RunBenchmarkAsync(cities, solvers);
-
-            cts.Cancel();
-            await progressTask;
-            Console.Write("\r" + new string(' ', 20) + "\r");
+            Console.WriteLine(" Done!");
 
             Console.WriteLine(benchmark.FormatResults(results));
 
@@ -301,7 +285,6 @@ namespace TravelingSalesman.ConsoleApp
 
         static async Task RunDemonstration()
         {
-            Console.Clear();
             PrintSectionHeader("Visual Algorithm Demonstration");
 
             Console.WriteLine("\nThis demonstration will show how different algorithms");
@@ -319,6 +302,7 @@ namespace TravelingSalesman.ConsoleApp
 
             Console.WriteLine("\nPress any key to start the demonstration...");
             Console.ReadKey();
+            Console.WriteLine(); // Add newline after keypress
 
             // Demonstrate each algorithm
             var algorithms = new (string name, ITspSolver solver)[]
@@ -331,7 +315,7 @@ namespace TravelingSalesman.ConsoleApp
 
             foreach (var (name, solver) in algorithms)
             {
-                Console.Clear();
+                Console.WriteLine("\n" + new string('─', 60));
                 PrintSectionHeader($"Algorithm: {name}");
 
                 Console.WriteLine($"\n🔄 Running {name}...\n");
@@ -344,24 +328,23 @@ namespace TravelingSalesman.ConsoleApp
 
                 var tour = await solver.SolveAsync(cities);
 
-                // Display progress
+                // Display progress summary (not all iterations)
                 if (iterations.Count > 0)
                 {
-                    Console.WriteLine("Algorithm Progress:");
+                    Console.WriteLine("Algorithm Progress Summary:");
                     Console.WriteLine(new string('-', 50));
 
-                    var displayCount = Math.Min(10, iterations.Count);
-                    var step = Math.Max(1, iterations.Count / displayCount);
+                    var first = iterations.First();
+                    var last = iterations.Last();
+                    var best = iterations.MinBy(i => i.distance);
 
-                    for (int i = 0; i < iterations.Count; i += step)
+                    Console.WriteLine($"  Initial: Distance = {first.distance:F2}");
+                    if (iterations.Count > 2)
                     {
-                        var iter = iterations[i];
-                        Console.WriteLine($"  Step {iter.iteration}: Distance = {iter.distance:F2}");
-                        if (!string.IsNullOrEmpty(iter.message) && iter.message.Length < 50)
-                        {
-                            Console.WriteLine($"         {iter.message}");
-                        }
+                        Console.WriteLine($"  Best:    Distance = {best.distance:F2} (at iteration {best.iteration})");
                     }
+                    Console.WriteLine($"  Final:   Distance = {last.distance:F2}");
+                    Console.WriteLine($"  Total iterations: {iterations.Count}");
                 }
 
                 Console.WriteLine(new string('-', 50));
@@ -371,18 +354,20 @@ namespace TravelingSalesman.ConsoleApp
 
                 DrawSimpleVisualization(tour);
 
-                Console.WriteLine("\nPress any key for next algorithm...");
-                Console.ReadKey();
+                if (algorithms.Last() != (name, solver))
+                {
+                    Console.WriteLine("\nPress any key for next algorithm...");
+                    Console.ReadKey();
+                    Console.WriteLine(); // Add newline after keypress
+                }
             }
 
-            Console.Clear();
-            PrintSectionHeader("Demonstration Complete");
-            Console.WriteLine("\nAll algorithms have been demonstrated!");
+            Console.WriteLine("\n" + new string('═', 60));
+            Console.WriteLine("Demonstration Complete! All algorithms have been demonstrated.");
         }
 
         static void ShowAlgorithmInfo()
         {
-            Console.Clear();
             PrintSectionHeader("Algorithm Information");
 
             var info = new Dictionary<string, (string complexity, string pros, string cons, string description)>
@@ -515,23 +500,6 @@ namespace TravelingSalesman.ConsoleApp
             return ConsoleColor.Red;
         }
 
-        class ProgressBar
-        {
-            private int _lastLength = 0;
-
-            public void Update(string message, double currentBest)
-            {
-                var output = $"  {message} | Best: {currentBest:F2}";
-
-                // Clear previous line
-                Console.Write("\r" + new string(' ', _lastLength) + "\r");
-
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.Write(output);
-                Console.ResetColor();
-
-                _lastLength = output.Length;
-            }
-        }
+        // Removed ProgressBar class that was overwriting console lines
     }
 }
