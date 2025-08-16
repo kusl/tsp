@@ -135,4 +135,9 @@ jobs:
           ### 📦 Downloads
           - Windows x64: `TSP-win-x64-${{ steps.version.outputs.sha }}.exe`
           - Linux x64: `TSP-linux-x64-${{ steps.version.outputs.sha }}`
-          - Linux ARM64: `TSP-linux-arm64-${{ s
+          - Linux ARM64: `TSP-linux-arm64-${{ steps.version.outputs.sha }}`
+          - macOS x64: `TSP-osx-x64-${{ steps.version.outputs.sha }}`
+          - macOS ARM64: `TSP-osx-arm64-${{ steps.version.outputs.sha }}`
+          
+          ### 🔄 Changes
+          ${{ github.event.head_commit.message }}
