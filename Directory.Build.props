@@ -1,23 +1,35 @@
 <Project>
   <PropertyGroup>
+    <!-- Version Management -->
+    <Version>1.2.0</Version>
+    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <FileVersion>1.2.0.0</FileVersion>
+    <InformationalVersion>1.2.0</InformationalVersion>
+
     <!-- Centralized .NET version management -->
     <TargetFramework>net9.0</TargetFramework>
     <DotNetVersion>9.0</DotNetVersion>
     <DotNetChannel>9.0</DotNetChannel>
-    
+
     <!-- When .NET 10 releases, just update these three lines -->
     <!-- <TargetFramework>net10.0</TargetFramework> -->
     <!-- <DotNetVersion>10.0</DotNetVersion> -->
     <!-- <DotNetChannel>10.0</DotNetChannel> -->
-    
+
     <!-- Shared project settings -->
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AnalysisLevel>latest</AnalysisLevel>
-    
+
     <!-- AOT settings for console apps -->
     <PublishAot Condition="'$(OutputType)' == 'Exe'">true</PublishAot>
     <InvariantGlobalization Condition="'$(PublishAot)' == 'true'">true</InvariantGlobalization>
+
+    <!-- Company/Product Info -->
+    <Company>TSP Solutions</Company>
+    <Product>Traveling Salesman Problem Solver</Product>
+    <Copyright>Copyright © 2025 TSP Solutions</Copyright>
+    <Description>Advanced TSP solver with multiple algorithms</Description>
   </PropertyGroup>
 </Project>

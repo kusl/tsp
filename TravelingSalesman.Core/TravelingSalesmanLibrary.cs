@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace TravelingSalesman.Core
 {
@@ -27,20 +29,26 @@ namespace TravelingSalesman.Core
     {
         private readonly List<City> _cities;
         private readonly double[,] _distanceMatrix;
+        private readonly ILogger<Tour> _logger;
         private double? _cachedDistance;
 
         public IReadOnlyList<City> Cities => _cities.AsReadOnly();
         public double TotalDistance => _cachedDistance ??= CalculateTotalDistance();
 
-        public Tour(IEnumerable<City> cities, double[,] distanceMatrix)
+        public Tour(IEnumerable<City> cities, double[,] distanceMatrix, ILogger<Tour>? logger = null)
         {
             _cities = cities.ToList();
             _distanceMatrix = distanceMatrix;
+            _logger = logger ?? NullLogger<Tour>.Instance;
         }
 
         private double CalculateTotalDistance()
         {
-            if (_cities.Count < 2) return 0;
+            if (_cities.Count < 2)
+            {
+                _logger.LogDebug("Tour has less than 2 cities, returning distance 0");
+                return 0;
+            }
 
             var distance = 0.0;
             for (int i = 0; i < _cities.Count - 1; i++)
@@ -49,19 +57,29 @@ namespace TravelingSalesman.Core
             }
             // Return to start
             distance += _distanceMatrix[_cities[^1].Id, _cities[0].Id];
+            
+            _logger.LogTrace("Calculated total distance: {Distance:F2} for {CityCount} cities", distance, _cities.Count);
             return distance;
         }
 
-        public Tour Clone() => new Tour(_cities, _distanceMatrix);
+        public Tour Clone(ILogger<Tour>? logger = null) => new Tour(_cities, _distanceMatrix, logger ?? _logger);
 
         public void SwapCities(int index1, int index2)
         {
+            if (index1 == index2) return;
+            
+            var city1 = _cities[index1];
+            var city2 = _cities[index2];
+            
             (_cities[index1], _cities[index2]) = (_cities[index2], _cities[index1]);
             _cachedDistance = null;
+            
+            _logger.LogTrace("Swapped cities {City1} and {City2}", city1.Name, city2.Name);
         }
 
         public void Reverse(int start, int end)
         {
+            _logger.LogTrace("Reversing tour segment from index {Start} to {End}", start, end);
             while (start < end)
             {
                 SwapCities(start, end);
@@ -109,6 +127,13 @@ namespace TravelingSalesman.Core
     /// </summary>
     public abstract class TspSolverBase : ITspSolver
     {
+        protected readonly ILogger _logger;
+
+        protected TspSolverBase(ILogger? logger = null)
+        {
+            _logger = logger ?? NullLogger.Instance;
+        }
+
         public abstract string Name { get; }
         public event EventHandler<TspProgressEventArgs>? ProgressChanged;
 
@@ -116,6 +141,8 @@ namespace TravelingSalesman.Core
         {
             var n = cities.Count;
             var matrix = new double[n, n];
+
+            _logger.LogDebug("Building distance matrix for {CityCount} cities", n);
 
             for (int i = 0; i < n; i++)
             {
@@ -125,11 +152,15 @@ namespace TravelingSalesman.Core
                 }
             }
 
+            _logger.LogDebug("Distance matrix built successfully");
             return matrix;
         }
 
         protected void OnProgressChanged(int iteration, double currentBest, string message = "")
         {
+            _logger.LogTrace("Algorithm progress: Iteration {Iteration}, Best Distance {Distance:F2}, Message: {Message}", 
+                iteration, currentBest, message);
+                
             ProgressChanged?.Invoke(this, new TspProgressEventArgs
             {
                 Iteration = iteration,
@@ -148,12 +179,21 @@ namespace TravelingSalesman.Core
     {
         public override string Name => "Nearest Neighbor";
 
+        public NearestNeighborSolver(ILogger<NearestNeighborSolver>? logger = null) : base(logger)
+        {
+        }
+
         public override Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default)
         {
             return Task.Run(() =>
             {
+                _logger.LogInformation("Starting Nearest Neighbor algorithm for {CityCount} cities", cities.Count);
+
                 if (cities.Count < 2)
+                {
+                    _logger.LogWarning("Less than 2 cities provided, returning minimal tour");
                     return new Tour(cities, BuildDistanceMatrix(cities));
+                }
 
                 var distanceMatrix = BuildDistanceMatrix(cities);
                 var visited = new bool[cities.Count];
@@ -182,12 +222,17 @@ namespace TravelingSalesman.Core
                         visited[nearest] = true;
                         route.Add(cities[nearest]);
                         current = nearest;
+
+                        _logger.LogTrace("Added city {CityName} (distance: {Distance:F2})", cities[nearest].Name, nearestDistance);
                     }
 
                     OnProgressChanged(i, new Tour(route, distanceMatrix).TotalDistance, $"Added city {cities[current].Name}");
                 }
 
-                return new Tour(route, distanceMatrix);
+                var finalTour = new Tour(route, distanceMatrix);
+                _logger.LogInformation("Nearest Neighbor completed: Distance {Distance:F2}", finalTour.TotalDistance);
+                
+                return finalTour;
             }, cancellationToken);
         }
     }
@@ -201,16 +246,21 @@ namespace TravelingSalesman.Core
 
         public override string Name => "2-Opt";
 
-        public TwoOptSolver(int maxIterations = 1000)
+        public TwoOptSolver(int maxIterations = 1000, ILogger<TwoOptSolver>? logger = null) : base(logger)
         {
             _maxIterations = maxIterations;
         }
 
         public override async Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default)
         {
+            _logger.LogInformation("Starting 2-Opt algorithm for {CityCount} cities (max iterations: {MaxIterations})", 
+                cities.Count, _maxIterations);
+
             // Start with nearest neighbor solution
-            var nnSolver = new NearestNeighborSolver();
+            var nnSolver = new NearestNeighborSolver(_logger as ILogger<NearestNeighborSolver>);
             var tour = await nnSolver.SolveAsync(cities, cancellationToken);
+
+            _logger.LogDebug("Initial tour from Nearest Neighbor: {Distance:F2}", tour.TotalDistance);
 
             return await Task.Run(() => Improve2Opt(tour, cancellationToken), cancellationToken);
         }
@@ -220,6 +270,9 @@ namespace TravelingSalesman.Core
             var improved = true;
             var iteration = 0;
             var bestTour = tour.Clone();
+            var initialDistance = bestTour.TotalDistance;
+
+            _logger.LogDebug("Starting 2-Opt improvement from distance {InitialDistance:F2}", initialDistance);
 
             while (improved && iteration < _maxIterations)
             {
@@ -238,6 +291,8 @@ namespace TravelingSalesman.Core
 
                         if (newTour.TotalDistance < bestTour.TotalDistance)
                         {
+                            _logger.LogTrace("2-Opt improvement found: {OldDistance:F2} -> {NewDistance:F2}", 
+                                bestTour.TotalDistance, newTour.TotalDistance);
                             bestTour = newTour;
                             improved = true;
                         }
@@ -247,6 +302,11 @@ namespace TravelingSalesman.Core
                 iteration++;
                 OnProgressChanged(iteration, bestTour.TotalDistance, $"2-Opt iteration {iteration}");
             }
+
+            var finalImprovement = ((initialDistance - bestTour.TotalDistance) / initialDistance) * 100;
+            _logger.LogInformation("2-Opt completed after {Iterations} iterations. " +
+                                 "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%)", 
+                                 iteration, bestTour.TotalDistance, finalImprovement);
 
             return bestTour;
         }
@@ -265,10 +325,11 @@ namespace TravelingSalesman.Core
         public override string Name => "Simulated Annealing";
 
         public SimulatedAnnealingSolver(
-            double initialTemperature = 10000,  // Was 1000 - needs to be higher for more cities
-            double coolingRate = 0.9995,        // Was 0.995 - slower cooling
-            int iterationsPerTemperature = 1000, // Was 100 - more iterations
-            int? seed = null)
+            double initialTemperature = 10000,
+            double coolingRate = 0.9995,
+            int iterationsPerTemperature = 1000,
+            int? seed = null,
+            ILogger<SimulatedAnnealingSolver>? logger = null) : base(logger)
         {
             _initialTemperature = initialTemperature;
             _coolingRate = coolingRate;
@@ -278,8 +339,12 @@ namespace TravelingSalesman.Core
 
         public override async Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default)
         {
+            _logger.LogInformation("Starting Simulated Annealing for {CityCount} cities " +
+                                 "(temp: {InitialTemp}, cooling: {CoolingRate}, iterations per temp: {IterationsPerTemp})", 
+                                 cities.Count, _initialTemperature, _coolingRate, _iterationsPerTemperature);
+
             // Start with nearest neighbor solution
-            var nnSolver = new NearestNeighborSolver();
+            var nnSolver = new NearestNeighborSolver(_logger as ILogger<NearestNeighborSolver>);
             var initialTour = await nnSolver.SolveAsync(cities, cancellationToken);
 
             return await Task.Run(() => RunSimulatedAnnealing(initialTour, cancellationToken), cancellationToken);
@@ -291,6 +356,11 @@ namespace TravelingSalesman.Core
             var bestTour = currentTour.Clone();
             var temperature = _initialTemperature;
             var iteration = 0;
+            var acceptedMoves = 0;
+            var rejectedMoves = 0;
+            var initialDistance = initialTour.TotalDistance;
+
+            _logger.LogDebug("Starting SA from initial distance: {InitialDistance:F2}", initialDistance);
 
             while (temperature > 0.1)
             {
@@ -314,16 +384,23 @@ namespace TravelingSalesman.Core
                         if (deltaDistance < 0 || _random.NextDouble() < Math.Exp(-deltaDistance / temperature))
                         {
                             currentTour = newTour;
+                            acceptedMoves++;
 
                             if (currentTour.TotalDistance < bestTour.TotalDistance)
                             {
                                 bestTour = currentTour.Clone();
+                                _logger.LogTrace("New best solution found: {Distance:F2} at temperature {Temperature:F2}", 
+                                    bestTour.TotalDistance, temperature);
                             }
+                        }
+                        else
+                        {
+                            rejectedMoves++;
                         }
                     }
 
                     iteration++;
-                    if (iteration % 100 == 0)
+                    if (iteration % 1000 == 0)
                     {
                         OnProgressChanged(iteration, bestTour.TotalDistance,
                             $"Temperature: {temperature:F2}, Best: {bestTour.TotalDistance:F2}");
@@ -332,6 +409,14 @@ namespace TravelingSalesman.Core
 
                 temperature *= _coolingRate;
             }
+
+            var finalImprovement = ((initialDistance - bestTour.TotalDistance) / initialDistance) * 100;
+            var acceptanceRate = (double)acceptedMoves / (acceptedMoves + rejectedMoves) * 100;
+
+            _logger.LogInformation("Simulated Annealing completed after {Iterations} iterations. " +
+                                 "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%). " +
+                                 "Acceptance rate: {AcceptanceRate:F1}%", 
+                                 iteration, bestTour.TotalDistance, finalImprovement, acceptanceRate);
 
             return bestTour;
         }
@@ -355,7 +440,8 @@ namespace TravelingSalesman.Core
             int generations = 500,
             double mutationRate = 0.02,
             double elitismRate = 0.2,
-            int? seed = null)
+            int? seed = null,
+            ILogger<GeneticAlgorithmSolver>? logger = null) : base(logger)
         {
             _populationSize = populationSize;
             _generations = generations;
@@ -364,20 +450,25 @@ namespace TravelingSalesman.Core
             _random = seed.HasValue ? new Random(seed.Value) : new Random();
         }
 
-        // Better Genetic Algorithm parameters that scale with problem size
-        public static GeneticAlgorithmSolver CreateScaledGeneticSolver(int cityCount, int? seed = null)
+        public static GeneticAlgorithmSolver CreateScaledGeneticSolver(int cityCount, int? seed = null, ILogger<GeneticAlgorithmSolver>? logger = null)
         {
             return new GeneticAlgorithmSolver(
-                populationSize: Math.Max(200, cityCount * 2),  // Scale with city count
-                generations: Math.Max(1000, cityCount * 10),   // More generations for larger problems
-                mutationRate: 0.1,                             // Higher mutation
-                elitismRate: 0.1,                              // Less elitism
-                seed: seed
+                populationSize: Math.Max(200, cityCount * 2),
+                generations: Math.Max(1000, cityCount * 10),
+                mutationRate: 0.1,
+                elitismRate: 0.1,
+                seed: seed,
+                logger: logger
             );
         }
 
         public override Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default)
         {
+            _logger.LogInformation("Starting Genetic Algorithm for {CityCount} cities " +
+                                 "(population: {Population}, generations: {Generations}, " +
+                                 "mutation rate: {MutationRate:F3}, elitism rate: {ElitismRate:F3})", 
+                                 cities.Count, _populationSize, _generations, _mutationRate, _elitismRate);
+
             return Task.Run(() => RunGeneticAlgorithm(cities, cancellationToken), cancellationToken);
         }
 
@@ -386,6 +477,10 @@ namespace TravelingSalesman.Core
             var distanceMatrix = BuildDistanceMatrix(cities);
             var population = InitializePopulation(cities, distanceMatrix);
             var bestTour = population.OrderBy(t => t.TotalDistance).First();
+            var initialBest = bestTour.TotalDistance;
+            var generationsWithoutImprovement = 0;
+
+            _logger.LogDebug("Initial population created. Best distance: {BestDistance:F2}", initialBest);
 
             for (int generation = 0; generation < _generations; generation++)
             {
@@ -396,15 +491,34 @@ namespace TravelingSalesman.Core
                 var generationBest = population.OrderBy(t => t.TotalDistance).First();
                 if (generationBest.TotalDistance < bestTour.TotalDistance)
                 {
+                    _logger.LogDebug("Generation {Generation}: New best solution {Distance:F2}", 
+                        generation, generationBest.TotalDistance);
                     bestTour = generationBest.Clone();
+                    generationsWithoutImprovement = 0;
+                }
+                else
+                {
+                    generationsWithoutImprovement++;
                 }
 
-                if (generation % 10 == 0)
+                if (generation % 50 == 0)
                 {
                     OnProgressChanged(generation, bestTour.TotalDistance,
                         $"Generation {generation}, Best: {bestTour.TotalDistance:F2}");
                 }
+
+                // Early stopping if no improvement for many generations
+                if (generationsWithoutImprovement > _generations / 4)
+                {
+                    _logger.LogDebug("Early stopping at generation {Generation} due to no improvement", generation);
+                    break;
+                }
             }
+
+            var finalImprovement = ((initialBest - bestTour.TotalDistance) / initialBest) * 100;
+            _logger.LogInformation("Genetic Algorithm completed. " +
+                                 "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%)", 
+                                 bestTour.TotalDistance, finalImprovement);
 
             return bestTour;
         }
@@ -412,6 +526,8 @@ namespace TravelingSalesman.Core
         private List<Tour> InitializePopulation(IReadOnlyList<City> cities, double[,] distanceMatrix)
         {
             var population = new List<Tour>();
+
+            _logger.LogDebug("Initializing population of {PopulationSize} individuals", _populationSize);
 
             for (int i = 0; i < _populationSize; i++)
             {
@@ -501,7 +617,7 @@ namespace TravelingSalesman.Core
     }
 
     /// <summary>
-    /// Factory for creating TSP solvers
+    /// Factory for creating TSP solvers with logging
     /// </summary>
     public static class TspSolverFactory
     {
@@ -513,24 +629,24 @@ namespace TravelingSalesman.Core
             GeneticAlgorithm
         }
 
-        public static ITspSolver CreateSolver(SolverType type)
+        public static ITspSolver CreateSolver(SolverType type, ILoggerFactory? loggerFactory = null)
         {
             return type switch
             {
-                SolverType.NearestNeighbor => new NearestNeighborSolver(),
-                SolverType.TwoOpt => new TwoOptSolver(),
-                SolverType.SimulatedAnnealing => new SimulatedAnnealingSolver(),
-                SolverType.GeneticAlgorithm => new GeneticAlgorithmSolver(),
+                SolverType.NearestNeighbor => new NearestNeighborSolver(loggerFactory?.CreateLogger<NearestNeighborSolver>()),
+                SolverType.TwoOpt => new TwoOptSolver(logger: loggerFactory?.CreateLogger<TwoOptSolver>()),
+                SolverType.SimulatedAnnealing => new SimulatedAnnealingSolver(logger: loggerFactory?.CreateLogger<SimulatedAnnealingSolver>()),
+                SolverType.GeneticAlgorithm => new GeneticAlgorithmSolver(logger: loggerFactory?.CreateLogger<GeneticAlgorithmSolver>()),
                 _ => throw new ArgumentException($"Unknown solver type: {type}")
             };
         }
 
-        public static IEnumerable<ITspSolver> CreateAllSolvers()
+        public static IEnumerable<ITspSolver> CreateAllSolvers(ILoggerFactory? loggerFactory = null)
         {
-            yield return new NearestNeighborSolver();
-            yield return new TwoOptSolver();
-            yield return new SimulatedAnnealingSolver();
-            yield return new GeneticAlgorithmSolver();
+            yield return new NearestNeighborSolver(loggerFactory?.CreateLogger<NearestNeighborSolver>());
+            yield return new TwoOptSolver(logger: loggerFactory?.CreateLogger<TwoOptSolver>());
+            yield return new SimulatedAnnealingSolver(logger: loggerFactory?.CreateLogger<SimulatedAnnealingSolver>());
+            yield return new GeneticAlgorithmSolver(logger: loggerFactory?.CreateLogger<GeneticAlgorithmSolver>());
         }
     }
 
@@ -540,14 +656,18 @@ namespace TravelingSalesman.Core
     public sealed class TspDataGenerator
     {
         private readonly Random _random;
+        private readonly ILogger<TspDataGenerator> _logger;
 
-        public TspDataGenerator(int? seed = null)
+        public TspDataGenerator(int? seed = null, ILogger<TspDataGenerator>? logger = null)
         {
             _random = seed.HasValue ? new Random(seed.Value) : new Random();
+            _logger = logger ?? NullLogger<TspDataGenerator>.Instance;
         }
 
         public IReadOnlyList<City> GenerateRandomCities(int count, double maxX = 100, double maxY = 100)
         {
+            _logger.LogDebug("Generating {Count} random cities in area {MaxX}x{MaxY}", count, maxX, maxY);
+            
             var cities = new List<City>();
 
             for (int i = 0; i < count; i++)
@@ -560,11 +680,14 @@ namespace TravelingSalesman.Core
                 ));
             }
 
+            _logger.LogInformation("Generated {Count} random cities", count);
             return cities;
         }
 
         public IReadOnlyList<City> GenerateCircularCities(int count, double radius = 50, double centerX = 50, double centerY = 50)
         {
+            _logger.LogDebug("Generating {Count} cities in circular pattern (radius: {Radius})", count, radius);
+            
             var cities = new List<City>();
             var angleStep = 2 * Math.PI / count;
 
@@ -579,11 +702,14 @@ namespace TravelingSalesman.Core
                 ));
             }
 
+            _logger.LogInformation("Generated {Count} cities in circular pattern", count);
             return cities;
         }
 
         public IReadOnlyList<City> GenerateGridCities(int rows, int cols, double spacing = 10)
         {
+            _logger.LogDebug("Generating {Rows}x{Cols} cities in grid pattern (spacing: {Spacing})", rows, cols, spacing);
+            
             var cities = new List<City>();
             var id = 0;
 
@@ -601,6 +727,7 @@ namespace TravelingSalesman.Core
                 }
             }
 
+            _logger.LogInformation("Generated {Count} cities in {Rows}x{Cols} grid pattern", cities.Count, rows, cols);
             return cities;
         }
     }
@@ -610,6 +737,13 @@ namespace TravelingSalesman.Core
     /// </summary>
     public sealed class TspBenchmark
     {
+        private readonly ILogger<TspBenchmark> _logger;
+
+        public TspBenchmark(ILogger<TspBenchmark>? logger = null)
+        {
+            _logger = logger ?? NullLogger<TspBenchmark>.Instance;
+        }
+
         public sealed record BenchmarkResult(
             string SolverName,
             double Distance,
@@ -622,25 +756,33 @@ namespace TravelingSalesman.Core
             IEnumerable<ITspSolver> solvers,
             CancellationToken cancellationToken = default)
         {
+            var solverList = solvers.ToList();
+            _logger.LogInformation("Starting benchmark with {CityCount} cities and {SolverCount} algorithms", 
+                cities.Count, solverList.Count);
+
             var results = new List<BenchmarkResult>();
 
-            foreach (var solver in solvers)
+            foreach (var solver in solverList)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
+                _logger.LogDebug("Running benchmark for {SolverName}", solver.Name);
                 var startTime = DateTime.UtcNow;
                 var tour = await solver.SolveAsync(cities, cancellationToken);
                 var executionTime = DateTime.UtcNow - startTime;
 
-                results.Add(new BenchmarkResult(
-                    solver.Name,
-                    tour.TotalDistance,
-                    executionTime,
-                    tour
-                ));
+                var result = new BenchmarkResult(solver.Name, tour.TotalDistance, executionTime, tour);
+                results.Add(result);
+
+                _logger.LogInformation("Benchmark completed for {SolverName}: Distance {Distance:F2}, Time {TimeMs}ms", 
+                    solver.Name, tour.TotalDistance, executionTime.TotalMilliseconds);
             }
 
-            return results.OrderBy(r => r.Distance).ToList();
+            var sortedResults = results.OrderBy(r => r.Distance).ToList();
+            _logger.LogInformation("Benchmark completed. Winner: {Winner} with distance {Distance:F2}", 
+                sortedResults.First().SolverName, sortedResults.First().Distance);
+
+            return sortedResults;
         }
 
         public string FormatResults(IReadOnlyList<BenchmarkResult> results)
