@@ -103,11 +103,27 @@ namespace TravelingSalesman.ConsoleApp
             PrintSectionHeader("Interactive TSP Solver");
 
             // Get number of cities
-            Console.Write("\nHow many cities? (4-50): ");
-            if (!int.TryParse(Console.ReadLine(), out int cityCount) || cityCount < 4 || cityCount > 50)
+            Console.Write("\nHow many cities? (minimum 2): ");
+            if (!int.TryParse(Console.ReadLine(), out int cityCount) || cityCount < 2)
             {
                 PrintError("Invalid input. Using default of 10 cities.");
                 cityCount = 10;
+            }
+
+            // Warn for large numbers
+            if (cityCount > 100)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"\n⚠️ Note: {cityCount} cities may take significant time with some algorithms.");
+                Console.WriteLine("   Nearest Neighbor will be fast, but Genetic Algorithm may take minutes.");
+                Console.Write("   Continue? (y/n): ");
+                Console.ResetColor();
+                
+                if (Console.ReadLine()?.ToLower() != "y")
+                {
+                    Console.WriteLine("Using 50 cities instead.");
+                    cityCount = 50;
+                }
             }
 
             // Select data pattern
@@ -223,12 +239,21 @@ namespace TravelingSalesman.ConsoleApp
         {
             PrintSectionHeader("Algorithm Benchmark");
 
-            Console.Write("\nNumber of cities for benchmark (10-30): ");
-            if (!int.TryParse(Console.ReadLine(), out int cityCount) || cityCount < 10 || cityCount > 30)
+            Console.Write("\nNumber of cities for benchmark: ");
+            if (!int.TryParse(Console.ReadLine(), out int cityCount) || cityCount < 2)
             {
                 cityCount = 15;
-                Console.WriteLine($"Using default of {cityCount} cities.");
+                Console.WriteLine($"Invalid input. Using default of {cityCount} cities.");
             }
+
+            if (cityCount > 50)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"\n⚠️ Benchmark with {cityCount} cities may take several minutes.");
+                Console.ResetColor();
+            }
+
+            // Rest continues...
 
             var generator = new TspDataGenerator(42);
             var cities = generator.GenerateRandomCities(cityCount);
