@@ -1,10 +1,11 @@
 <Project>
   <PropertyGroup>
     <!-- Version Management - these will be updated by CI/CD -->
-    <Version>1.2.0</Version>
-    <AssemblyVersion>1.2.0.0</AssemblyVersion>
-    <FileVersion>1.2.0.0</FileVersion>
-    <InformationalVersion>1.2.0</InformationalVersion>
+    <!-- Use a more CI-friendly format to avoid sed issues -->
+    <Version Condition="'$(Version)' == ''">1.2.0</Version>
+    <AssemblyVersion Condition="'$(AssemblyVersion)' == ''">1.2.0.0</AssemblyVersion>
+    <FileVersion Condition="'$(FileVersion)' == ''">1.2.0.0</FileVersion>
+    <InformationalVersion Condition="'$(InformationalVersion)' == ''">1.2.0</InformationalVersion>
 
     <!-- Centralized .NET version management -->
     <TargetFramework>net9.0</TargetFramework>
@@ -25,11 +26,51 @@
     <!-- AOT settings for console apps -->
     <PublishAot Condition="'$(OutputType)' == 'Exe'">true</PublishAot>
     <InvariantGlobalization Condition="'$(PublishAot)' == 'true'">true</InvariantGlobalization>
+    
+    <!-- Optimize for size and startup time -->
+    <PublishSingleFile Condition="'$(PublishAot)' == 'true'">true</PublishSingleFile>
+    <PublishTrimmed Condition="'$(PublishAot)' == 'true'">true</PublishTrimmed>
+    <TrimMode Condition="'$(PublishAot)' == 'true'">link</TrimMode>
 
     <!-- Company/Product Info -->
     <Company>TSP Solutions</Company>
     <Product>Traveling Salesman Problem Solver</Product>
     <Copyright>Copyright © 2025 TSP Solutions</Copyright>
     <Description>Advanced TSP solver with multiple algorithms</Description>
+    
+    <!-- Assembly metadata for better debugging -->
+    <AssemblyTitle>$(Product)</AssemblyTitle>
+    <AssemblyDescription>$(Description)</AssemblyDescription>
+    <AssemblyCompany>$(Company)</AssemblyCompany>
+    <AssemblyProduct>$(Product)</AssemblyProduct>
+    <AssemblyCopyright>$(Copyright)</AssemblyCopyright>
+  </PropertyGroup>
+
+  <!-- Conditional compilation symbols for different builds -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE</DefineConstants>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <!-- Package settings for libraries -->
+  <PropertyGroup Condition="'$(IsPackable)' == 'true'">
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageId>$(AssemblyName)</PackageId>
+    <PackageVersion>$(Version)</PackageVersion>
+    <Authors>$(Company)</Authors>
+    <PackageDescription>$(Description)</PackageDescription>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/kusl/tsp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/kusl/tsp.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>tsp;traveling-salesman;optimization;algorithms</PackageTags>
   </PropertyGroup>
 </Project>

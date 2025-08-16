@@ -17,6 +17,22 @@ namespace TravelingSalesman.ConsoleApp
 
         static async Task Main(string[] args)
         {
+            // Handle version argument
+            if (args.Length > 0 && (args[0] == "--version" || args[0] == "-v"))
+            {
+                Console.WriteLine($"TSP Solver v{GetAssemblyVersion()}");
+                Console.WriteLine($"Built with .NET {Environment.Version}");
+                Console.WriteLine($"Runtime: {System.Runtime.InteropServices.RuntimeInformation.RuntimeIdentifier}");
+                return;
+            }
+
+            // Handle help argument
+            if (args.Length > 0 && (args[0] == "--help" || args[0] == "-h"))
+            {
+                ShowHelp();
+                return;
+            }
+
             // Configure Serilog to write to both console and file
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
@@ -549,6 +565,20 @@ namespace TravelingSalesman.ConsoleApp
         {
             var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             return version?.ToString(3) ?? "1.2.0";
+        }
+
+        static void ShowHelp()
+        {
+            Console.WriteLine("TSP Solver - Traveling Salesman Problem Solver");
+            Console.WriteLine();
+            Console.WriteLine("Usage: TSP-solver [options]");
+            Console.WriteLine();
+            Console.WriteLine("Options:");
+            Console.WriteLine("  --version, -v    Show version information");
+            Console.WriteLine("  --help, -h       Show this help message");
+            Console.WriteLine();
+            Console.WriteLine("Interactive mode will start if no options are provided.");
+            Console.WriteLine("Logs are written to the 'logs/' directory.");
         }
     }
 }
