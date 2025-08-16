@@ -73,7 +73,7 @@ namespace TravelingSalesman.ConsoleApp
             Console.WriteLine(); // Space from previous output
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("╔═══════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║          TRAVELING SALESMAN PROBLEM SOLVER v1.0              ║");
+            Console.WriteLine("║          TRAVELING SALESMAN PROBLEM SOLVER v1.0               ║");
             Console.WriteLine("║                  .NET 9 Implementation                        ║");
             Console.WriteLine("╚═══════════════════════════════════════════════════════════════╝");
             Console.ResetColor();
