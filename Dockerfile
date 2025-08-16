@@ -6,7 +6,7 @@ ARG LAUNCHING_FROM_VS
 ARG FINAL_BASE_IMAGE=${LAUNCHING_FROM_VS:+aotdebug}
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM mcr.microsoft.com/dotnet/runtime:10.0-preview AS base
+FROM mcr.microsoft.com/dotnet/runtime:9 AS base
 USER $APP_UID
 WORKDIR /app
 
