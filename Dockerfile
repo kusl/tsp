@@ -23,8 +23,9 @@ RUN apt-get update \
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-# Copy solution file
+# Copy solution and Directory.Build.props FIRST
 COPY ["TSP.sln", "./"]
+COPY ["Directory.Build.props", "./"]
 
 # Copy project files for both projects
 COPY ["TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj", "TravelingSalesman.ConsoleApp/"]
