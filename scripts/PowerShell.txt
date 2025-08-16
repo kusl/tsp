@@ -2027,4 +2027,63 @@ namespace TravelingSalesman.Core
         }
     }
 }
-PS C:\code\TSP>
+PS C:\code\TSP> Set-Location "C:\code\tsp"; git status; git remote show origin; git clean -dfx; tree /F; Set-Location "C:\code\TSP\TravelingSalesman.ConsoleApp\"; dotnet run
+On branch master
+Your branch is ahead of 'origin/master' by 9 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+* remote origin
+  Fetch URL: git@github.com:kusl/tsp.git
+  Push  URL: git@github.com:kusl/tsp.git
+  HEAD branch: master
+  Remote branch:
+    master tracked
+  Local branch configured for 'git pull':
+    master merges with remote master
+  Local ref configured for 'git push':
+    master pushes to master (fast-forwardable)
+Folder PATH listing
+Volume serial number is BE05-6605
+C:.
+│   .dockerignore
+│   .gitattributes
+│   .gitignore
+│   Directory.Build.props
+│   Directory.Packages.props
+│   Dockerfile
+│   LICENSE.txt
+│   README.md
+│   TSP.sln
+│
+├───.github
+│   └───workflows
+│           build.yml
+│           release.yml
+│
+├───scripts
+│       cat.ps1
+│       PowerShell.txt
+│
+├───TravelingSalesman.ConsoleApp
+│   │   Program.cs
+│   │   TravelingSalesman.ConsoleApp.csproj
+│   │
+│   └───Properties
+│           launchSettings.json
+│
+└───TravelingSalesman.Core
+        TravelingSalesman.Core.csproj
+        TravelingSalesmanLibrary.cs
+
+Using launch settings from C:\code\TSP\TravelingSalesman.ConsoleApp\Properties\launchSettings.json...
+Restore complete (1.8s)
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+  TravelingSalesman.Core succeeded (6.4s) → C:\code\TSP\TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
+  TravelingSalesman.ConsoleApp failed with 1 error(s) (1.8s)
+    C:\code\TSP\TravelingSalesman.ConsoleApp\Program.cs(84,25): error CS1061: 'ILogger<Program>' does not contain a definition for 'LogFatal' and no accessible extension method 'LogFatal' accepting a first argument of type 'ILogger<Program>' could be found (are you missing a using directive or an assembly reference?)
+
+Build failed with 1 error(s) in 11.3s
+
+The build failed. Fix the build errors and run again.
+PS C:\code\TSP\TravelingSalesman.ConsoleApp> Set-Location "C:\code\tsp"; git status; git remote show origin; git clean -dfx; tree /F; Set-Location "C:\code\TSP\TravelingSalesman.ConsoleApp\"; dotnet run
