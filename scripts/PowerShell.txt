@@ -1,1546 +1,286 @@
-PowerShell 7.6.0-preview.4
-PS C:\Users\kushal> Set-Location "C:\code\tsp"; git status; git remote show origin; git clean -dfx; tree /F
-On branch master
-Your branch is up to date with 'origin/master'.
+Excellent questions! Let me address both concerns:
 
-nothing to commit, working tree clean
-* remote origin
-  Fetch URL: git@github.com:kusl/tsp.git
-  Push  URL: git@github.com:kusl/tsp.git
-  HEAD branch: master
-  Remote branch:
-    master tracked
-  Local branch configured for 'git pull':
-    master merges with remote master
-  Local ref configured for 'git push':
-    master pushes to master (up to date)
-Folder PATH listing
-Volume serial number is BE05-6605
-C:.
-│   .dockerignore
-│   .gitattributes
-│   .gitignore
-│   Dockerfile
-│   LICENSE.txt
-│   README.md
-│   TSP.sln
-│
-├───.github
-│   └───workflows
-│           build.yml
-│
-├───scripts
-│       cat.ps1
-│
-├───TravelingSalesman.ConsoleApp
-│   │   Program.cs
-│   │   TravelingSalesman.ConsoleApp.csproj
-│   │
-│   └───Properties
-│           launchSettings.json
-│
-└───TravelingSalesman.Core
-        TravelingSalesman.Core.csproj
-        TravelingSalesmanLibrary.cs
+## 1. Single Binary Releases with .NET 9 AOT
 
-PS C:\code\TSP> C:\code\TSP\scripts\cat.ps1
-On branch master
-Your branch is up to date with 'origin/master'.
+Yes! .NET 9 with AOT (Ahead-of-Time compilation) can produce single, self-contained native binaries that don't require .NET runtime or Docker. Here's an updated GitHub Actions workflow that creates binary releases:
 
-nothing to commit, working tree clean
-* remote origin
-  Fetch URL: git@github.com:kusl/tsp.git
-  Push  URL: git@github.com:kusl/tsp.git
-  HEAD branch: master
-  Remote branch:
-    master tracked
-  Local branch configured for 'git pull':
-    master merges with remote master
-  Local ref configured for 'git push':
-    master pushes to master (up to date)
-Folder PATH listing
-Volume serial number is BE05-6605
-C:.
-│   .dockerignore
-│   .gitattributes
-│   .gitignore
-│   Dockerfile
-│   LICENSE.txt
-│   README.md
-│   TSP.sln
-│
-├───.github
-│   └───workflows
-│           build.yml
-│
-├───scripts
-│       cat.ps1
-│
-├───TravelingSalesman.ConsoleApp
-│   │   Program.cs
-│   │   TravelingSalesman.ConsoleApp.csproj
-│   │
-│   └───Properties
-│           launchSettings.json
-│
-└───TravelingSalesman.Core
-        TravelingSalesman.Core.csproj
-        TravelingSalesmanLibrary.cs
-
-
-=== SLN FILE ===
-
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36408.4
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelingSalesman.Core", "TravelingSalesman.Core\TravelingSalesman.Core.csproj", "{C2346882-82C9-4200-AD54-AB85B62D0297}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelingSalesman.ConsoleApp", "TravelingSalesman.ConsoleApp\TravelingSalesman.ConsoleApp.csproj", "{304BB409-E7A3-484A-9EB2-2864B7868DD2}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
-        ProjectSection(SolutionItems) = preProject
-                .github\workflows\build.yml = .github\workflows\build.yml
-                Dockerfile = Dockerfile
-        EndProjectSection
-EndProject
-Global
-        GlobalSection(SolutionConfigurationPlatforms) = preSolution
-                Debug|Any CPU = Debug|Any CPU
-                Release|Any CPU = Release|Any CPU
-        EndGlobalSection
-        GlobalSection(ProjectConfigurationPlatforms) = postSolution
-                {C2346882-82C9-4200-AD54-AB85B62D0297}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-                {C2346882-82C9-4200-AD54-AB85B62D0297}.Debug|Any CPU.Build.0 = Debug|Any CPU
-                {C2346882-82C9-4200-AD54-AB85B62D0297}.Release|Any CPU.ActiveCfg = Release|Any CPU
-                {C2346882-82C9-4200-AD54-AB85B62D0297}.Release|Any CPU.Build.0 = Release|Any CPU
-                {304BB409-E7A3-484A-9EB2-2864B7868DD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-                {304BB409-E7A3-484A-9EB2-2864B7868DD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-                {304BB409-E7A3-484A-9EB2-2864B7868DD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-                {304BB409-E7A3-484A-9EB2-2864B7868DD2}.Release|Any CPU.Build.0 = Release|Any CPU
-        EndGlobalSection
-        GlobalSection(SolutionProperties) = preSolution
-                HideSolutionNode = FALSE
-        EndGlobalSection
-        GlobalSection(ExtensibilityGlobals) = postSolution
-                SolutionGuid = {A273C62C-9A31-4047-9AAB-4C20C12D1666}
-        EndGlobalSection
-EndGlobal
-
-=== DOCKERFILE ===
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-# These ARGs allow for swapping out the base used to make the final image when debugging from VS
-ARG LAUNCHING_FROM_VS
-# This sets the base image for final, but only if LAUNCHING_FROM_VS has been defined
-ARG FINAL_BASE_IMAGE=${LAUNCHING_FROM_VS:+aotdebug}
-
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM mcr.microsoft.com/dotnet/runtime:9.0 AS base
-USER $APP_UID
-WORKDIR /app
-
-# This stage is used to build the service project
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-# Install clang/zlib1g-dev dependencies for publishing to native
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-    clang zlib1g-dev
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-
-# Copy solution file (adjust name if needed)
-COPY ["TSP.sln", "./"]
-
-# Copy project files for both projects
-COPY ["TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj", "TravelingSalesman.ConsoleApp/"]
-COPY ["TravelingSalesman.Core/TravelingSalesman.Core.csproj", "TravelingSalesman.Core/"]
-
-# Restore the console app (which will also restore its dependencies)
-RUN dotnet restore "TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj"
-
-# Copy all source code
-COPY . .
-
-WORKDIR "/src/TravelingSalesman.ConsoleApp"
-RUN dotnet build "TravelingSalesman.ConsoleApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
-
-# This stage is used to publish the service project to be copied to the final stage
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "TravelingSalesman.ConsoleApp.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=true
-
-# This stage is used as the base for the final stage when launching from VS to support debugging in regular mode (Default when not using the Debug configuration)
-FROM base AS aotdebug
-USER root
-# Install GDB to support native debugging
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-    gdb
-USER app
-
-# This stage is used in production or whe
-
-=== GITHUB ACTIONS ===
-name: Build and Test TSP Solver
+```yaml
+name: Build, Test, and Release
 
 on:
   push:
     branches: [ master, main ]
+    tags: [ 'v*' ]
   pull_request:
     branches: [ master, main ]
   workflow_dispatch:
 
 jobs:
-  build-and-test:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Build Docker image
+    - uses: actions/checkout@v4
+    - name: Build and Test Docker
       run: |
         docker build -t tsp-solver:latest .
-        echo "✅ Docker image built successfully"
-        docker images | grep tsp-solver
+        echo -e "2\n5\n5\n" | timeout 10s docker run --rm -i tsp-solver:latest || true
 
-    - name: Test - Benchmark with 10 cities
-      run: |
-        echo "Running benchmark test with 10 cities..."
-        echo -e "2\n10\n5\n" | timeout 30s docker run --rm -i tsp-solver:latest | tee benchmark_output.log || true
+  build-binaries:
+    strategy:
+      matrix:
+        include:
+          # Windows
+          - os: windows-latest
+            rid: win-x64
+            artifact: TSP-win-x64.exe
+            build_cmd: dotnet publish -c Release -r win-x64 --self-contained -p:PublishAot=true -p:PublishSingleFile=true
+          
+          # Linux x64
+          - os: ubuntu-latest
+            rid: linux-x64
+            artifact: TSP-linux-x64
+            build_cmd: dotnet publish -c Release -r linux-x64 --self-contained -p:PublishAot=true -p:PublishSingleFile=true
+          
+          # Linux ARM64
+          - os: ubuntu-latest
+            rid: linux-arm64
+            artifact: TSP-linux-arm64
+            build_cmd: |
+              sudo apt-get update
+              sudo apt-get install -y gcc-aarch64-linux-gnu
+              dotnet publish -c Release -r linux-arm64 --self-contained -p:PublishAot=true -p:PublishSingleFile=true
+          
+          # macOS x64
+          - os: macos-13  # Intel Mac
+            rid: osx-x64
+            artifact: TSP-macos-x64
+            build_cmd: dotnet publish -c Release -r osx-x64 --self-contained -p:PublishAot=true -p:PublishSingleFile=true
+          
+          # macOS ARM64 (Apple Silicon)
+          - os: macos-14  # M1/M2 Mac
+            rid: osx-arm64
+            artifact: TSP-macos-arm64
+            build_cmd: dotnet publish -c Release -r osx-arm64 --self-contained -p:PublishAot=true -p:PublishSingleFile=true
 
-        if grep -q "TSP Solver Benchmark Results" benchmark_output.log; then
-          echo "✅ Benchmark completed successfully"
-          grep -A 5 "Winner:" benchmark_output.log || true
-        else
-          echo "⚠️ Benchmark may not have completed properly"
-        fi
-
-    - name: Test - Interactive solver with Nearest Neighbor
-      run: |
-        echo "Testing Nearest Neighbor algorithm with 8 cities..."
-        echo -e "1\n8\n1\n1\nn\n5\n" | timeout 20s docker run --rm -i tsp-solver:latest | tee nn_output.log || true
-
-        if grep -q "Solution Found!" nn_output.log; then
-          echo "✅ Nearest Neighbor test completed"
-          grep "Total Distance:" nn_output.log || true
-        else
-          echo "⚠️ Nearest Neighbor test may not have completed"
-        fi
-
-    - name: Test - Demonstration mode
-      run: |
-        echo "Running demonstration mode..."
-        echo -e "3\n5\n" | timeout 60s docker run --rm -i tsp-solver:latest | tee demo_output.log || true
-
-        if grep -q "Demonstration Complete" demo_output.log; then
-          echo "✅ Demonstration completed successfully"
-        else
-          echo "⚠️ Demonstration may not have completed"
-        fi
-
-    - name: Test - Algorithm Information
-      run: |
-        echo "Getting algorithm information..."
-        echo -e "4\n5\n" | timeout 10s docker run --rm -i tsp-solver:latest | tee info_output.log || true
-
-        if grep -q "Algorithm Information" info_output.log; then
-          echo "✅ Algorithm info displayed successfully"
-        else
-          echo "⚠️ Algorithm info test may not have completed"
-        fi
-
-    - name: Upload test results
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-outputs
-        path: |
-          *_output.log
-
-    - name: Display summary
-      if: always()
-      run: |
-        echo "## Test Summary"
-        echo "Docker image size:"
-        docker images tsp-solver:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
-
-        echo ""
-        echo "Test files generated:"
-        ls -lh *_output.log || echo "No output files found"
-
-  build-native-dotnet:
-    runs-on: ubuntu-latest
-
+    runs-on: ${{ matrix.os }}
+    
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
+    - uses: actions/checkout@v4
+    
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.0.x'
-
-    - name: Restore dependencies
+    
+    - name: Install dependencies
       run: dotnet restore TSP.sln
-
-    - name: Build
-      run: dotnet build TSP.sln --configuration Release --no-restore
-
-    - name: Run without Docker
+    
+    - name: Build AOT Binary
+      shell: bash
       run: |
-        echo "Testing native .NET build..."
-        cd TravelingSalesman.ConsoleApp/bin/Release/net9.0
-        echo -e "2\n5\n5\n" | timeout 10s dotnet TravelingSalesman.ConsoleApp.dll || true
-
-    - name: Publish AOT (if supported)
-      continue-on-error: true
+        cd TravelingSalesman.ConsoleApp
+        ${{ matrix.build_cmd }}
+    
+    - name: Prepare artifact
+      shell: bash
       run: |
-        dotnet publish TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj \
-          -c Release \
-          -r linux-x64 \
-          --self-contained true \
-          -p:PublishAot=true \
-          -o ./publish-aot
+        if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+          mv TravelingSalesman.ConsoleApp/bin/Release/net9.0/${{ matrix.rid }}/publish/TravelingSalesman.ConsoleApp.exe ${{ matrix.artifact }}
+        else
+          mv TravelingSalesman.ConsoleApp/bin/Release/net9.0/${{ matrix.rid }}/publish/TravelingSalesman.ConsoleApp ${{ matrix.artifact }}
+          chmod +x ${{ matrix.artifact }}
+        fi
+        
+        # Create size info
+        ls -lh ${{ matrix.artifact }} > size-info-${{ matrix.rid }}.txt
+    
+    - name: Upload binary
+      uses: actions/upload-artifact@v4
+      with:
+        name: binary-${{ matrix.rid }}
+        path: |
+          ${{ matrix.artifact }}
+          size-info-${{ matrix.rid }}.txt
 
-        echo "AOT published files:"
-        ls -lh ./publish-aot/ || true
+  create-release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [test, build-binaries]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: ./artifacts
+    
+    - name: Display structure
+      run: ls -la ./artifacts/*/
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ./artifacts/binary-*/*
+        body: |
+          ## TSP Solver Release
+          
+          ### 🚀 Single Binary Executables
+          No .NET runtime or Docker required! Just download and run.
+          
+          ### 📦 Available Platforms:
+          - **Windows x64**: `TSP-win-x64.exe`
+          - **Linux x64**: `TSP-linux-x64`
+          - **Linux ARM64**: `TSP-linux-arm64`
+          - **macOS x64 (Intel)**: `TSP-macos-x64`
+          - **macOS ARM64 (M1/M2)**: `TSP-macos-arm64`
+          
+          ### 🏃 Usage:
+          ```bash
+          # Linux/macOS
+          chmod +x TSP-linux-x64
+          ./TSP-linux-x64
+          
+          # Windows
+          TSP-win-x64.exe
+          ```
+        draft: false
+        prerelease: false
+```
 
-=== CSPROJ FILES ===
+To trigger a release, create a git tag:
+```powershell
+git tag v1.0.0
+git push origin v1.0.0
+```
 
---- C:\code\TSP\TravelingSalesman.ConsoleApp\TravelingSalesman.ConsoleApp.csproj ---
-<Project Sdk="Microsoft.NET.Sdk">
+## 2. .NET Version Management - Avoiding Annual Ceremony
 
+You're absolutely right about the version churn. Here's a better approach using MSBuild properties to centralize version management:
+
+### Create a `Directory.Build.props` file in your repository root:
+
+```xml
+<Project>
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <!-- Centralized .NET version management -->
     <TargetFramework>net9.0</TargetFramework>
+    <DotNetVersion>9.0</DotNetVersion>
+    <DotNetChannel>9.0</DotNetChannel>
+    
+    <!-- When .NET 10 releases, just update these three lines -->
+    <!-- <TargetFramework>net10.0</TargetFramework> -->
+    <!-- <DotNetVersion>10.0</DotNetVersion> -->
+    <!-- <DotNetChannel>10.0</DotNetChannel> -->
+    
+    <!-- Shared project settings -->
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PublishAot>true</PublishAot>
-    <InvariantGlobalization>true</InvariantGlobalization>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest</AnalysisLevel>
+    
+    <!-- AOT settings for console apps -->
+    <PublishAot Condition="'$(OutputType)' == 'Exe'">true</PublishAot>
+    <InvariantGlobalization Condition="'$(PublishAot)' == 'true'">true</InvariantGlobalization>
   </PropertyGroup>
+</Project>
+```
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
-  </ItemGroup>
+### Simplified `TravelingSalesman.ConsoleApp.csproj`:
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- TargetFramework inherited from Directory.Build.props -->
+  </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TravelingSalesman.Core\TravelingSalesman.Core.csproj" />
   </ItemGroup>
-
 </Project>
+```
 
---- C:\code\TSP\TravelingSalesman.Core\TravelingSalesman.Core.csproj ---
+### Simplified `TravelingSalesman.Core.csproj`:
+```xml
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
+  <!-- Everything inherited from Directory.Build.props -->
 </Project>
-
-=== CS FILES ===
-
---- C:\code\TSP\TravelingSalesman.ConsoleApp\Program.cs ---
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using TravelingSalesman.Core;
-
-namespace TravelingSalesman.ConsoleApp
-{
-    class Program
-    {
-        private static readonly ConsoleColor[] _colors =
-        {
-            ConsoleColor.Cyan,
-            ConsoleColor.Green,
-            ConsoleColor.Yellow,
-            ConsoleColor.Magenta
-        };
-
-        static async Task Main(string[] args)
-        {
-            Console.Title = "Traveling Salesman Problem Solver";
-            PrintHeader();
-
-            try
-            {
-                while (true)
-                {
-                    var option = ShowMainMenu();
-
-                    switch (option)
-                    {
-                        case 1:
-                            await RunInteractiveSolver();
-                            break;
-                        case 2:
-                            await RunBenchmark();
-                            break;
-                        case 3:
-                            await RunDemonstration();
-                            break;
-                        case 4:
-                            ShowAlgorithmInfo();
-                            break;
-                        case 5:
-                            Console.WriteLine("\nThank you for using TSP Solver! Goodbye!");
-                            return;
-                        default:
-                            PrintError("Invalid option. Please try again.");
-                            break;
-                    }
-
-                    if (option != 5)
-                    {
-                        Console.WriteLine("\nPress any key to return to main menu...");
-                        Console.ReadKey();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                PrintError($"An unexpected error occurred: {ex.Message}");
-                Console.WriteLine("\nPress any key to exit...");
-                Console.ReadKey();
-            }
-        }
-
-        static void PrintHeader()
-        {
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine(@"
-╔═══════════════════════════════════════════════════════════════╗
-║          TRAVELING SALESMAN PROBLEM SOLVER v1.0              ║
-║                  .NET 9 Implementation                        ║
-╚═══════════════════════════════════════════════════════════════╝");
-            Console.ResetColor();
-        }
-
-        static int ShowMainMenu()
-        {
-            Console.Clear();
-            PrintHeader();
-
-            Console.WriteLine("\n📍 Main Menu:\n");
-            Console.WriteLine("  1. Interactive Solver - Solve custom TSP instances");
-            Console.WriteLine("  2. Algorithm Benchmark - Compare all algorithms");
-            Console.WriteLine("  3. Visual Demonstration - See algorithms in action");
-            Console.WriteLine("  4. Algorithm Information - Learn about each algorithm");
-            Console.WriteLine("  5. Exit");
-
-            Console.Write("\n➤ Select an option (1-5): ");
-
-            if (int.TryParse(Console.ReadLine(), out int option))
-            {
-                return option;
-            }
-
-            return -1;
-        }
-
-        static async Task RunInteractiveSolver()
-        {
-            Console.Clear();
-            PrintSectionHeader("Interactive TSP Solver");
-
-            // Get number of cities
-            Console.Write("\nHow many cities? (4-50): ");
-            if (!int.TryParse(Console.ReadLine(), out int cityCount) || cityCount < 4 || cityCount > 50)
-            {
-                PrintError("Invalid input. Using default of 10 cities.");
-                cityCount = 10;
-            }
-
-            // Select data pattern
-            Console.WriteLine("\nSelect city distribution pattern:");
-            Console.WriteLine("  1. Random");
-            Console.WriteLine("  2. Circular");
-            Console.WriteLine("  3. Grid");
-            Console.Write("\n➤ Select pattern (1-3): ");
-
-            var generator = new TspDataGenerator(42); // Fixed seed for reproducibility
-            IReadOnlyList<City> cities;
-
-            var patternChoice = Console.ReadLine();
-            switch (patternChoice)
-            {
-                case "2":
-                    cities = generator.GenerateCircularCities(cityCount);
-                    Console.WriteLine($"\n✓ Generated {cityCount} cities in circular pattern");
-                    break;
-                case "3":
-                    var gridSize = (int)Math.Sqrt(cityCount);
-                    cities = generator.GenerateGridCities(gridSize, gridSize + (cityCount - gridSize * gridSize) / gridSize + 1);
-                    cities = cities.Take(cityCount).ToList();
-                    Console.WriteLine($"\n✓ Generated {cityCount} cities in grid pattern");
-                    break;
-                default:
-                    cities = generator.GenerateRandomCities(cityCount);
-                    Console.WriteLine($"\n✓ Generated {cityCount} random cities");
-                    break;
-            }
-
-            // Select algorithm
-            Console.WriteLine("\nSelect algorithm:");
-            Console.WriteLine("  1. Nearest Neighbor (Fast, Good)");
-            Console.WriteLine("  2. 2-Opt (Medium, Better)");
-            Console.WriteLine("  3. Simulated Annealing (Slow, Very Good)");
-            Console.WriteLine("  4. Genetic Algorithm (Slowest, Best)");
-            Console.Write("\n➤ Select algorithm (1-4): ");
-
-            ITspSolver solver;
-            var algoChoice = Console.ReadLine();
-            switch (algoChoice)
-            {
-                case "2":
-                    solver = new TwoOptSolver();
-                    break;
-                case "3":
-                    solver = new SimulatedAnnealingSolver();
-                    break;
-                case "4":
-                    solver = new GeneticAlgorithmSolver();
-                    break;
-                default:
-                    solver = new NearestNeighborSolver();
-                    break;
-            }
-
-            Console.WriteLine($"\n🔄 Running {solver.Name} algorithm...\n");
-
-            // Setup progress reporting
-            var progressBar = new ProgressBar();
-            solver.ProgressChanged += (s, e) =>
-            {
-                progressBar.Update(e.Message, e.CurrentBestDistance);
-            };
-
-            // Solve
-            var stopwatch = Stopwatch.StartNew();
-            var tour = await solver.SolveAsync(cities);
-            stopwatch.Stop();
-
-            // Display results
-            Console.WriteLine("\n\n" + new string('═', 60));
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("✓ Solution Found!");
-            Console.ResetColor();
-            Console.WriteLine(new string('═', 60));
-
-            Console.WriteLine($"\nAlgorithm: {solver.Name}");
-            Console.WriteLine($"Execution Time: {stopwatch.ElapsedMilliseconds:N0} ms");
-            Console.WriteLine($"Total Distance: {tour.TotalDistance:F2} units");
-            Console.WriteLine($"\nRoute ({tour.Cities.Count} cities):");
-
-            var routeStr = string.Join(" → ", tour.Cities.Take(Math.Min(10, tour.Cities.Count)).Select(c => c.Name));
-            if (tour.Cities.Count > 10)
-            {
-                routeStr += " → ... → " + tour.Cities.Last().Name;
-            }
-            routeStr += " → " + tour.Cities[0].Name;
-
-            Console.WriteLine(routeStr);
-
-            // Show city coordinates if requested
-            Console.Write("\nShow city coordinates? (y/n): ");
-            if (Console.ReadLine()?.ToLower() == "y")
-            {
-                Console.WriteLine("\nCity Coordinates:");
-                foreach (var city in cities.Take(Math.Min(20, cities.Count)))
-                {
-                    Console.WriteLine($"  {city.Name}: ({city.X:F2}, {city.Y:F2})");
-                }
-                if (cities.Count > 20)
-                {
-                    Console.WriteLine($"  ... and {cities.Count - 20} more cities");
-                }
-            }
-        }
-
-        static async Task RunBenchmark()
-        {
-            Console.Clear();
-            PrintSectionHeader("Algorithm Benchmark");
-
-            Console.Write("\nNumber of cities for benchmark (10-30): ");
-            if (!int.TryParse(Console.ReadLine(), out int cityCount) || cityCount < 10 || cityCount > 30)
-            {
-                cityCount = 15;
-                Console.WriteLine($"Using default of {cityCount} cities.");
-            }
-
-            var generator = new TspDataGenerator(42);
-            var cities = generator.GenerateRandomCities(cityCount);
-
-            Console.WriteLine($"\n🔄 Running benchmark with {cityCount} cities...\n");
-            Console.WriteLine("This may take a moment...\n");
-
-            var benchmark = new TspBenchmark();
-            var solvers = TspSolverFactory.CreateAllSolvers();
-
-            var cts = new CancellationTokenSource();
-            var progressTask = Task.Run(async () =>
-            {
-                var spinner = new[] { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" };
-                var i = 0;
-                while (!cts.Token.IsCancellationRequested)
-                {
-                    Console.Write($"\r{spinner[i++ % spinner.Length]} Processing...");
-                    await Task.Delay(100);
-                }
-            });
-
-            var results = await benchmark.RunBenchmarkAsync(cities, solvers);
-
-            cts.Cancel();
-            await progressTask;
-            Console.Write("\r" + new string(' ', 20) + "\r");
-
-            Console.WriteLine(benchmark.FormatResults(results));
-
-            // Display winner details
-            var winner = results.First();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"\n🏆 Winner: {winner.SolverName}");
-            Console.ResetColor();
-            Console.WriteLine($"   Distance: {winner.Distance:F2}");
-            Console.WriteLine($"   Time: {winner.ExecutionTime.TotalMilliseconds:F1} ms");
-
-            // Show relative performance
-            if (results.Count > 1)
-            {
-                Console.WriteLine("\n📊 Relative Performance:");
-                var maxBarLength = 40;
-                var bestTime = results.Min(r => r.ExecutionTime.TotalMilliseconds);
-                var bestDistance = results.Min(r => r.Distance);
-
-                foreach (var result in results)
-                {
-                    var distanceRatio = result.Distance / bestDistance;
-                    var timeRatio = result.ExecutionTime.TotalMilliseconds / bestTime;
-
-                    var distanceBar = new string('█', (int)(maxBarLength / distanceRatio));
-                    var timeBar = new string('█', Math.Min(maxBarLength, (int)(maxBarLength / timeRatio)));
-
-                    Console.WriteLine($"\n  {result.SolverName}:");
-                    Console.Write("    Distance: ");
-                    Console.ForegroundColor = GetColorForRatio(distanceRatio);
-                    Console.WriteLine(distanceBar);
-                    Console.ResetColor();
-
-                    Console.Write("    Speed:    ");
-                    Console.ForegroundColor = GetColorForRatio(timeRatio);
-                    Console.WriteLine(timeBar);
-                    Console.ResetColor();
-                }
-            }
-        }
-
-        static async Task RunDemonstration()
-        {
-            Console.Clear();
-            PrintSectionHeader("Visual Algorithm Demonstration");
-
-            Console.WriteLine("\nThis demonstration will show how different algorithms");
-            Console.WriteLine("approach the TSP problem step by step.\n");
-
-            var generator = new TspDataGenerator(42);
-            var cities = generator.GenerateCircularCities(8); // Small number for clarity
-
-            Console.WriteLine($"Generated {cities.Count} cities in a circular pattern.\n");
-            Console.WriteLine("Cities:");
-            foreach (var city in cities)
-            {
-                Console.WriteLine($"  {city.Name}: ({city.X:F1}, {city.Y:F1})");
-            }
-
-            Console.WriteLine("\nPress any key to start the demonstration...");
-            Console.ReadKey();
-
-            // Demonstrate each algorithm
-            var algorithms = new (string name, ITspSolver solver)[]
-            {
-                ("Nearest Neighbor", new NearestNeighborSolver()),
-                ("2-Opt Improvement", new TwoOptSolver(100)),
-                ("Simulated Annealing", new SimulatedAnnealingSolver(1000, 0.99, 50)),
-                ("Genetic Algorithm", new GeneticAlgorithmSolver(20, 50, 0.05, 0.3))
-            };
-
-            foreach (var (name, solver) in algorithms)
-            {
-                Console.Clear();
-                PrintSectionHeader($"Algorithm: {name}");
-
-                Console.WriteLine($"\n🔄 Running {name}...\n");
-
-                var iterations = new List<(int iteration, double distance, string message)>();
-                solver.ProgressChanged += (s, e) =>
-                {
-                    iterations.Add((e.Iteration, e.CurrentBestDistance, e.Message));
-                };
-
-                var tour = await solver.SolveAsync(cities);
-
-                // Display progress
-                if (iterations.Count > 0)
-                {
-                    Console.WriteLine("Algorithm Progress:");
-                    Console.WriteLine(new string('-', 50));
-
-                    var displayCount = Math.Min(10, iterations.Count);
-                    var step = Math.Max(1, iterations.Count / displayCount);
-
-                    for (int i = 0; i < iterations.Count; i += step)
-                    {
-                        var iter = iterations[i];
-                        Console.WriteLine($"  Step {iter.iteration}: Distance = {iter.distance:F2}");
-                        if (!string.IsNullOrEmpty(iter.message) && iter.message.Length < 50)
-                        {
-                            Console.WriteLine($"         {iter.message}");
-                        }
-                    }
-                }
-
-                Console.WriteLine(new string('-', 50));
-                Console.WriteLine($"\n✓ Final Solution:");
-                Console.WriteLine($"  Distance: {tour.TotalDistance:F2}");
-                Console.WriteLine($"  Route: {string.Join(" → ", tour.Cities.Select(c => c.Name))} → {tour.Cities[0].Name}");
-
-                DrawSimpleVisualization(tour);
-
-                Console.WriteLine("\nPress any key for next algorithm...");
-                Console.ReadKey();
-            }
-
-            Console.Clear();
-            PrintSectionHeader("Demonstration Complete");
-            Console.WriteLine("\nAll algorithms have been demonstrated!");
-        }
-
-        static void ShowAlgorithmInfo()
-        {
-            Console.Clear();
-            PrintSectionHeader("Algorithm Information");
-
-            var info = new Dictionary<string, (string complexity, string pros, string cons, string description)>
-            {
-                ["Nearest Neighbor"] = (
-                    "O(n²)",
-                    "Fast, simple, deterministic",
-                    "Can produce suboptimal solutions",
-                    "Builds tour by always visiting the nearest unvisited city."
-                ),
-                ["2-Opt"] = (
-                    "O(n²) per iteration",
-                    "Good improvement over initial solution",
-                    "Can get stuck in local optima",
-                    "Improves existing tour by reversing segments to reduce crossings."
-                ),
-                ["Simulated Annealing"] = (
-                    "O(n) per iteration × iterations",
-                    "Can escape local optima, tunable parameters",
-                    "Slower, non-deterministic",
-                    "Uses controlled randomness to explore solution space, accepting worse solutions probabilistically."
-                ),
-                ["Genetic Algorithm"] = (
-                    "O(p×g×n) where p=population, g=generations",
-                    "Excellent for large problems, parallelizable",
-                    "Slowest, many parameters to tune",
-                    "Evolves population of solutions using selection, crossover, and mutation."
-                )
-            };
-
-            foreach (var (algo, (complexity, pros, cons, description)) in info)
-            {
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"\n📍 {algo}");
-                Console.ResetColor();
-                Console.WriteLine(new string('-', 40));
-                Console.WriteLine($"Description: {description}");
-                Console.WriteLine($"Complexity:  {complexity}");
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"Pros:        {pros}");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine($"Cons:        {cons}");
-                Console.ResetColor();
-            }
-
-            Console.WriteLine("\n" + new string('═', 60));
-            Console.WriteLine("\n💡 Recommendations:");
-            Console.WriteLine("  • Small problems (< 20 cities): Nearest Neighbor + 2-Opt");
-            Console.WriteLine("  • Medium problems (20-100 cities): Simulated Annealing");
-            Console.WriteLine("  • Large problems (> 100 cities): Genetic Algorithm");
-            Console.WriteLine("  • Real-time requirements: Nearest Neighbor");
-            Console.WriteLine("  • Best quality: Genetic Algorithm with tuned parameters");
-        }
-
-        static void DrawSimpleVisualization(Tour tour)
-        {
-            Console.WriteLine("\nSimple ASCII Visualization:");
-            Console.WriteLine(new string('─', 50));
-
-            const int width = 40;
-            const int height = 10;
-            var grid = new char[height, width];
-
-            // Initialize grid
-            for (int i = 0; i < height; i++)
-                for (int j = 0; j < width; j++)
-                    grid[i, j] = ' ';
-
-            // Normalize coordinates to fit grid
-            var minX = tour.Cities.Min(c => c.X);
-            var maxX = tour.Cities.Max(c => c.X);
-            var minY = tour.Cities.Min(c => c.Y);
-            var maxY = tour.Cities.Max(c => c.Y);
-
-            foreach (var city in tour.Cities)
-            {
-                var x = (int)((city.X - minX) / (maxX - minX) * (width - 1));
-                var y = (int)((city.Y - minY) / (maxY - minY) * (height - 1));
-
-                if (x >= 0 && x < width && y >= 0 && y < height)
-                {
-                    grid[height - 1 - y, x] = '●';
-                }
-            }
-
-            // Draw grid
-            for (int i = 0; i < height; i++)
-            {
-                Console.Write("  ");
-                for (int j = 0; j < width; j++)
-                {
-                    if (grid[i, j] == '●')
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write(grid[i, j]);
-                        Console.ResetColor();
-                    }
-                    else
-                    {
-                        Console.Write(grid[i, j]);
-                    }
-                }
-                Console.WriteLine();
-            }
-
-            Console.WriteLine(new string('─', 50));
-        }
-
-        static void PrintSectionHeader(string title)
-        {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("\n" + new string('═', 60));
-            Console.WriteLine($"  {title}");
-            Console.WriteLine(new string('═', 60));
-            Console.ResetColor();
-        }
-
-        static void PrintError(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"\n❌ Error: {message}");
-            Console.ResetColor();
-        }
-
-        static ConsoleColor GetColorForRatio(double ratio)
-        {
-            if (ratio <= 1.05) return ConsoleColor.Green;
-            if (ratio <= 1.15) return ConsoleColor.Yellow;
-            if (ratio <= 1.30) return ConsoleColor.DarkYellow;
-            return ConsoleColor.Red;
-        }
-
-        class ProgressBar
-        {
-            private int _lastLength = 0;
-
-            public void Update(string message, double currentBest)
-            {
-                var output = $"  {message} | Best: {currentBest:F2}";
-
-                // Clear previous line
-                Console.Write("\r" + new string(' ', _lastLength) + "\r");
-
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.Write(output);
-                Console.ResetColor();
-
-                _lastLength = output.Length;
-            }
-        }
-    }
-}
-
---- C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs ---
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace TravelingSalesman.Core
-{
-    /// <summary>
-    /// Represents a city in the TSP problem
-    /// </summary>
-    public sealed record City(int Id, string Name, double X, double Y)
-    {
-        public double DistanceTo(City other)
-        {
-            var dx = X - other.X;
-            var dy = Y - other.Y;
-            return Math.Sqrt(dx * dx + dy * dy);
-        }
-    }
-
-    /// <summary>
-    /// Represents a tour through cities
-    /// </summary>
-    public sealed class Tour
-    {
-        private readonly List<City> _cities;
-        private readonly double[,] _distanceMatrix;
-        private double? _cachedDistance;
-
-        public IReadOnlyList<City> Cities => _cities.AsReadOnly();
-        public double TotalDistance => _cachedDistance ??= CalculateTotalDistance();
-
-        public Tour(IEnumerable<City> cities, double[,] distanceMatrix)
-        {
-            _cities = cities.ToList();
-            _distanceMatrix = distanceMatrix;
-        }
-
-        private double CalculateTotalDistance()
-        {
-            if (_cities.Count < 2) return 0;
-
-            var distance = 0.0;
-            for (int i = 0; i < _cities.Count - 1; i++)
-            {
-                distance += _distanceMatrix[_cities[i].Id, _cities[i + 1].Id];
-            }
-            // Return to start
-            distance += _distanceMatrix[_cities[^1].Id, _cities[0].Id];
-            return distance;
-        }
-
-        public Tour Clone() => new Tour(_cities, _distanceMatrix);
-
-        public void SwapCities(int index1, int index2)
-        {
-            (_cities[index1], _cities[index2]) = (_cities[index2], _cities[index1]);
-            _cachedDistance = null;
-        }
-
-        public void Reverse(int start, int end)
-        {
-            while (start < end)
-            {
-                SwapCities(start, end);
-                start++;
-                end--;
-            }
-        }
-
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine($"Tour Distance: {TotalDistance:F2}");
-            sb.AppendLine("Route:");
-            foreach (var city in _cities)
-            {
-                sb.Append($"{city.Name} -> ");
-            }
-            sb.Append(_cities[0].Name); // Return to start
-            return sb.ToString();
-        }
-    }
-
-    /// <summary>
-    /// Interface for TSP solving algorithms
-    /// </summary>
-    public interface ITspSolver
-    {
-        string Name { get; }
-        Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default);
-        event EventHandler<TspProgressEventArgs>? ProgressChanged;
-    }
-
-    /// <summary>
-    /// Event args for progress reporting
-    /// </summary>
-    public sealed class TspProgressEventArgs : EventArgs
-    {
-        public int Iteration { get; init; }
-        public double CurrentBestDistance { get; init; }
-        public string Message { get; init; } = string.Empty;
-    }
-
-    /// <summary>
-    /// Base class for TSP solvers
-    /// </summary>
-    public abstract class TspSolverBase : ITspSolver
-    {
-        public abstract string Name { get; }
-        public event EventHandler<TspProgressEventArgs>? ProgressChanged;
-
-        protected double[,] BuildDistanceMatrix(IReadOnlyList<City> cities)
-        {
-            var n = cities.Count;
-            var matrix = new double[n, n];
-
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    matrix[i, j] = cities[i].DistanceTo(cities[j]);
-                }
-            }
-
-            return matrix;
-        }
-
-        protected void OnProgressChanged(int iteration, double currentBest, string message = "")
-        {
-            ProgressChanged?.Invoke(this, new TspProgressEventArgs
-            {
-                Iteration = iteration,
-                CurrentBestDistance = currentBest,
-                Message = message
-            });
-        }
-
-        public abstract Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default);
-    }
-
-    /// <summary>
-    /// Nearest Neighbor heuristic solver
-    /// </summary>
-    public sealed class NearestNeighborSolver : TspSolverBase
-    {
-        public override string Name => "Nearest Neighbor";
-
-        public override Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default)
-        {
-            return Task.Run(() =>
-            {
-                if (cities.Count < 2)
-                    return new Tour(cities, BuildDistanceMatrix(cities));
-
-                var distanceMatrix = BuildDistanceMatrix(cities);
-                var visited = new bool[cities.Count];
-                var route = new List<City> { cities[0] };
-                visited[0] = true;
-
-                var current = 0;
-                for (int i = 1; i < cities.Count; i++)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    var nearest = -1;
-                    var nearestDistance = double.MaxValue;
-
-                    for (int j = 0; j < cities.Count; j++)
-                    {
-                        if (!visited[j] && distanceMatrix[current, j] < nearestDistance)
-                        {
-                            nearest = j;
-                            nearestDistance = distanceMatrix[current, j];
-                        }
-                    }
-
-                    if (nearest != -1)
-                    {
-                        visited[nearest] = true;
-                        route.Add(cities[nearest]);
-                        current = nearest;
-                    }
-
-                    OnProgressChanged(i, new Tour(route, distanceMatrix).TotalDistance, $"Added city {cities[current].Name}");
-                }
-
-                return new Tour(route, distanceMatrix);
-            }, cancellationToken);
-        }
-    }
-
-    /// <summary>
-    /// 2-Opt local search improvement solver
-    /// </summary>
-    public sealed class TwoOptSolver : TspSolverBase
-    {
-        private readonly int _maxIterations;
-
-        public override string Name => "2-Opt";
-
-        public TwoOptSolver(int maxIterations = 1000)
-        {
-            _maxIterations = maxIterations;
-        }
-
-        public override async Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default)
-        {
-            // Start with nearest neighbor solution
-            var nnSolver = new NearestNeighborSolver();
-            var tour = await nnSolver.SolveAsync(cities, cancellationToken);
-
-            return await Task.Run(() => Improve2Opt(tour, cancellationToken), cancellationToken);
-        }
-
-        private Tour Improve2Opt(Tour tour, CancellationToken cancellationToken)
-        {
-            var improved = true;
-            var iteration = 0;
-            var bestTour = tour.Clone();
-
-            while (improved && iteration < _maxIterations)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                improved = false;
-
-                for (int i = 1; i < tour.Cities.Count - 2; i++)
-                {
-                    for (int j = i + 1; j < tour.Cities.Count; j++)
-                    {
-                        cancellationToken.ThrowIfCancellationRequested();
-
-                        // Try reversing the tour between i and j
-                        var newTour = bestTour.Clone();
-                        newTour.Reverse(i, j);
-
-                        if (newTour.TotalDistance < bestTour.TotalDistance)
-                        {
-                            bestTour = newTour;
-                            improved = true;
-                        }
-                    }
-                }
-
-                iteration++;
-                OnProgressChanged(iteration, bestTour.TotalDistance, $"2-Opt iteration {iteration}");
-            }
-
-            return bestTour;
-        }
-    }
-
-    /// <summary>
-    /// Simulated Annealing solver for TSP
-    /// </summary>
-    public sealed class SimulatedAnnealingSolver : TspSolverBase
-    {
-        private readonly double _initialTemperature;
-        private readonly double _coolingRate;
-        private readonly int _iterationsPerTemperature;
-        private readonly Random _random;
-
-        public override string Name => "Simulated Annealing";
-
-        public SimulatedAnnealingSolver(
-            double initialTemperature = 1000,
-            double coolingRate = 0.995,
-            int iterationsPerTemperature = 100,
-            int? seed = null)
-        {
-            _initialTemperature = initialTemperature;
-            _coolingRate = coolingRate;
-            _iterationsPerTemperature = iterationsPerTemperature;
-            _random = seed.HasValue ? new Random(seed.Value) : new Random();
-        }
-
-        public override async Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default)
-        {
-            // Start with nearest neighbor solution
-            var nnSolver = new NearestNeighborSolver();
-            var initialTour = await nnSolver.SolveAsync(cities, cancellationToken);
-
-            return await Task.Run(() => RunSimulatedAnnealing(initialTour, cancellationToken), cancellationToken);
-        }
-
-        private Tour RunSimulatedAnnealing(Tour initialTour, CancellationToken cancellationToken)
-        {
-            var currentTour = initialTour.Clone();
-            var bestTour = currentTour.Clone();
-            var temperature = _initialTemperature;
-            var iteration = 0;
-
-            while (temperature > 0.1)
-            {
-                for (int i = 0; i < _iterationsPerTemperature; i++)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    var newTour = currentTour.Clone();
-
-                    // Random perturbation: swap two random cities
-                    var index1 = _random.Next(1, newTour.Cities.Count);
-                    var index2 = _random.Next(1, newTour.Cities.Count);
-
-                    if (index1 != index2)
-                    {
-                        newTour.SwapCities(index1, index2);
-
-                        var deltaDistance = newTour.TotalDistance - currentTour.TotalDistance;
-
-                        // Accept or reject the new solution
-                        if (deltaDistance < 0 || _random.NextDouble() < Math.Exp(-deltaDistance / temperature))
-                        {
-                            currentTour = newTour;
-
-                            if (currentTour.TotalDistance < bestTour.TotalDistance)
-                            {
-                                bestTour = currentTour.Clone();
-                            }
-                        }
-                    }
-
-                    iteration++;
-                    if (iteration % 100 == 0)
-                    {
-                        OnProgressChanged(iteration, bestTour.TotalDistance,
-                            $"Temperature: {temperature:F2}, Best: {bestTour.TotalDistance:F2}");
-                    }
-                }
-
-                temperature *= _coolingRate;
-            }
-
-            return bestTour;
-        }
-    }
-
-    /// <summary>
-    /// Genetic Algorithm solver for TSP
-    /// </summary>
-    public sealed class GeneticAlgorithmSolver : TspSolverBase
-    {
-        private readonly int _populationSize;
-        private readonly int _generations;
-        private readonly double _mutationRate;
-        private readonly double _elitismRate;
-        private readonly Random _random;
-
-        public override string Name => "Genetic Algorithm";
-
-        public GeneticAlgorithmSolver(
-            int populationSize = 100,
-            int generations = 500,
-            double mutationRate = 0.02,
-            double elitismRate = 0.2,
-            int? seed = null)
-        {
-            _populationSize = populationSize;
-            _generations = generations;
-            _mutationRate = mutationRate;
-            _elitismRate = elitismRate;
-            _random = seed.HasValue ? new Random(seed.Value) : new Random();
-        }
-
-        public override Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default)
-        {
-            return Task.Run(() => RunGeneticAlgorithm(cities, cancellationToken), cancellationToken);
-        }
-
-        private Tour RunGeneticAlgorithm(IReadOnlyList<City> cities, CancellationToken cancellationToken)
-        {
-            var distanceMatrix = BuildDistanceMatrix(cities);
-            var population = InitializePopulation(cities, distanceMatrix);
-            var bestTour = population.OrderBy(t => t.TotalDistance).First();
-
-            for (int generation = 0; generation < _generations; generation++)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                population = EvolvePopulation(population, distanceMatrix);
-
-                var generationBest = population.OrderBy(t => t.TotalDistance).First();
-                if (generationBest.TotalDistance < bestTour.TotalDistance)
-                {
-                    bestTour = generationBest.Clone();
-                }
-
-                if (generation % 10 == 0)
-                {
-                    OnProgressChanged(generation, bestTour.TotalDistance,
-                        $"Generation {generation}, Best: {bestTour.TotalDistance:F2}");
-                }
-            }
-
-            return bestTour;
-        }
-
-        private List<Tour> InitializePopulation(IReadOnlyList<City> cities, double[,] distanceMatrix)
-        {
-            var population = new List<Tour>();
-
-            for (int i = 0; i < _populationSize; i++)
-            {
-                var shuffled = cities.Skip(1).OrderBy(_ => _random.Next()).ToList();
-                shuffled.Insert(0, cities[0]); // Keep first city fixed
-                population.Add(new Tour(shuffled, distanceMatrix));
-            }
-
-            return population;
-        }
-
-        private List<Tour> EvolvePopulation(List<Tour> population, double[,] distanceMatrix)
-        {
-            var newPopulation = new List<Tour>();
-
-            // Keep elite individuals
-            var eliteCount = (int)(_populationSize * _elitismRate);
-            var elite = population.OrderBy(t => t.TotalDistance).Take(eliteCount).ToList();
-            newPopulation.AddRange(elite.Select(t => t.Clone()));
-
-            // Fill rest with offspring
-            while (newPopulation.Count < _populationSize)
-            {
-                var parent1 = TournamentSelection(population);
-                var parent2 = TournamentSelection(population);
-                var child = Crossover(parent1, parent2, distanceMatrix);
-
-                if (_random.NextDouble() < _mutationRate)
-                {
-                    Mutate(child);
-                }
-
-                newPopulation.Add(child);
-            }
-
-            return newPopulation;
-        }
-
-        private Tour TournamentSelection(List<Tour> population, int tournamentSize = 5)
-        {
-            var tournament = new List<Tour>();
-
-            for (int i = 0; i < tournamentSize; i++)
-            {
-                tournament.Add(population[_random.Next(population.Count)]);
-            }
-
-            return tournament.OrderBy(t => t.TotalDistance).First();
-        }
-
-        private Tour Crossover(Tour parent1, Tour parent2, double[,] distanceMatrix)
-        {
-            var cities = parent1.Cities.ToList();
-            var start = _random.Next(1, cities.Count - 1);
-            var end = _random.Next(start + 1, cities.Count);
-
-            var childCities = new List<City> { cities[0] }; // Keep first city fixed
-            var segment = parent1.Cities.Skip(start).Take(end - start).ToList();
-
-            foreach (var city in segment)
-            {
-                if (city.Id != 0) // Skip first city
-                    childCities.Add(city);
-            }
-
-            foreach (var city in parent2.Cities)
-            {
-                if (!childCities.Contains(city) && city.Id != 0)
-                {
-                    childCities.Add(city);
-                }
-            }
-
-            return new Tour(childCities, distanceMatrix);
-        }
-
-        private void Mutate(Tour tour)
-        {
-            var index1 = _random.Next(1, tour.Cities.Count);
-            var index2 = _random.Next(1, tour.Cities.Count);
-
-            if (index1 != index2)
-            {
-                tour.SwapCities(index1, index2);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Factory for creating TSP solvers
-    /// </summary>
-    public static class TspSolverFactory
-    {
-        public enum SolverType
-        {
-            NearestNeighbor,
-            TwoOpt,
-            SimulatedAnnealing,
-            GeneticAlgorithm
-        }
-
-        public static ITspSolver CreateSolver(SolverType type)
-        {
-            return type switch
-            {
-                SolverType.NearestNeighbor => new NearestNeighborSolver(),
-                SolverType.TwoOpt => new TwoOptSolver(),
-                SolverType.SimulatedAnnealing => new SimulatedAnnealingSolver(),
-                SolverType.GeneticAlgorithm => new GeneticAlgorithmSolver(),
-                _ => throw new ArgumentException($"Unknown solver type: {type}")
-            };
-        }
-
-        public static IEnumerable<ITspSolver> CreateAllSolvers()
-        {
-            yield return new NearestNeighborSolver();
-            yield return new TwoOptSolver();
-            yield return new SimulatedAnnealingSolver();
-            yield return new GeneticAlgorithmSolver();
-        }
-    }
-
-    /// <summary>
-    /// Service for generating test data
-    /// </summary>
-    public sealed class TspDataGenerator
-    {
-        private readonly Random _random;
-
-        public TspDataGenerator(int? seed = null)
-        {
-            _random = seed.HasValue ? new Random(seed.Value) : new Random();
-        }
-
-        public IReadOnlyList<City> GenerateRandomCities(int count, double maxX = 100, double maxY = 100)
-        {
-            var cities = new List<City>();
-
-            for (int i = 0; i < count; i++)
-            {
-                cities.Add(new City(
-                    i,
-                    $"City_{i}",
-                    _random.NextDouble() * maxX,
-                    _random.NextDouble() * maxY
-                ));
-            }
-
-            return cities;
-        }
-
-        public IReadOnlyList<City> GenerateCircularCities(int count, double radius = 50, double centerX = 50, double centerY = 50)
-        {
-            var cities = new List<City>();
-            var angleStep = 2 * Math.PI / count;
-
-            for (int i = 0; i < count; i++)
-            {
-                var angle = i * angleStep;
-                cities.Add(new City(
-                    i,
-                    $"City_{i}",
-                    centerX + radius * Math.Cos(angle),
-                    centerY + radius * Math.Sin(angle)
-                ));
-            }
-
-            return cities;
-        }
-
-        public IReadOnlyList<City> GenerateGridCities(int rows, int cols, double spacing = 10)
-        {
-            var cities = new List<City>();
-            var id = 0;
-
-            for (int row = 0; row < rows; row++)
-            {
-                for (int col = 0; col < cols; col++)
-                {
-                    cities.Add(new City(
-                        id,
-                        $"City_{id}",
-                        col * spacing,
-                        row * spacing
-                    ));
-                    id++;
-                }
-            }
-
-            return cities;
-        }
-    }
-
-    /// <summary>
-    /// Service for comparing different TSP solvers
-    /// </summary>
-    public sealed class TspBenchmark
-    {
-        public sealed record BenchmarkResult(
-            string SolverName,
-            double Distance,
-            TimeSpan ExecutionTime,
-            Tour Tour
-        );
-
-        public async Task<IReadOnlyList<BenchmarkResult>> RunBenchmarkAsync(
-            IReadOnlyList<City> cities,
-            IEnumerable<ITspSolver> solvers,
-            CancellationToken cancellationToken = default)
-        {
-            var results = new List<BenchmarkResult>();
-
-            foreach (var solver in solvers)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                var startTime = DateTime.UtcNow;
-                var tour = await solver.SolveAsync(cities, cancellationToken);
-                var executionTime = DateTime.UtcNow - startTime;
-
-                results.Add(new BenchmarkResult(
-                    solver.Name,
-                    tour.TotalDistance,
-                    executionTime,
-                    tour
-                ));
-            }
-
-            return results.OrderBy(r => r.Distance).ToList();
-        }
-
-        public string FormatResults(IReadOnlyList<BenchmarkResult> results)
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine("\n=== TSP Solver Benchmark Results ===");
-            sb.AppendLine($"{"Rank",-5} {"Solver",-20} {"Distance",-15} {"Time (ms)",-10} {"% from Best",-12}");
-            sb.AppendLine(new string('-', 75));
-
-            var bestDistance = results.First().Distance;
-
-            for (int i = 0; i < results.Count; i++)
-            {
-                var result = results[i];
-                var percentFromBest = ((result.Distance - bestDistance) / bestDistance) * 100;
-
-                sb.AppendLine($"{i + 1,-5} {result.SolverName,-20} {result.Distance,-15:F2} " +
-                            $"{result.ExecutionTime.TotalMilliseconds,-10:F1} {percentFromBest,-12:F2}%");
-            }
-
-            return sb.ToString();
-        }
-    }
-}
-PS C:\code\TSP>
+```
+
+### Multi-version Dockerfile using build arguments:
+```dockerfile
+# Default to .NET 9, but allow override
+ARG DOTNET_VERSION=9.0
+
+FROM mcr.microsoft.com/dotnet/runtime:${DOTNET_VERSION} AS base
+USER $APP_UID
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} AS build
+RUN apt-get update && apt-get install -y --no-install-recommends clang zlib1g-dev
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+
+COPY ["*.sln", "./"]
+COPY ["Directory.Build.props", "./"]
+COPY ["TravelingSalesman.ConsoleApp/*.csproj", "TravelingSalesman.ConsoleApp/"]
+COPY ["TravelingSalesman.Core/*.csproj", "TravelingSalesman.Core/"]
+RUN dotnet restore
+
+COPY . .
+WORKDIR "/src/TravelingSalesman.ConsoleApp"
+RUN dotnet build -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+RUN dotnet publish -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=true
+
+FROM mcr.microsoft.com/dotnet/runtime-deps:${DOTNET_VERSION} AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["./TravelingSalesman.ConsoleApp"]
+```
+
+### Future-proof GitHub Actions with matrix builds:
+```yaml
+name: Multi-Version Build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        dotnet: ['9.0', '10.0']  # Easy to add versions
+        continue-on-error: true   # Don't fail if 10.0 isn't out yet
+        
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET ${{ matrix.dotnet }}
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ matrix.dotnet }}.x
+      continue-on-error: true
+    
+    - name: Build with .NET ${{ matrix.dotnet }}
+      run: |
+        dotnet --version
+        dotnet build TSP.sln
+      continue-on-error: ${{ matrix.dotnet == '10.0' }}
+```
+
+## Summary of Benefits:
+
+1. **Single Binary Releases**: Yes, AOT produces true single-file executables (~10-30MB) that work without any runtime
+2. **Version Management**: With `Directory.Build.props`, updating to .NET 10 requires changing just 3 lines
+3. **Future-Proof CI/CD**: Matrix builds can test multiple .NET versions simultaneously
+4. **Cross-Platform**: Automatic builds for all major platforms
+
+The AOT binaries are perfect for distribution - users just download and run, no installation needed!
