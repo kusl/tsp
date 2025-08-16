@@ -1,7 +1,8 @@
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is up to date with 'origin/master'.
+Your branch is ahead of 'origin/master' by 3 commits.
+  (use "git push" to publish your local commits)
 
 nothing to commit, working tree clean
 * remote origin
@@ -13,7 +14,7 @@ nothing to commit, working tree clean
   Local branch configured for 'git pull':
     master merges with remote master
   Local ref configured for 'git push':
-    master pushes to master (up to date)
+    master pushes to master (fast-forwardable)
 Folder PATH listing
 Volume serial number is BE05-6605
 C:.
@@ -446,8 +447,13 @@ jobs:
       id: version
       shell: bash
       run: |
-        VERSION="$(date +'%Y.%m.%d').$(git rev-list --count HEAD)"
+        # Generate date-based version: YYYY.MM.DD.BUILD_NUMBER
+        DATE_VERSION="$(date +'%Y.%m.%d')"
+        BUILD_NUMBER="$(git rev-list --count HEAD)"
         SHORT_SHA=$(git rev-parse --short HEAD)
+
+        # Create 4-part version for .NET (max 65535 per part)
+        VERSION="${DATE_VERSION}.${BUILD_NUMBER}"
         FULL_VERSION="${VERSION}-${SHORT_SHA}"
 
         echo "version=${VERSION}" >> $GITHUB_OUTPUT
@@ -455,6 +461,7 @@ jobs:
         echo "sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
 
         echo "Generated version: ${FULL_VERSION}"
+        echo "Assembly version: ${VERSION} (4 parts)"
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
