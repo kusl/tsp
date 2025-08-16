@@ -255,14 +255,28 @@ namespace TravelingSalesman.ConsoleApp
 
             // Rest continues...
 
-            var generator = new TspDataGenerator(42);
+            var generator = new TspDataGenerator(); // Remove fixed seed!
             var cities = generator.GenerateRandomCities(cityCount);
 
             Console.WriteLine($"\n🔄 Running benchmark with {cityCount} cities...\n");
             Console.WriteLine("This may take a moment...\n");
 
             var benchmark = new TspBenchmark();
-            var solvers = TspSolverFactory.CreateAllSolvers();
+            // Create solvers with parameters scaled to problem size
+            var solvers = new List<ITspSolver>
+            {
+                new NearestNeighborSolver(),
+                new TwoOptSolver(maxIterations: cityCount * 10),
+                new SimulatedAnnealingSolver(
+                    initialTemperature: cityCount * 100,
+                    coolingRate: 0.9995,
+                    iterationsPerTemperature: cityCount * 10),
+                new GeneticAlgorithmSolver(
+                    populationSize: Math.Max(200, cityCount * 2),
+                    generations: Math.Min(5000, cityCount * 20),
+                    mutationRate: 0.1,
+                    elitismRate: 0.1)
+            };
 
             Console.Write("Processing: ");
             var results = await benchmark.RunBenchmarkAsync(cities, solvers);

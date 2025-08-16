@@ -265,9 +265,9 @@ namespace TravelingSalesman.Core
         public override string Name => "Simulated Annealing";
 
         public SimulatedAnnealingSolver(
-            double initialTemperature = 1000,
-            double coolingRate = 0.995,
-            int iterationsPerTemperature = 100,
+            double initialTemperature = 10000,  // Was 1000 - needs to be higher for more cities
+            double coolingRate = 0.9995,        // Was 0.995 - slower cooling
+            int iterationsPerTemperature = 1000, // Was 100 - more iterations
             int? seed = null)
         {
             _initialTemperature = initialTemperature;
@@ -362,6 +362,18 @@ namespace TravelingSalesman.Core
             _mutationRate = mutationRate;
             _elitismRate = elitismRate;
             _random = seed.HasValue ? new Random(seed.Value) : new Random();
+        }
+
+        // Better Genetic Algorithm parameters that scale with problem size
+        public static GeneticAlgorithmSolver CreateScaledGeneticSolver(int cityCount, int? seed = null)
+        {
+            return new GeneticAlgorithmSolver(
+                populationSize: Math.Max(200, cityCount * 2),  // Scale with city count
+                generations: Math.Max(1000, cityCount * 10),   // More generations for larger problems
+                mutationRate: 0.1,                             // Higher mutation
+                elitismRate: 0.1,                              // Less elitism
+                seed: seed
+            );
         }
 
         public override Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default)
@@ -501,7 +513,7 @@ namespace TravelingSalesman.Core
             GeneticAlgorithm
         }
 
-        public static ITspSolver CreateSolver(SolverType type)
+        public static ITspSolver `olver(SolverType type)
         {
             return type switch
             {
@@ -513,7 +525,7 @@ namespace TravelingSalesman.Core
             };
         }
 
-        public static IEnumerable<ITspSolver> CreateAllSolvers()
+        public static IEnumerable<ITspSolver> `AllSolvers()
         {
             yield return new NearestNeighborSolver();
             yield return new TwoOptSolver();
