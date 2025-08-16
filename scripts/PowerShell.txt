@@ -1,3 +1,43 @@
+Annotations
+13 errors and 5 notices
+build-and-release (macos-latest, osx-arm64)
+Process completed with exit code 1.
+build-and-release (macos-latest, osx-arm64): TravelingSalesman.Core/obj/Release/net9.0/TravelingSalesman.Core.AssemblyInfo.cs#L21
+The specified version string '2025.08.16.62.0' does not conform to the required format - major[.minor[.build[.revision]]]
+build-and-release (macos-latest, osx-arm64): TravelingSalesman.Core/obj/Release/net9.0/TravelingSalesman.Core.AssemblyInfo.cs#L17
+The specified version string '2025.08.16.62.0' does not conform to the recommended format - major.minor.build.revision
+build-and-release (macos-latest, osx-x64)
+Process completed with exit code 1.
+build-and-release (macos-latest, osx-x64): TravelingSalesman.Core/obj/Release/net9.0/TravelingSalesman.Core.AssemblyInfo.cs#L21
+The specified version string '2025.08.16.62.0' does not conform to the required format - major[.minor[.build[.revision]]]
+build-and-release (macos-latest, osx-x64): TravelingSalesman.Core/obj/Release/net9.0/TravelingSalesman.Core.AssemblyInfo.cs#L17
+The specified version string '2025.08.16.62.0' does not conform to the recommended format - major.minor.build.revision
+build-and-release (macos-latest, osx-x64)
+The strategy configuration was canceled because "build-and-release.macos-latest_osx-arm64" failed
+build-and-release (ubuntu-latest, linux-x64)
+The operation was canceled.
+build-and-release (ubuntu-latest, linux-x64): TravelingSalesman.Core/obj/Release/net9.0/TravelingSalesman.Core.AssemblyInfo.cs#L21
+The specified version string '2025.08.16.62.0' does not conform to the required format - major[.minor[.build[.revision]]]
+build-and-release (ubuntu-latest, linux-x64): TravelingSalesman.Core/obj/Release/net9.0/TravelingSalesman.Core.AssemblyInfo.cs#L17
+The specified version string '2025.08.16.62.0' does not conform to the recommended format - major.minor.build.revision
+build-and-release (ubuntu-latest, linux-x64)
+The strategy configuration was canceled because "build-and-release.macos-latest_osx-arm64" failed
+build-and-release (windows-latest, win-x64)
+The operation was canceled.
+build-and-release (windows-latest, win-x64)
+The strategy configuration was canceled because "build-and-release.macos-latest_osx-arm64" failed
+build-and-release (macos-latest, osx-arm64)
+The macos-latest label will migrate to macOS 15 beginning August 4, 2025. For more information see https://github.com/actions/runner-images/issues/12520
+build-and-release (macos-latest, osx-arm64)
+The macos-latest label will migrate to macOS 15 beginning August 4, 2025. For more information see https://github.com/actions/runner-images/issues/12520
+build-and-release (macos-latest, osx-x64)
+The macos-latest label will migrate to macOS 15 beginning August 4, 2025. For more information see https://github.com/actions/runner-images/issues/12520
+build-and-release (macos-latest, osx-x64)
+The macos-latest label will migrate to macOS 15 beginning August 4, 2025. For more information see https://github.com/actions/runner-images/issues/12520
+build-and-release (windows-latest, win-x64)
+The windows-latest label will migrate from Windows Server 2022 to Windows Server 2025 beginning September 2, 2025. For more information see https://github.com/actions/runner-images/issues/12677
+
+
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
