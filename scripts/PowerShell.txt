@@ -1,7 +1,7 @@
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is ahead of 'origin/master' by 2 commits.
+Your branch is ahead of 'origin/master' by 1 commit.
   (use "git push" to publish your local commits)
 
 nothing to commit, working tree clean
@@ -15,6 +15,10 @@ nothing to commit, working tree clean
     master merges with remote master
   Local ref configured for 'git push':
     master pushes to master (fast-forwardable)
+Removing TravelingSalesman.ConsoleApp/bin/
+Removing TravelingSalesman.ConsoleApp/obj/
+Removing TravelingSalesman.Core/bin/
+Removing TravelingSalesman.Core/obj/
 Folder PATH listing
 Volume serial number is BE05-6605
 C:.
@@ -1662,29 +1666,7 @@ namespace TravelingSalesman.Core
             }
 
             return sb.ToString();
-
-════════════════════════════════════════════════════════════
-  Interactive TSP Solver
-════════════════════════════════════════════════════════════
-
-How many cities? (4-50): 50
-
-Select city distribution pattern:
-
-╔═══════════════════════════════════════════════════════════════╗
-║          TRAVELING SALESMAN PROBLEM SOLVER v1.0              ║
-║                  .NET 9 Implementation                        ║
-╚═══════════════════════════════════════════════════════════════╝
-
-📍 Main Menu:
-
-  1. Interactive Solver - Solve custom TSP instances
-  2. Algorithm Benchmark - Compare all algorithms
-  3. Visual Demonstration - See algorithms in action
-  4. Algorithm Information - Learn about each algorithm
-  5. Exit
-
-➤ Select an option (1-5): 5
-
-Thank you for using TSP Solver! Goodbye!
-PS C:\code\TSP\TravelingSalesman.ConsoleApp>
+        }
+    }
+}
+PS C:\code\TSP>
