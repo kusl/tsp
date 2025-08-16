@@ -1662,7 +1662,29 @@ namespace TravelingSalesman.Core
             }
 
             return sb.ToString();
-        }
-    }
-}
-PS C:\code\TSP>
+
+════════════════════════════════════════════════════════════
+  Interactive TSP Solver
+════════════════════════════════════════════════════════════
+
+How many cities? (4-50): 50
+
+Select city distribution pattern:
+
+╔═══════════════════════════════════════════════════════════════╗
+║          TRAVELING SALESMAN PROBLEM SOLVER v1.0              ║
+║                  .NET 9 Implementation                        ║
+╚═══════════════════════════════════════════════════════════════╝
+
+📍 Main Menu:
+
+  1. Interactive Solver - Solve custom TSP instances
+  2. Algorithm Benchmark - Compare all algorithms
+  3. Visual Demonstration - See algorithms in action
+  4. Algorithm Information - Learn about each algorithm
+  5. Exit
+
+➤ Select an option (1-5): 5
+
+Thank you for using TSP Solver! Goodbye!
+PS C:\code\TSP\TravelingSalesman.ConsoleApp>
