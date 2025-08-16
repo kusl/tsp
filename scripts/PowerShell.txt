@@ -1,7 +1,7 @@
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is ahead of 'origin/master' by 4 commits.
+Your branch is ahead of 'origin/master' by 7 commits.
   (use "git push" to publish your local commits)
 
 nothing to commit, working tree clean
@@ -651,7 +651,7 @@ namespace TravelingSalesman.ConsoleApp
                     solver = new SimulatedAnnealingSolver();
                     break;
                 case "4":
-                    solver = new GeneticAlgorithmSolver();
+                    solver = GeneticAlgorithmSolver.CreateScaledGeneticSolver(cityCount);
                     break;
                 default:
                     solver = new NearestNeighborSolver();
@@ -1536,7 +1536,7 @@ namespace TravelingSalesman.Core
             GeneticAlgorithm
         }
 
-        public static ITspSolver `olver(SolverType type)
+        public static ITspSolver CreateSolver(SolverType type)
         {
             return type switch
             {
@@ -1548,7 +1548,7 @@ namespace TravelingSalesman.Core
             };
         }
 
-        public static IEnumerable<ITspSolver> `AllSolvers()
+        public static IEnumerable<ITspSolver> CreateAllSolvers()
         {
             yield return new NearestNeighborSolver();
             yield return new TwoOptSolver();
@@ -1690,7 +1690,7 @@ namespace TravelingSalesman.Core
 }
 PS C:\code\TSP> Set-Location "C:\code\tsp"; git status; git remote show origin; git clean -dfx; tree /F; Set-Location "C:\code\TSP\TravelingSalesman.ConsoleApp\"; dotnet run
 On branch master
-Your branch is ahead of 'origin/master' by 5 commits.
+Your branch is ahead of 'origin/master' by 7 commits.
   (use "git push" to publish your local commits)
 
 nothing to commit, working tree clean
@@ -1739,13 +1739,53 @@ C:.
 Using launch settings from C:\code\TSP\TravelingSalesman.ConsoleApp\Properties\launchSettings.json...
 Restore complete (1.6s)
 You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
-  TravelingSalesman.Core failed with 4 error(s) (0.9s)
-    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(516,34): error CS1519: Invalid token '`' in a member declaration
-    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(516,34): error CS1056: Unexpected character '`'
-    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(528,47): error CS1519: Invalid token '`' in a member declaration
-    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(528,47): error CS1056: Unexpected character '`'
+  TravelingSalesman.Core succeeded (1.1s) → C:\code\TSP\TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
+  TravelingSalesman.ConsoleApp succeeded (1.4s) → bin\Debug\net9.0\TravelingSalesman.ConsoleApp.dll
 
-Build failed with 4 error(s) in 4.1s
+Build succeeded in 5.5s
 
-The build failed. Fix the build errors and run again.
-PS C:\code\TSP\TravelingSalesman.ConsoleApp>
+╔═══════════════════════════════════════════════════════════════╗
+║          TRAVELING SALESMAN PROBLEM SOLVER v1.0               ║
+║                  .NET 9 Implementation                        ║
+╚═══════════════════════════════════════════════════════════════╝
+
+📍 Main Menu:
+
+  1. Interactive Solver - Solve custom TSP instances
+  2. Algorithm Benchmark - Compare all algorithms
+  3. Visual Demonstration - See algorithms in action
+  4. Algorithm Information - Learn about each algorithm
+  5. Exit
+
+➤ Select an option (1-5): 1
+
+════════════════════════════════════════════════════════════
+  Interactive TSP Solver
+════════════════════════════════════════════════════════════
+
+How many cities? (minimum 2): 200
+
+⚠️ Note: 200 cities may take significant time with some algorithms.
+   Nearest Neighbor will be fast, but Genetic Algorithm may take minutes.
+   Continue? (y/n): y
+
+Select city distribution pattern:
+  1. Random
+  2. Circular
+  3. Grid
+
+➤ Select pattern (1-3): 1
+
+✓ Generated 200 random cities
+
+Select algorithm:
+  1. Nearest Neighbor (Fast, Good)
+  2. 2-Opt (Medium, Better)
+  3. Simulated Annealing (Slow, Very Good)
+  4. Genetic Algorithm (Slowest, Best)
+
+➤ Select algorithm (1-4): 4
+
+🔄 Running Genetic Algorithm algorithm...
+
+..
