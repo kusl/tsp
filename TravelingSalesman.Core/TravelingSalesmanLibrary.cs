@@ -513,7 +513,7 @@ namespace TravelingSalesman.Core
             GeneticAlgorithm
         }
 
-        public static ITspSolver `olver(SolverType type)
+        public static ITspSolver CreateSolver(SolverType type)
         {
             return type switch
             {
@@ -525,7 +525,7 @@ namespace TravelingSalesman.Core
             };
         }
 
-        public static IEnumerable<ITspSolver> `AllSolvers()
+        public static IEnumerable<ITspSolver> CreateAllSolvers()
         {
             yield return new NearestNeighborSolver();
             yield return new TwoOptSolver();

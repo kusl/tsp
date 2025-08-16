@@ -174,7 +174,7 @@ namespace TravelingSalesman.ConsoleApp
                     solver = new SimulatedAnnealingSolver();
                     break;
                 case "4":
-                    solver = new GeneticAlgorithmSolver();
+                    solver = GeneticAlgorithmSolver.CreateScaledGeneticSolver(cityCount);
                     break;
                 default:
                     solver = new NearestNeighborSolver();
