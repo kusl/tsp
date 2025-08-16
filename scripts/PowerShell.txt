@@ -1,7 +1,7 @@
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is ahead of 'origin/master' by 2 commits.
+Your branch is ahead of 'origin/master' by 1 commit.
   (use "git push" to publish your local commits)
 
 nothing to commit, working tree clean
@@ -550,14 +550,25 @@ jobs:
 
     - name: Generate version info
       id: version
+      shell: bash
       run: |
-        VERSION="$(date +'%Y.%m.%d').$(git rev-list --count HEAD)"
+        # Use semantic versioning with build number
+        MAJOR="1"
+        MINOR="2"
+        PATCH="0"
+        BUILD_NUMBER="$(git rev-list --count HEAD)"
         SHORT_SHA=$(git rev-parse --short HEAD)
+
+        # Create 4-part version for .NET (max 65535 per part)
+        VERSION="${MAJOR}.${MINOR}.${PATCH}.${BUILD_NUMBER}"
         FULL_VERSION="${VERSION}-${SHORT_SHA}"
 
         echo "version=${VERSION}" >> $GITHUB_OUTPUT
         echo "full_version=${FULL_VERSION}" >> $GITHUB_OUTPUT
         echo "sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
+
+        echo "Generated version: ${FULL_VERSION}"
+        echo "Assembly version: ${VERSION} (4 parts)"
 
     - name: Download all artifacts
       uses: actions/download-artifact@v4
