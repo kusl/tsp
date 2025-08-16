@@ -1,7 +1,7 @@
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is ahead of 'origin/master' by 8 commits.
+Your branch is ahead of 'origin/master' by 12 commits.
   (use "git push" to publish your local commits)
 
 nothing to commit, working tree clean
@@ -15,6 +15,11 @@ nothing to commit, working tree clean
     master merges with remote master
   Local ref configured for 'git push':
     master pushes to master (fast-forwardable)
+Removing TravelingSalesman.ConsoleApp/bin/
+Removing TravelingSalesman.ConsoleApp/logs/
+Removing TravelingSalesman.ConsoleApp/obj/
+Removing TravelingSalesman.Core/bin/
+Removing TravelingSalesman.Core/obj/
 Folder PATH listing
 Volume serial number is BE05-6605
 C:.
@@ -745,7 +750,7 @@ namespace TravelingSalesman.ConsoleApp
             }
             catch (Exception ex)
             {
-                _logger.LogFatal(ex, "Unexpected error occurred in main application loop");
+                _logger.LogCritical(ex, "Unexpected error occurred in main application loop");
                 Log.Fatal("An unexpected error occurred: {ErrorMessage}", ex.Message);
                 Log.Information("Press any key to exit...");
                 Console.ReadKey();
@@ -2027,206 +2032,4 @@ namespace TravelingSalesman.Core
         }
     }
 }
-PS C:\code\TSP> Set-Location "C:\code\tsp"; git status; git remote show origin; git clean -dfx; tree /F; Set-Location "C:\code\TSP\TravelingSalesman.ConsoleApp\"; dotnet run
-On branch master
-Your branch is ahead of 'origin/master' by 9 commits.
-  (use "git push" to publish your local commits)
-
-nothing to commit, working tree clean
-* remote origin
-  Fetch URL: git@github.com:kusl/tsp.git
-  Push  URL: git@github.com:kusl/tsp.git
-  HEAD branch: master
-  Remote branch:
-    master tracked
-  Local branch configured for 'git pull':
-    master merges with remote master
-  Local ref configured for 'git push':
-    master pushes to master (fast-forwardable)
-Folder PATH listing
-Volume serial number is BE05-6605
-C:.
-│   .dockerignore
-│   .gitattributes
-│   .gitignore
-│   Directory.Build.props
-│   Directory.Packages.props
-│   Dockerfile
-│   LICENSE.txt
-│   README.md
-│   TSP.sln
-│
-├───.github
-│   └───workflows
-│           build.yml
-│           release.yml
-│
-├───scripts
-│       cat.ps1
-│       PowerShell.txt
-│
-├───TravelingSalesman.ConsoleApp
-│   │   Program.cs
-│   │   TravelingSalesman.ConsoleApp.csproj
-│   │
-│   └───Properties
-│           launchSettings.json
-│
-└───TravelingSalesman.Core
-        TravelingSalesman.Core.csproj
-        TravelingSalesmanLibrary.cs
-
-Using launch settings from C:\code\TSP\TravelingSalesman.ConsoleApp\Properties\launchSettings.json...
-Restore complete (1.8s)
-You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
-  TravelingSalesman.Core succeeded (6.4s) → C:\code\TSP\TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
-  TravelingSalesman.ConsoleApp failed with 1 error(s) (1.8s)
-    C:\code\TSP\TravelingSalesman.ConsoleApp\Program.cs(84,25): error CS1061: 'ILogger<Program>' does not contain a definition for 'LogFatal' and no accessible extension method 'LogFatal' accepting a first argument of type 'ILogger<Program>' could be found (are you missing a using directive or an assembly reference?)
-
-Build failed with 1 error(s) in 11.3s
-
-The build failed. Fix the build errors and run again.
-PS C:\code\TSP\TravelingSalesman.ConsoleApp> Set-Location "C:\code\tsp"; git status; git remote show origin; git clean -dfx; tree /F; Set-Location "C:\code\TSP\TravelingSalesman.ConsoleApp\"; dotnet run
-On branch master
-Your branch is ahead of 'origin/master' by 11 commits.
-  (use "git push" to publish your local commits)
-
-nothing to commit, working tree clean
-* remote origin
-  Fetch URL: git@github.com:kusl/tsp.git
-  Push  URL: git@github.com:kusl/tsp.git
-  HEAD branch: master
-  Remote branch:
-    master tracked
-  Local branch configured for 'git pull':
-    master merges with remote master
-  Local ref configured for 'git push':
-    master pushes to master (fast-forwardable)
-Removing TravelingSalesman.ConsoleApp/bin/
-Removing TravelingSalesman.ConsoleApp/obj/
-Removing TravelingSalesman.Core/bin/
-Removing TravelingSalesman.Core/obj/
-Folder PATH listing
-Volume serial number is BE05-6605
-C:.
-│   .dockerignore
-│   .gitattributes
-│   .gitignore
-│   Directory.Build.props
-│   Directory.Packages.props
-│   Dockerfile
-│   LICENSE.txt
-│   README.md
-│   TSP.sln
-│
-├───.github
-│   └───workflows
-│           build.yml
-│           release.yml
-│
-├───scripts
-│       cat.ps1
-│       PowerShell.txt
-│
-├───TravelingSalesman.ConsoleApp
-│   │   Program.cs
-│   │   TravelingSalesman.ConsoleApp.csproj
-│   │
-│   └───Properties
-│           launchSettings.json
-│
-└───TravelingSalesman.Core
-        TravelingSalesman.Core.csproj
-        TravelingSalesmanLibrary.cs
-
-Using launch settings from C:\code\TSP\TravelingSalesman.ConsoleApp\Properties\launchSettings.json...
-Restore complete (2.1s)
-You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
-  TravelingSalesman.Core succeeded (1.5s) → C:\code\TSP\TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
-  TravelingSalesman.ConsoleApp succeeded (1.8s) → bin\Debug\net9.0\TravelingSalesman.ConsoleApp.dll
-
-Build succeeded in 6.8s
-[12:49:59 INF] TSP Solver v1.2.0 starting up
-
-[12:49:59 INF] ╔═══════════════════════════════════════════════════════════════╗
-[12:49:59 INF] ║          TRAVELING SALESMAN PROBLEM SOLVER v1.2.0        ║
-[12:49:59 INF] ║                  .NET 9 Implementation                        ║
-[12:49:59 INF] ╚═══════════════════════════════════════════════════════════════╝
-[12:49:59 INF] 📍 Main Menu:
-[12:49:59 INF]
-[12:49:59 INF]   1. Interactive Solver - Solve custom TSP instances
-[12:49:59 INF]   2. Algorithm Benchmark - Compare all algorithms
-[12:49:59 INF]   3. Visual Demonstration - See algorithms in action
-[12:50:00 INF]   4. Algorithm Information - Learn about each algorithm
-[12:50:00 INF]   5. Exit
-[12:50:00 INF] ➤ Select an option (1-5):
-1
-[12:50:06 INF] Starting interactive solver session
-[12:50:06 INF] ════════════════════════════════════════════════════════════
-[12:50:06 INF]   Interactive TSP Solver
-[12:50:06 INF] ════════════════════════════════════════════════════════════
-[12:50:06 INF] How many cities? (minimum 2):
-5
-[12:50:09 INF] Interactive solver configured for 5 cities
-[12:50:09 INF] Select city distribution pattern:
-[12:50:09 INF]   1. Random
-[12:50:09 INF]   2. Circular
-[12:50:09 INF]   3. Grid
-[12:50:09 INF] ➤ Select pattern (1-3):
-1
-[12:50:11 DBG] Generating 5 random cities in area 100x100
-[12:50:11 INF] Generated 5 random cities
-[12:50:11 INF] ✓ Generated 5 random cities
-[12:50:11 INF] Generated 5 cities with random pattern
-[12:50:11 INF] Select algorithm:
-[12:50:11 INF]   1. Nearest Neighbor (Fast, Good)
-[12:50:11 INF]   2. 2-Opt (Medium, Better)
-[12:50:11 INF]   3. Simulated Annealing (Slow, Very Good)
-[12:50:11 INF]   4. Genetic Algorithm (Slowest, Best)
-[12:50:11 INF] ➤ Select algorithm (1-4):
-4
-[12:50:14 INF] Selected algorithm: Genetic Algorithm for 5 cities
-[12:50:14 INF] 🔄 Running Genetic Algorithm algorithm...
-[12:50:14 INF] Starting TSP solution with Genetic Algorithm
-[12:50:14 INF] Starting Genetic Algorithm for 5 cities (population: 200, generations: 1000, mutation rate: 0.100, elitism rate: 0.100)
-[12:50:14 DBG] Building distance matrix for 5 cities
-[12:50:14 DBG] Distance matrix built successfully
-[12:50:14 DBG] Initializing population of 200 individuals
-[12:50:14 DBG] Initial population created. Best distance: 200.17
-.[12:50:15 DBG] Early stopping at generation 250 due to no improvement
-[12:50:15 INF] Genetic Algorithm completed. Distance: 200.17 (improved by 0.0%)
-[12:50:15 INF] TSP solution completed - Algorithm: Genetic Algorithm, Cities: 5, Pattern: random, Distance: 200.17, Time: 472ms
-
-
-[12:50:15 INF] ════════════════════════════════════════════════════════════
-[12:50:15 INF] ✓ Solution Found!
-[12:50:15 INF] ════════════════════════════════════════════════════════════
-[12:50:15 INF] Algorithm: Genetic Algorithm
-[12:50:15 INF] Execution Time: 472 ms
-[12:50:15 INF] Total Distance: 200.17 units
-[12:50:15 INF] Route (5 cities):
-[12:50:15 INF] City_0 → City_3 → City_4 → City_1 → City_2 → City_0
-[12:50:15 INF] Show city coordinates? (y/n):
-y
-[12:50:17 INF] City Coordinates:
-[12:50:17 INF]   City_0: (66.81, 14.09)
-[12:50:17 INF]   City_1: (12.55, 52.28)
-[12:50:17 INF]   City_2: (16.84, 26.26)
-[12:50:17 INF]   City_3: (72.44, 51.29)
-[12:50:17 INF]   City_4: (17.37, 76.13)
-[12:50:17 INF] Interactive solver session completed successfully
-[12:50:17 INF] Press any key to return to main menu...
-
-[12:50:19 INF] 📍 Main Menu:
-[12:50:19 INF]
-[12:50:19 INF]   1. Interactive Solver - Solve custom TSP instances
-[12:50:19 INF]   2. Algorithm Benchmark - Compare all algorithms
-[12:50:19 INF]   3. Visual Demonstration - See algorithms in action
-[12:50:19 INF]   4. Algorithm Information - Learn about each algorithm
-[12:50:19 INF]   5. Exit
-[12:50:19 INF] ➤ Select an option (1-5):
-5
-[12:50:24 INF] User requested application exit
-[12:50:24 INF] Thank you for using TSP Solver! Goodbye!
-[12:50:24 INF] TSP Solver shutting down
-PS C:\code\TSP\TravelingSalesman.ConsoleApp> C:\code\TSP\scripts\cat.ps1
+PS C:\code\TSP>
