@@ -1788,4 +1788,56 @@ Select algorithm:
 
 🔄 Running Genetic Algorithm algorithm...
 
-..
+....................
+
+════════════════════════════════════════════════════════════
+✓ Solution Found!
+════════════════════════════════════════════════════════════
+
+Algorithm: Genetic Algorithm
+Execution Time: 1,549,101 ms
+Total Distance: 2428.41 units
+
+Route (200 cities):
+City_0 → City_144 → City_194 → City_150 → City_23 → City_100 → City_152 → City_115 → City_143 → City_163 → ... → City_106 → City_0
+
+Show city coordinates? (y/n): y
+
+City Coordinates:
+  City_0: (66.81, 14.09)
+  City_1: (12.55, 52.28)
+  City_2: (16.84, 26.26)
+  City_3: (72.44, 51.29)
+  City_4: (17.37, 76.13)
+  City_5: (23.46, 25.73)
+  City_6: (50.56, 32.02)
+  City_7: (38.10, 26.02)
+  City_8: (51.75, 3.53)
+  City_9: (81.41, 57.72)
+  City_10: (39.75, 15.22)
+  City_11: (9.01, 70.52)
+  City_12: (81.62, 54.00)
+  City_13: (4.41, 71.12)
+  City_14: (14.78, 90.62)
+  City_15: (69.26, 51.64)
+  City_16: (18.64, 4.15)
+  City_17: (30.82, 58.32)
+  City_18: (82.11, 0.40)
+  City_19: (53.57, 80.52)
+  ... and 180 more cities
+
+Press any key to return to main menu...
+
+
+📍 Main Menu:
+
+  1. Interactive Solver - Solve custom TSP instances
+  2. Algorithm Benchmark - Compare all algorithms
+  3. Visual Demonstration - See algorithms in action
+  4. Algorithm Information - Learn about each algorithm
+  5. Exit
+
+➤ Select an option (1-5): 5
+
+Thank you for using TSP Solver! Goodbye!
+PS C:\code\TSP\TravelingSalesman.ConsoleApp> Set-Location "C:\code\tsp"; git status; git remote show origin; git clean -dfx; tree /F; Set-Location "C:\code\TSP\TravelingSalesman.ConsoleApp\"; dotnet run
