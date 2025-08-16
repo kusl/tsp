@@ -1,8 +1,7 @@
 PowerShell 7.6.0-preview.4
-PS C:\Users\kushal> Set-Location "C:\code\tsp"; git status; git remote show origin; git clean -dfx; tree /F; Set-Location "C:\code\TSP\TravelingSalesman.ConsoleApp\"; dotnet run
+PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is ahead of 'origin/master' by 2 commits.
-  (use "git push" to publish your local commits)
+Your branch is up to date with 'origin/master'.
 
 nothing to commit, working tree clean
 * remote origin
@@ -14,144 +13,7 @@ nothing to commit, working tree clean
   Local branch configured for 'git pull':
     master merges with remote master
   Local ref configured for 'git push':
-    master pushes to master (fast-forwardable)
-Folder PATH listing
-Volume serial number is BE05-6605
-C:.
-│   .dockerignore
-│   .gitattributes
-│   .gitignore
-│   Directory.Build.props
-│   Directory.Packages.props
-│   Dockerfile
-│   LICENSE.txt
-│   README.md
-│   TSP.sln
-│
-├───.github
-│   └───workflows
-│           build.yml
-│           release.yml
-│
-├───scripts
-│       cat.ps1
-│       PowerShell.txt
-│
-├───TravelingSalesman.ConsoleApp
-│   │   Program.cs
-│   │   TravelingSalesman.ConsoleApp.csproj
-│   │
-│   └───Properties
-│           launchSettings.json
-│
-└───TravelingSalesman.Core
-        TravelingSalesman.Core.csproj
-        TravelingSalesmanLibrary.cs
-
-Using launch settings from C:\code\TSP\TravelingSalesman.ConsoleApp\Properties\launchSettings.json...
-Restore complete (2.1s)
-You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
-  TravelingSalesman.Core succeeded (6.4s) → C:\code\TSP\TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
-  TravelingSalesman.ConsoleApp succeeded (2.4s) → bin\Debug\net9.0\TravelingSalesman.ConsoleApp.dll
-
-Build succeeded in 12.2s
-[14:21:20 INF] TSP Solver v1.2.0 starting up
-
-[14:21:20 INF] ╔═══════════════════════════════════════════════════════════════╗
-[14:21:20 INF] ║          TRAVELING SALESMAN PROBLEM SOLVER v1.2.0        ║
-[14:21:20 INF] ║                  .NET 9 Implementation                        ║
-[14:21:20 INF] ╚═══════════════════════════════════════════════════════════════╝
-[14:21:20 INF] 📍 Main Menu:
-[14:21:20 INF]
-[14:21:20 INF]   1. Interactive Solver - Solve custom TSP instances
-[14:21:20 INF]   2. Algorithm Benchmark - Compare all algorithms
-[14:21:20 INF]   3. Visual Demonstration - See algorithms in action
-[14:21:20 INF]   4. Algorithm Information - Learn about each algorithm
-[14:21:20 INF]   5. Exit
-[14:21:20 INF] ➤ Select an option (1-5):
-1
-[14:21:32 INF] Starting interactive solver session
-[14:21:32 INF] ════════════════════════════════════════════════════════════
-[14:21:32 INF]   Interactive TSP Solver
-[14:21:32 INF] ════════════════════════════════════════════════════════════
-[14:21:32 INF] How many cities? (minimum 2):
-2
-[14:21:34 INF] Interactive solver configured for 2 cities
-[14:21:34 INF] Select city distribution pattern:
-[14:21:35 INF]   1. Random
-[14:21:35 INF]   2. Circular
-[14:21:35 INF]   3. Grid
-[14:21:35 INF] ➤ Select pattern (1-3):
-1
-[14:21:36 DBG] Generating 2 random cities in area 100x100
-[14:21:37 INF] Generated 2 random cities
-[14:21:37 INF] ✓ Generated 2 random cities
-[14:21:37 INF] Generated 2 cities with random pattern
-[14:21:37 INF] Select algorithm:
-[14:21:37 INF]   1. Nearest Neighbor (Fast, Good)
-[14:21:37 INF]   2. 2-Opt (Medium, Better)
-[14:21:37 INF]   3. Simulated Annealing (Slow, Very Good)
-[14:21:37 INF]   4. Genetic Algorithm (Slowest, Best)
-[14:21:37 INF] ➤ Select algorithm (1-4):
-4
-[14:21:39 INF] Selected algorithm: Genetic Algorithm for 2 cities
-[14:21:39 INF] 🔄 Running Genetic Algorithm algorithm...
-[14:21:39 INF] Starting TSP solution with Genetic Algorithm
-[14:21:39 INF] Starting Genetic Algorithm for 2 cities (population: 200, generations: 1000, mutation rate: 0.100, elitism rate: 0.100)
-[14:21:39 DBG] Building distance matrix for 2 cities
-[14:21:39 DBG] Distance matrix built successfully
-[14:21:39 DBG] Initializing population of 200 individuals
-[14:21:39 DBG] Initial population created. Best distance: 132.70
-.[14:21:40 DBG] Early stopping at generation 250 due to no improvement
-[14:21:40 INF] Genetic Algorithm completed. Distance: 132.70 (improved by 0.0%)
-[14:21:40 INF] TSP solution completed - Algorithm: Genetic Algorithm, Cities: 2, Pattern: random, Distance: 132.70, Time: 411ms
-
-
-[14:21:40 INF] ════════════════════════════════════════════════════════════
-[14:21:40 INF] ✓ Solution Found!
-[14:21:40 INF] ════════════════════════════════════════════════════════════
-[14:21:40 INF] Algorithm: Genetic Algorithm
-[14:21:40 INF] Execution Time: 411 ms
-[14:21:40 INF] Total Distance: 132.70 units
-[14:21:40 INF] Route (2 cities):
-[14:21:40 INF] City_0 → City_1 → City_0
-[14:21:40 INF] Show city coordinates? (y/n):
-y
-[14:21:42 INF] City Coordinates:
-[14:21:42 INF]   City_0: (66.81, 14.09)
-[14:21:42 INF]   City_1: (12.55, 52.28)
-[14:21:42 INF] Interactive solver session completed successfully
-[14:21:42 INF] Press any key to return to main menu...
-
-[14:21:43 INF] 📍 Main Menu:
-[14:21:44 INF]
-[14:21:44 INF]   1. Interactive Solver - Solve custom TSP instances
-[14:21:44 INF]   2. Algorithm Benchmark - Compare all algorithms
-[14:21:44 INF]   3. Visual Demonstration - See algorithms in action
-[14:21:44 INF]   4. Algorithm Information - Learn about each algorithm
-[14:21:44 INF]   5. Exit
-[14:21:44 INF] ➤ Select an option (1-5):
-5
-[14:21:46 INF] User requested application exit
-[14:21:46 INF] Thank you for using TSP Solver! Goodbye!
-[14:21:46 INF] TSP Solver shutting down
-PS C:\code\TSP\TravelingSalesman.ConsoleApp>
-PS C:\code\TSP\TravelingSalesman.ConsoleApp> Set-Location "C:\code\tsp"; git status; git remote show origin; git clean -dfx; tree /F; Set-Location "C:\code\TSP\TravelingSalesman.ConsoleApp\"; dotnet run
-On branch master
-Your branch is ahead of 'origin/master' by 3 commits.
-  (use "git push" to publish your local commits)
-
-nothing to commit, working tree clean
-* remote origin
-  Fetch URL: git@github.com:kusl/tsp.git
-  Push  URL: git@github.com:kusl/tsp.git
-  HEAD branch: master
-  Remote branch:
-    master tracked
-  Local branch configured for 'git pull':
-    master merges with remote master
-  Local ref configured for 'git push':
-    master pushes to master (fast-forwardable)
+    master pushes to master (up to date)
 Removing TravelingSalesman.ConsoleApp/bin/
 Removing TravelingSalesman.ConsoleApp/logs/
 Removing TravelingSalesman.ConsoleApp/obj/
@@ -190,29 +52,2248 @@ C:.
         TravelingSalesman.Core.csproj
         TravelingSalesmanLibrary.cs
 
-Using launch settings from C:\code\TSP\TravelingSalesman.ConsoleApp\Properties\launchSettings.json...
-Restore complete (1.8s)
-You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
-  TravelingSalesman.Core succeeded (1.5s) → C:\code\TSP\TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
-  TravelingSalesman.ConsoleApp succeeded (1.8s) → bin\Debug\net9.0\TravelingSalesman.ConsoleApp.dll
 
-Build succeeded in 6.5s
-[14:24:46 INF] TSP Solver v1.2.0 starting up
+=== SLN FILE ===
 
-[14:24:46 INF] ╔═══════════════════════════════════════════════════════════════╗
-[14:24:46 INF] ║           TRAVELING SALESMAN PROBLEM SOLVER v1.2.0            ║
-[14:24:46 INF] ║                     .NET 9 Implementation                     ║
-[14:24:46 INF] ╚═══════════════════════════════════════════════════════════════╝
-[14:24:46 INF] 📍 Main Menu:
-[14:24:46 INF]
-[14:24:46 INF]   1. Interactive Solver - Solve custom TSP instances
-[14:24:46 INF]   2. Algorithm Benchmark - Compare all algorithms
-[14:24:46 INF]   3. Visual Demonstration - See algorithms in action
-[14:24:46 INF]   4. Algorithm Information - Learn about each algorithm
-[14:24:46 INF]   5. Exit
-[14:24:46 INF] ➤ Select an option (1-5):
-5
-[14:24:51 INF] User requested application exit
-[14:24:51 INF] Thank you for using TSP Solver! Goodbye!
-[14:24:51 INF] TSP Solver shutting down
-PS C:\code\TSP\TravelingSalesman.ConsoleApp>
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36408.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelingSalesman.Core", "TravelingSalesman.Core\TravelingSalesman.Core.csproj", "{C2346882-82C9-4200-AD54-AB85B62D0297}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelingSalesman.ConsoleApp", "TravelingSalesman.ConsoleApp\TravelingSalesman.ConsoleApp.csproj", "{304BB409-E7A3-484A-9EB2-2864B7868DD2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+        ProjectSection(SolutionItems) = preProject
+                .github\workflows\build.yml = .github\workflows\build.yml
+                Dockerfile = Dockerfile
+        EndProjectSection
+EndProject
+Global
+        GlobalSection(SolutionConfigurationPlatforms) = preSolution
+                Debug|Any CPU = Debug|Any CPU
+                Release|Any CPU = Release|Any CPU
+        EndGlobalSection
+        GlobalSection(ProjectConfigurationPlatforms) = postSolution
+                {C2346882-82C9-4200-AD54-AB85B62D0297}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+                {C2346882-82C9-4200-AD54-AB85B62D0297}.Debug|Any CPU.Build.0 = Debug|Any CPU
+                {C2346882-82C9-4200-AD54-AB85B62D0297}.Release|Any CPU.ActiveCfg = Release|Any CPU
+                {C2346882-82C9-4200-AD54-AB85B62D0297}.Release|Any CPU.Build.0 = Release|Any CPU
+                {304BB409-E7A3-484A-9EB2-2864B7868DD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+                {304BB409-E7A3-484A-9EB2-2864B7868DD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+                {304BB409-E7A3-484A-9EB2-2864B7868DD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+                {304BB409-E7A3-484A-9EB2-2864B7868DD2}.Release|Any CPU.Build.0 = Release|Any CPU
+        EndGlobalSection
+        GlobalSection(SolutionProperties) = preSolution
+                HideSolutionNode = FALSE
+        EndGlobalSection
+        GlobalSection(ExtensibilityGlobals) = postSolution
+                SolutionGuid = {A273C62C-9A31-4047-9AAB-4C20C12D1666}
+        EndGlobalSection
+EndGlobal
+
+=== DOCKERFILE ===
+# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+# Version configuration - change these two lines when upgrading .NET versions
+ARG DOTNET_VERSION=9.0
+ARG DOTNET_VERSION_EXACT=9.0
+
+# These ARGs allow for swapping out the base used to make the final image when debugging from VS
+ARG LAUNCHING_FROM_VS
+# This sets the base image for final, but only if LAUNCHING_FROM_VS has been defined
+ARG FINAL_BASE_IMAGE=${LAUNCHING_FROM_VS:+aotdebug}
+
+# This stage is used when running from VS in fast mode (Default for Debug configuration)
+FROM mcr.microsoft.com/dotnet/runtime:${DOTNET_VERSION} AS base
+USER $APP_UID
+WORKDIR /app
+
+# This stage is used to build the service project
+FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} AS build
+# Install clang/zlib1g-dev dependencies for publishing to native
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    clang zlib1g-dev
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+
+# Copy solution and MSBuild configuration files FIRST
+COPY ["TSP.sln", "./"]
+COPY ["Directory.Build.props", "./"]
+COPY ["Directory.Packages.props", "./"]
+
+# Copy project files for both projects
+COPY ["TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj", "TravelingSalesman.ConsoleApp/"]
+COPY ["TravelingSalesman.Core/TravelingSalesman.Core.csproj", "TravelingSalesman.Core/"]
+
+# Restore the console app (which will also restore its dependencies)
+RUN dotnet restore "TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj"
+
+# Copy all source code
+COPY . .
+
+WORKDIR "/src/TravelingSalesman.ConsoleApp"
+RUN dotnet build "TravelingSalesman.ConsoleApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+# This stage is used to publish the service project to be copied to the final stage
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "TravelingSalesman.ConsoleApp.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=true
+
+# This stage is used as the base for the final stage when launching from VS to support debugging in regular mode (Default when not using the Debug configuration)
+FROM base AS aotdebug
+USER root
+# Install GDB to support native debugging
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    gdb
+USER app
+
+# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
+# Re-declare the ARG in this stage so it's available
+ARG DOTNET_VERSION=9.0
+FROM ${FINAL_BASE_IMAGE:-mcr.microsoft.com/dotnet/runtime-deps:${DOTNET_VERSION}} AS final
+WORKDIR /app
+
+# Create logs directory for Serilog file output
+RUN mkdir -p /app/logs && \
+    chmod 755 /app/logs
+
+COPY --from=publish /app/publish .
+ENTRYPOINT ["./TravelingSalesman.ConsoleApp"]
+
+=== Properties FILE ===
+<Project>
+  <PropertyGroup>
+    <!-- Version Management - these will be updated by CI/CD -->
+    <!-- Use a more CI-friendly format to avoid sed issues -->
+    <Version Condition="'$(Version)' == ''">1.2.0</Version>
+    <AssemblyVersion Condition="'$(AssemblyVersion)' == ''">1.2.0.0</AssemblyVersion>
+    <FileVersion Condition="'$(FileVersion)' == ''">1.2.0.0</FileVersion>
+    <InformationalVersion Condition="'$(InformationalVersion)' == ''">1.2.0</InformationalVersion>
+
+    <!-- Centralized .NET version management -->
+    <TargetFramework>net9.0</TargetFramework>
+    <DotNetVersion>9.0</DotNetVersion>
+    <DotNetChannel>9.0</DotNetChannel>
+
+    <!-- When .NET 10 releases, just update these three lines -->
+    <!-- <TargetFramework>net10.0</TargetFramework> -->
+    <!-- <DotNetVersion>10.0</DotNetVersion> -->
+    <!-- <DotNetChannel>10.0</DotNetChannel> -->
+
+    <!-- Shared project settings -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest</AnalysisLevel>
+
+    <!-- AOT settings for console apps -->
+    <PublishAot Condition="'$(OutputType)' == 'Exe'">true</PublishAot>
+    <InvariantGlobalization Condition="'$(PublishAot)' == 'true'">true</InvariantGlobalization>
+
+    <!-- Optimize for size and startup time -->
+    <PublishSingleFile Condition="'$(PublishAot)' == 'true'">true</PublishSingleFile>
+    <PublishTrimmed Condition="'$(PublishAot)' == 'true'">true</PublishTrimmed>
+    <TrimMode Condition="'$(PublishAot)' == 'true'">link</TrimMode>
+
+    <!-- Company/Product Info -->
+    <Company>TSP Solutions</Company>
+    <Product>Traveling Salesman Problem Solver</Product>
+    <Copyright>Copyright © 2025 TSP Solutions</Copyright>
+    <Description>Advanced TSP solver with multiple algorithms</Description>
+
+    <!-- Assembly metadata for better debugging -->
+    <AssemblyTitle>$(Product)</AssemblyTitle>
+    <AssemblyDescription>$(Description)</AssemblyDescription>
+    <AssemblyCompany>$(Company)</AssemblyCompany>
+    <AssemblyProduct>$(Product)</AssemblyProduct>
+    <AssemblyCopyright>$(Copyright)</AssemblyCopyright>
+  </PropertyGroup>
+
+  <!-- Conditional compilation symbols for different builds -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE</DefineConstants>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <!-- Package settings for libraries -->
+  <PropertyGroup Condition="'$(IsPackable)' == 'true'">
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageId>$(AssemblyName)</PackageId>
+    <PackageVersion>$(Version)</PackageVersion>
+    <Authors>$(Company)</Authors>
+    <PackageDescription>$(Description)</PackageDescription>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/kusl/tsp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/kusl/tsp.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>tsp;traveling-salesman;optimization;algorithms</PackageTags>
+  </PropertyGroup>
+</Project>
+<Project>
+  <!-- Enable Central Package Management -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <!-- Central Package Version Management -->
+  <ItemGroup>
+    <!-- Logging -->
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.8" />
+    <PackageVersion Include="Serilog" Version="4.3.0" />
+    <PackageVersion Include="Serilog.Extensions.Logging" Version="9.0.2" />
+    <PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageVersion Include="Serilog.Formatting.Compact" Version="3.0.0" />
+  </ItemGroup>
+</Project>
+
+=== GITHUB ACTIONS ===
+name: Build and Test TSP Solver
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image
+      run: |
+        docker build -t tsp-solver:latest .
+        echo "✅ Docker image built successfully"
+        docker images | grep tsp-solver
+
+    - name: Test - Benchmark with 10 cities
+      run: |
+        echo "Running benchmark test with 10 cities..."
+        echo -e "2\n10\n5\n" | timeout 30s docker run --rm -i tsp-solver:latest | tee benchmark_output.log || true
+
+        if grep -q "Benchmark completed" benchmark_output.log; then
+          echo "✅ Benchmark completed successfully"
+          grep -A 5 "Winner:" benchmark_output.log || true
+        else
+          echo "⚠️ Benchmark may not have completed properly"
+        fi
+
+    - name: Test - Interactive solver with Nearest Neighbor
+      run: |
+        echo "Testing Nearest Neighbor algorithm with 8 cities..."
+        echo -e "1\n8\n1\n1\nn\n5\n" | timeout 20s docker run --rm -i tsp-solver:latest | tee nn_output.log || true
+
+        if grep -q "Solution Found" nn_output.log; then
+          echo "✅ Nearest Neighbor test completed"
+          grep "Total Distance:" nn_output.log || true
+        else
+          echo "⚠️ Nearest Neighbor test may not have completed"
+        fi
+
+    - name: Test - Demonstration mode
+      run: |
+        echo "Running demonstration mode..."
+        echo -e "3\n5\n" | timeout 60s docker run --rm -i tsp-solver:latest | tee demo_output.log || true
+
+        if grep -q "Demonstration Complete" demo_output.log; then
+          echo "✅ Demonstration completed successfully"
+        else
+          echo "⚠️ Demonstration may not have completed"
+        fi
+
+    - name: Test - Algorithm Information
+      run: |
+        echo "Getting algorithm information..."
+        echo -e "4\n5\n" | timeout 10s docker run --rm -i tsp-solver:latest | tee info_output.log || true
+
+        if grep -q "Algorithm Information" info_output.log; then
+          echo "✅ Algorithm info displayed successfully"
+        else
+          echo "⚠️ Algorithm info test may not have completed"
+        fi
+
+    - name: Test - Log File Creation
+      run: |
+        echo "Testing log file creation..."
+        # Run a quick test and check if logs directory is created
+        echo -e "4\n5\n" | timeout 10s docker run --rm -v $(pwd)/test-logs:/app/logs tsp-solver:latest | tee log_test.log || true
+
+        if [ -d "test-logs" ] && [ "$(ls -A test-logs)" ]; then
+          echo "✅ Log files created successfully"
+          ls -la test-logs/ || true
+          echo "Sample log content:"
+          head -5 test-logs/* 2>/dev/null || true
+        else
+          echo "⚠️ Log files may not have been created"
+        fi
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-outputs
+        path: |
+          *_output.log
+          log_test.log
+          test-logs/
+
+    - name: Display summary
+      if: always()
+      run: |
+        echo "## Test Summary"
+        echo "Docker image size:"
+        docker images tsp-solver:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+
+        echo ""
+        echo "Test files generated:"
+        ls -lh *_output.log log_test.log 2>/dev/null || echo "No output files found"
+
+        echo ""
+        echo "Log directory test:"
+        if [ -d "test-logs" ]; then
+          echo "✅ Logs directory created"
+          du -sh test-logs/ 2>/dev/null || true
+        else
+          echo "❌ Logs directory not found"
+        fi
+
+  build-native-dotnet:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore TSP.sln
+
+    - name: Build
+      run: dotnet build TSP.sln --configuration Release --no-restore
+
+    - name: Test Version Information
+      run: |
+        echo "Testing assembly version information..."
+        cd TravelingSalesman.ConsoleApp/bin/Release/net9.0
+
+        # Check if version is properly embedded
+        if command -v strings >/dev/null 2>&1; then
+          echo "Assembly version info:"
+          strings TravelingSalesman.ConsoleApp.dll | grep -E "^[0-9]+\.[0-9]+\.[0-9]+" || echo "Version strings not found"
+        fi
+
+    - name: Run without Docker
+      run: |
+        echo "Testing native .NET build with logging..."
+        cd TravelingSalesman.ConsoleApp/bin/Release/net9.0
+
+        # Test basic functionality and log creation
+        echo -e "4\n5\n" | timeout 10s dotnet TravelingSalesman.ConsoleApp.dll || true
+
+        # Check if logs directory was created
+        if [ -d "logs" ]; then
+          echo "✅ Logs directory created in native build"
+          ls -la logs/ || true
+        else
+          echo "❌ Logs directory not created in native build"
+        fi
+
+    - name: Publish AOT (if supported)
+      continue-on-error: true
+      run: |
+        echo "Publishing AOT build..."
+        dotnet publish TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj \
+          -c Release \
+          -r linux-x64 \
+          --self-contained true \
+          -p:PublishAot=true \
+          -o ./publish-aot
+
+        echo "AOT published files:"
+        ls -lh ./publish-aot/ || true
+
+        # Test AOT binary
+        if [ -f "./publish-aot/TravelingSalesman.ConsoleApp" ]; then
+          echo "Testing AOT binary..."
+          echo -e "4\n5\n" | timeout 10s ./publish-aot/TravelingSalesman.ConsoleApp || true
+
+          # Check logs for AOT build
+          if [ -d "./publish-aot/logs" ]; then
+            echo "✅ AOT build creates logs successfully"
+          else
+            echo "⚠️ AOT build may not create logs directory"
+          fi
+        fi
+
+    - name: Upload native build artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: native-build-logs
+        path: |
+          TravelingSalesman.ConsoleApp/bin/Release/net9.0/logs/
+          publish-aot/logs/
+name: Continuous Release
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+
+jobs:
+  build-and-release:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            rid: win-x64
+            binary_extension: .exe
+          - os: ubuntu-latest
+            rid: linux-x64
+            binary_extension: ""
+          - os: macos-latest
+            rid: osx-x64
+            binary_extension: ""
+          - os: macos-latest
+            rid: osx-arm64
+            binary_extension: ""
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Generate version info
+      id: version
+      shell: bash
+      run: |
+        # Generate a more stable version format
+        YEAR_SHORT=$(($(date +'%Y') - 2000))
+        MONTH=$((10#$(date +'%m')))
+        DAY=$((10#$(date +'%d')))
+
+        # Get build number from commits, but keep it reasonable
+        RAW_BUILD=$(git rev-list --count HEAD)
+        BUILD_NUMBER=$((RAW_BUILD % 10000 + 1000))  # Keep between 1000-10999
+
+        SHORT_SHA=$(git rev-parse --short=8 HEAD)
+
+        # Create semantic version (max 4 parts for .NET)
+        VERSION="${YEAR_SHORT}.${MONTH}.${DAY}.${BUILD_NUMBER}"
+        FULL_VERSION="${VERSION}-${SHORT_SHA}"
+
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "full_version=${FULL_VERSION}" >> $GITHUB_OUTPUT
+        echo "sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
+        echo "build_number=${BUILD_NUMBER}" >> $GITHUB_OUTPUT
+
+        echo "Generated versions:"
+        echo "  Assembly version: ${VERSION}"
+        echo "  Full version: ${FULL_VERSION}"
+        echo "  Commit: ${SHORT_SHA}"
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Update version in Directory.Build.props
+      shell: bash
+      run: |
+        echo "Updating version information..."
+
+        # Create a new Directory.Build.props with updated versions
+        cat > Directory.Build.props.new << 'EOF'
+        <Project>
+          <PropertyGroup>
+            <Version>${{ steps.version.outputs.version }}</Version>
+            <AssemblyVersion>${{ steps.version.outputs.version }}</AssemblyVersion>
+            <FileVersion>${{ steps.version.outputs.version }}</FileVersion>
+            <InformationalVersion>${{ steps.version.outputs.full_version }}</InformationalVersion>
+        EOF
+
+        # Append the rest of the original file (skip the first few version lines)
+        tail -n +8 Directory.Build.props >> Directory.Build.props.new
+        mv Directory.Build.props.new Directory.Build.props
+
+        echo "Updated Directory.Build.props:"
+        head -10 Directory.Build.props
+
+    - name: Restore dependencies
+      run: dotnet restore TSP.sln
+
+    - name: Build native binary
+      shell: bash
+      run: |
+        echo "Building for ${{ matrix.rid }}..."
+
+        # Ensure output directory exists
+        mkdir -p artifacts
+
+        dotnet publish TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj \
+          -c Release \
+          -r ${{ matrix.rid }} \
+          --self-contained \
+          -p:PublishAot=true \
+          -p:PublishSingleFile=true \
+          -p:PublishTrimmed=true \
+          -o ./publish-${{ matrix.rid }} \
+          --verbosity minimal
+
+        echo "Build completed. Files in publish directory:"
+        ls -la ./publish-${{ matrix.rid }}/
+
+        # Create final binary name
+        BINARY_NAME="TSP-${{ matrix.rid }}-${{ steps.version.outputs.sha }}${{ matrix.binary_extension }}"
+
+        # Move and rename the binary
+        if [[ "${{ matrix.rid }}" == win-* ]]; then
+          mv "./publish-${{ matrix.rid }}/TravelingSalesman.ConsoleApp.exe" "./artifacts/${BINARY_NAME}"
+        else
+          mv "./publish-${{ matrix.rid }}/TravelingSalesman.ConsoleApp" "./artifacts/${BINARY_NAME}"
+          chmod +x "./artifacts/${BINARY_NAME}"
+        fi
+
+        echo "Binary created: ${BINARY_NAME}"
+        ls -lah ./artifacts/
+
+    - name: Test binary functionality
+      shell: bash
+      continue-on-error: true
+      run: |
+        echo "Testing binary functionality..."
+        cd artifacts
+
+        BINARY_NAME="TSP-${{ matrix.rid }}-${{ steps.version.outputs.sha }}${{ matrix.binary_extension }}"
+
+        if [ ! -f "$BINARY_NAME" ]; then
+          echo "❌ Binary not found: $BINARY_NAME"
+          ls -la
+          exit 1
+        fi
+
+        echo "✅ Binary exists: $BINARY_NAME ($(du -h "$BINARY_NAME" | cut -f1))"
+
+        # Test execution with timeout and error handling
+        echo "Testing binary execution..."
+        if timeout 30s sh -c "echo -e '4\n5\n' | ./'$BINARY_NAME'" > test_output.log 2>&1; then
+          echo "✅ Binary executed successfully"
+
+          # Check for log directory creation
+          if [ -d "logs" ]; then
+            echo "✅ Logs directory created"
+            if [ "$(ls -A logs 2>/dev/null)" ]; then
+              echo "✅ Log files created:"
+              ls -la logs/
+              echo "Sample log content (first 3 lines):"
+              head -3 logs/* 2>/dev/null | head -10 || echo "No readable log content"
+            else
+              echo "⚠️ Logs directory empty"
+            fi
+          else
+            echo "⚠️ Logs directory not created"
+          fi
+
+          # Show some output
+          echo "Test output (first 20 lines):"
+          head -20 test_output.log || echo "No output captured"
+        else
+          echo "⚠️ Binary test failed or timed out"
+          echo "Test output:"
+          cat test_output.log 2>/dev/null || echo "No output captured"
+        fi
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: binary-${{ matrix.rid }}
+        path: |
+          ./artifacts/TSP-${{ matrix.rid }}-${{ steps.version.outputs.sha }}${{ matrix.binary_extension }}
+          ./artifacts/logs/
+          ./artifacts/test_output.log
+        if-no-files-found: warn
+
+  create-release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: build-and-release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Generate version info
+      id: version
+      shell: bash
+      run: |
+        # Use same logic as build job
+        YEAR_SHORT=$(($(date +'%Y') - 2000))
+        MONTH=$((10#$(date +'%m')))
+        DAY=$((10#$(date +'%d')))
+        RAW_BUILD=$(git rev-list --count HEAD)
+        BUILD_NUMBER=$((RAW_BUILD % 10000 + 1000))
+        SHORT_SHA=$(git rev-parse --short=8 HEAD)
+
+        VERSION="${YEAR_SHORT}.${MONTH}.${DAY}.${BUILD_NUMBER}"
+        FULL_VERSION="${VERSION}-${SHORT_SHA}"
+
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "full_version=${FULL_VERSION}" >> $GITHUB_OUTPUT
+        echo "sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: ./artifacts
+
+    - name: Debug artifact structure
+      run: |
+        echo "Downloaded artifacts structure:"
+        find ./artifacts -type f -ls | head -30
+        echo ""
+        echo "Looking for binaries:"
+        find ./artifacts -name "TSP-*" -type f -ls
+
+    - name: Prepare release assets
+      run: |
+        mkdir -p ./release-assets
+
+        # Copy all binaries
+        echo "Copying binaries..."
+        find ./artifacts -name "TSP-*" -type f \( -name "*.exe" -o ! -name "*.*" \) -exec cp -v {} ./release-assets/ \;
+
+        # Copy any log files that exist
+        echo "Copying log files..."
+        find ./artifacts -name "*.log" -type f -exec cp -v {} ./release-assets/ \; 2>/dev/null || echo "No log files found"
+
+        # Create comprehensive version info
+        cat > ./release-assets/version.txt << EOF
+        TSP Solver Release Information
+        ============================
+        Version: ${{ steps.version.outputs.full_version }}
+        Assembly Version: ${{ steps.version.outputs.version }}
+        Commit: ${{ github.sha }}
+        Short SHA: ${{ steps.version.outputs.sha }}
+        Branch: ${{ github.ref_name }}
+        Build Date: $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+        Build Trigger: ${{ github.event_name }}
+
+        Supported Platforms:
+        - Windows x64 (Native AOT)
+        - Linux x64 (Native AOT)
+        - macOS x64 (Intel, Native AOT)
+        - macOS ARM64 (Apple Silicon, Native AOT)
+
+        Features:
+        - Multiple TSP algorithms (Nearest Neighbor, 2-Opt, Simulated Annealing, Genetic Algorithm)
+        - Comprehensive logging with Serilog (console + file)
+        - Interactive and benchmark modes
+        - Cross-platform native AOT compilation
+        - Docker support
+        - Single-file deployment
+
+        Logging Details:
+        - Console output for user interaction
+        - Detailed file logging in logs/ directory
+        - Daily rotating log files (30 day retention)
+        - Structured logging for performance analysis
+        - Debug-level logging for algorithm internals
+
+        Usage Examples:
+        # Interactive mode
+        ./TSP-linux-x64-${{ steps.version.outputs.sha }}
+
+        # Check version
+        ./TSP-linux-x64-${{ steps.version.outputs.sha }} --version 2>/dev/null || echo "Run interactively"
+
+        # View logs
+        ls -la logs/
+        tail -f logs/tsp-solver-*.log
+        EOF
+
+        # Create checksums
+        echo "Creating checksums..."
+        cd ./release-assets
+        find . -name "TSP-*" -type f -exec sha256sum {} \; > checksums.txt
+        cd ..
+
+        echo "Release assets prepared:"
+        ls -la ./release-assets/
+        echo ""
+        echo "Checksums:"
+        cat ./release-assets/checksums.txt
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ steps.version.outputs.full_version }}
+        name: TSP Solver v${{ steps.version.outputs.full_version }}
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+        fail_on_unmatched_files: false
+        files: |
+          ./release-assets/*
+        body: |
+          ## 🚀 TSP Solver v${{ steps.version.outputs.full_version }}
+
+          **Automated Release** - Built from commit [${{ steps.version.outputs.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+
+          ### 📦 Downloads
+
+          | Platform | Download | Size |
+          |----------|----------|------|
+          | Windows x64 | [`TSP-win-x64-${{ steps.version.outputs.sha }}.exe`](../../releases/download/v${{ steps.version.outputs.full_version }}/TSP-win-x64-${{ steps.version.outputs.sha }}.exe) | Single executable |
+          | Linux x64 | [`TSP-linux-x64-${{ steps.version.outputs.sha }}`](../../releases/download/v${{ steps.version.outputs.full_version }}/TSP-linux-x64-${{ steps.version.outputs.sha }}) | Single executable |
+          | macOS Intel | [`TSP-osx-x64-${{ steps.version.outputs.sha }}`](../../releases/download/v${{ steps.version.outputs.full_version }}/TSP-osx-x64-${{ steps.version.outputs.sha }}) | Single executable |
+          | macOS Apple Silicon | [`TSP-osx-arm64-${{ steps.version.outputs.sha }}`](../../releases/download/v${{ steps.version.outputs.full_version }}/TSP-osx-arm64-${{ steps.version.outputs.sha }}) | Singleexecutable |
+
+          📋 **[version.txt](../../releases/download/v${{ steps.version.outputs.full_version }}/version.txt)** - Release information
+          📋 **[checksums.txt](../../releases/download/v${{ steps.version.outputs.full_version }}/checksums.txt)** - SHA256 checksums
+
+          ### ✨ Key Features
+
+          - 🧠 **Multiple Algorithms**: Nearest Neighbor, 2-Opt, Simulated Annealing, Genetic Algorithm
+          - 📊 **Comprehensive Logging**: Console + file logging with Serilog
+          - 🎯 **Interactive Mode**: Solve custom TSP instances with different city patterns
+          - 🏆 **Benchmark Mode**: Compare all algorithms performance
+          - 📈 **Performance Tracking**: Detailed metrics and algorithm progress reporting
+          - 🐳 **Docker Support**: Containerized execution environment
+          - ⚡ **Native AOT**: Fast startup, single-file deployment, no .NET runtime required
+          - 🔄 **Cross-Platform**: Windows, Linux, macOS (Intel & ARM64)
+
+          ### 📋 Quick Start
+
+          ```bash
+          # Download and run (Linux/macOS example)
+          wget https://github.com/kusl/tsp/releases/download/v${{ steps.version.outputs.full_version }}/TSP-linux-x64-${{ steps.version.outputs.sha }}
+          chmod +x TSP-linux-x64-${{ steps.version.outputs.sha }}
+          ./TSP-linux-x64-${{ steps.version.outputs.sha }}
+
+          # Check logs after running
+          ls -la logs/
+          ```
+
+          ### 🔄 Recent Changes
+
+          ${{ github.event.head_commit.message }}
+
+          ### 📊 Algorithm Performance
+
+          | Algorithm | Best For | Time Complexity | Quality |
+          |-----------|----------|----------------|---------|
+          | Nearest Neighbor | Quick results | O(n²) | Good |
+          | 2-Opt | Improved solutions | O(n²) per iteration | Better |
+          | Simulated Annealing | Avoiding local optima | O(n) per iteration | Very Good |
+          | Genetic Algorithm | Large problems | O(p×g×n) | Best |
+
+          ---
+
+          🔧 **Built with**: .NET 9 | Native AOT | Serilog Logging | GitHub Actions
+          📝 **License**: MIT | 🐛 **Issues**: [Report here](../../issues)
+
+    - name: Workflow Summary
+      if: always()
+      run: |
+        echo "## Release Workflow Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- **Version**: ${{ steps.version.outputs.full_version }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit**: ${{ steps.version.outputs.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Release**: [v${{ steps.version.outputs.full_version }}](../../releases/tag/v${{ steps.version.outputs.full_version }})" >> $GITHUB_STEP_SUMMARY
+        echo "- **Assets**: $(find ./release-assets -type f | wc -l) files prepared" >> $GITHUB_STEP_SUMMARY
+
+=== CSPROJ FILES ===
+
+--- C:\code\TSP\TravelingSalesman.ConsoleApp\TravelingSalesman.ConsoleApp.csproj ---
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- TargetFramework and other properties inherited from Directory.Build.props -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Package versions managed by Directory.Packages.props -->
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog.Extensions.Logging" />
+    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Serilog.Sinks.File" />
+    <PackageReference Include="Serilog.Formatting.Compact" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TravelingSalesman.Core\TravelingSalesman.Core.csproj" />
+  </ItemGroup>
+</Project>
+
+--- C:\code\TSP\TravelingSalesman.Core\TravelingSalesman.Core.csproj ---
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Everything inherited from Directory.Build.props -->
+
+  <ItemGroup>
+    <!-- Package version managed by Directory.Packages.props -->
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+</Project>
+
+=== CS FILES ===
+
+--- C:\code\TSP\TravelingSalesman.ConsoleApp\Program.cs ---
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using TravelingSalesman.Core;
+using Serilog;
+using Microsoft.Extensions.Logging;
+using Serilog.Extensions.Logging;
+
+namespace TravelingSalesman.ConsoleApp
+{
+    class Program
+    {
+        private static ILoggerFactory _loggerFactory = null!;
+        private static ILogger<Program> _logger = null!;
+
+        static async Task Main(string[] args)
+        {
+            // Handle version argument
+            if (args.Length > 0 && (args[0] == "--version" || args[0] == "-v"))
+            {
+                Console.WriteLine($"TSP Solver v{GetAssemblyVersion()}");
+                Console.WriteLine($"Built with .NET {Environment.Version}");
+                Console.WriteLine($"Runtime: {System.Runtime.InteropServices.RuntimeInformation.RuntimeIdentifier}");
+                return;
+            }
+
+            // Handle help argument
+            if (args.Length > 0 && (args[0] == "--help" || args[0] == "-h"))
+            {
+                ShowHelp();
+                return;
+            }
+
+            // Configure Serilog to write to both console and file
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .MinimumLevel.Override("TravelingSalesman.Core", Serilog.Events.LogEventLevel.Debug)
+                .WriteTo.Console(
+                    outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+                .WriteTo.File(
+                    path: "logs/tsp-solver-.log",
+                    rollingInterval: RollingInterval.Day,
+                    retainedFileCountLimit: 30,
+                    outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {SourceContext} {Message:lj} {Properties:j}{NewLine}{Exception}")
+                .Enrich.WithProperty("Application", "TSP-Solver")
+                .Enrich.WithProperty("Version", GetAssemblyVersion())
+                .CreateLogger();
+
+            // Create Microsoft.Extensions.Logging factory with Serilog
+            _loggerFactory = new SerilogLoggerFactory(Log.Logger);
+            _logger = _loggerFactory.CreateLogger<Program>();
+
+            _logger.LogInformation("TSP Solver v{Version} starting up", GetAssemblyVersion());
+
+            try
+            {
+                PrintHeader();
+
+                while (true)
+                {
+                    var option = ShowMainMenu();
+                    _logger.LogDebug("User selected menu option: {Option}", option);
+
+                    switch (option)
+                    {
+                        case 1:
+                            await RunInteractiveSolver();
+                            break;
+                        case 2:
+                            await RunBenchmark();
+                            break;
+                        case 3:
+                            await RunDemonstration();
+                            break;
+                        case 4:
+                            ShowAlgorithmInfo();
+                            break;
+                        case 5:
+                            _logger.LogInformation("User requested application exit");
+                            Log.Information("Thank you for using TSP Solver! Goodbye!");
+                            return;
+                        default:
+                            _logger.LogWarning("Invalid menu option selected: {Option}", option);
+                            Log.Error("Invalid option. Please try again.");
+                            break;
+                    }
+
+                    if (option != 5)
+                    {
+                        Log.Information("Press any key to return to main menu...");
+                        Console.ReadKey();
+                        Console.WriteLine(); // Still need Console.WriteLine for newline after keypress
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex, "Unexpected error occurred in main application loop");
+                Log.Fatal("An unexpected error occurred: {ErrorMessage}", ex.Message);
+                Log.Information("Press any key to exit...");
+                Console.ReadKey();
+            }
+            finally
+            {
+                _logger.LogInformation("TSP Solver shutting down");
+                await Log.CloseAndFlushAsync();
+            }
+        }
+
+        static async Task RunInteractiveSolver()
+        {
+            _logger.LogInformation("Starting interactive solver session");
+            LogSectionHeader("Interactive TSP Solver");
+
+            // Get number of cities
+            Log.Information("How many cities? (minimum 2): ");
+            if (!int.TryParse(Console.ReadLine(), out int cityCount) || cityCount < 2)
+            {
+                _logger.LogWarning("Invalid city count input, using default of 10");
+                Log.Error("Invalid input. Using default of 10 cities.");
+                cityCount = 10;
+            }
+
+            _logger.LogInformation("Interactive solver configured for {CityCount} cities", cityCount);
+
+            // Warn for large numbers
+            if (cityCount > 100)
+            {
+                _logger.LogWarning("Large city count requested: {CityCount}", cityCount);
+                Log.Warning("⚠️ Note: {CityCount} cities may take significant time with some algorithms.", cityCount);
+                Log.Warning("   Nearest Neighbor will be fast, but Genetic Algorithm may take minutes.");
+                Log.Information("   Continue? (y/n): ");
+
+                if (Console.ReadLine()?.ToLower() != "y")
+                {
+                    Log.Information("Using 50 cities instead.");
+                    cityCount = 50;
+                    _logger.LogInformation("User reduced city count to {CityCount}", cityCount);
+                }
+            }
+
+            // Select data pattern
+            Log.Information("Select city distribution pattern:");
+            Log.Information("  1. Random");
+            Log.Information("  2. Circular");
+            Log.Information("  3. Grid");
+            Log.Information("➤ Select pattern (1-3): ");
+
+            var generator = new TspDataGenerator(42, _loggerFactory.CreateLogger<TspDataGenerator>());
+            IReadOnlyList<City> cities;
+            string pattern;
+
+            var patternChoice = Console.ReadLine();
+            switch (patternChoice)
+            {
+                case "2":
+                    cities = generator.GenerateCircularCities(cityCount);
+                    pattern = "circular";
+                    Log.Information("✓ Generated {CityCount} cities in circular pattern", cityCount);
+                    break;
+                case "3":
+                    var gridSize = (int)Math.Sqrt(cityCount);
+                    cities = generator.GenerateGridCities(gridSize, gridSize + (cityCount - gridSize * gridSize) / gridSize + 1);
+                    cities = cities.Take(cityCount).ToList();
+                    pattern = "grid";
+                    Log.Information("✓ Generated {CityCount} cities in grid pattern", cityCount);
+                    break;
+                default:
+                    cities = generator.GenerateRandomCities(cityCount);
+                    pattern = "random";
+                    Log.Information("✓ Generated {CityCount} random cities", cityCount);
+                    break;
+            }
+
+            _logger.LogInformation("Generated {CityCount} cities with {Pattern} pattern", cityCount, pattern);
+
+            // Select algorithm
+            Log.Information("Select algorithm:");
+            Log.Information("  1. Nearest Neighbor (Fast, Good)");
+            Log.Information("  2. 2-Opt (Medium, Better)");
+            Log.Information("  3. Simulated Annealing (Slow, Very Good)");
+            Log.Information("  4. Genetic Algorithm (Slowest, Best)");
+            Log.Information("➤ Select algorithm (1-4): ");
+
+            ITspSolver solver;
+            var algoChoice = Console.ReadLine();
+            switch (algoChoice)
+            {
+                case "2":
+                    solver = new TwoOptSolver(logger: _loggerFactory.CreateLogger<TwoOptSolver>());
+                    break;
+                case "3":
+                    solver = new SimulatedAnnealingSolver(logger: _loggerFactory.CreateLogger<SimulatedAnnealingSolver>());
+                    break;
+                case "4":
+                    solver = GeneticAlgorithmSolver.CreateScaledGeneticSolver(cityCount, logger: _loggerFactory.CreateLogger<GeneticAlgorithmSolver>());
+                    break;
+                default:
+                    solver = new NearestNeighborSolver(_loggerFactory.CreateLogger<NearestNeighborSolver>());
+                    break;
+            }
+
+            _logger.LogInformation("Selected algorithm: {Algorithm} for {CityCount} cities", solver.Name, cityCount);
+            Log.Information("🔄 Running {Algorithm} algorithm...", solver.Name);
+
+            // Setup progress reporting - show dots for visual feedback
+            var progressCount = 0;
+            solver.ProgressChanged += (s, e) =>
+            {
+                if (progressCount++ % 10 == 0)
+                {
+                    Console.Write(".");
+                }
+            };
+
+            // Solve
+            var stopwatch = Stopwatch.StartNew();
+            _logger.LogInformation("Starting TSP solution with {Algorithm}", solver.Name);
+
+            var tour = await solver.SolveAsync(cities);
+            stopwatch.Stop();
+
+            // Log the results
+            _logger.LogInformation("TSP solution completed - Algorithm: {Algorithm}, Cities: {CityCount}, Pattern: {Pattern}, " +
+                          "Distance: {Distance:F2}, Time: {TimeMs}ms",
+                          solver.Name, cityCount, pattern, tour.TotalDistance, stopwatch.ElapsedMilliseconds);
+
+            // Display results
+            Console.WriteLine(); // Clear progress dots
+            Console.WriteLine();
+            Log.Information(new string('═', 60));
+            Log.Information("✓ Solution Found!");
+            Log.Information(new string('═', 60));
+
+            Log.Information("Algorithm: {Algorithm}", solver.Name);
+            Log.Information("Execution Time: {TimeMs:N0} ms", stopwatch.ElapsedMilliseconds);
+            Log.Information("Total Distance: {Distance:F2} units", tour.TotalDistance);
+            Log.Information("Route ({CityCount} cities):", tour.Cities.Count);
+
+            var routeStr = string.Join(" → ", tour.Cities.Take(Math.Min(10, tour.Cities.Count)).Select(c => c.Name));
+            if (tour.Cities.Count > 10)
+            {
+                routeStr += " → ... → " + tour.Cities.Last().Name;
+            }
+            routeStr += " → " + tour.Cities[0].Name;
+
+            Log.Information(routeStr);
+
+            // Show city coordinates if requested
+            Log.Information("Show city coordinates? (y/n): ");
+            if (Console.ReadLine()?.ToLower() == "y")
+            {
+                Log.Information("City Coordinates:");
+                foreach (var city in cities.Take(Math.Min(20, cities.Count)))
+                {
+                    Log.Information("  {CityName}: ({X:F2}, {Y:F2})", city.Name, city.X, city.Y);
+                }
+                if (cities.Count > 20)
+                {
+                    Log.Information("  ... and {AdditionalCount} more cities", cities.Count - 20);
+                }
+            }
+
+            _logger.LogInformation("Interactive solver session completed successfully");
+        }
+
+        static async Task RunBenchmark()
+        {
+            _logger.LogInformation("Starting benchmark session");
+            LogSectionHeader("Algorithm Benchmark");
+
+            Log.Information("Number of cities for benchmark: ");
+            if (!int.TryParse(Console.ReadLine(), out int cityCount) || cityCount < 2)
+            {
+                cityCount = 15;
+                Log.Information("Invalid input. Using default of {CityCount} cities.", cityCount);
+                _logger.LogWarning("Invalid benchmark city count, using default: {CityCount}", cityCount);
+            }
+
+            if (cityCount > 50)
+            {
+                Log.Warning("⚠️ Benchmark with {CityCount} cities may take several minutes.", cityCount);
+                _logger.LogWarning("Large benchmark requested: {CityCount} cities", cityCount);
+            }
+
+            var generator = new TspDataGenerator(logger: _loggerFactory.CreateLogger<TspDataGenerator>());
+            var cities = generator.GenerateRandomCities(cityCount);
+
+            _logger.LogInformation("Generated {CityCount} random cities for benchmark", cityCount);
+
+            Log.Information("🔄 Running benchmark with {CityCount} cities...", cityCount);
+            Log.Information("This may take a moment...");
+
+            var benchmark = new TspBenchmark(_loggerFactory.CreateLogger<TspBenchmark>());
+            var solvers = new List<ITspSolver>
+            {
+                new NearestNeighborSolver(_loggerFactory.CreateLogger<NearestNeighborSolver>()),
+                new TwoOptSolver(maxIterations: cityCount * 10, logger: _loggerFactory.CreateLogger<TwoOptSolver>()),
+                new SimulatedAnnealingSolver(
+                    initialTemperature: cityCount * 100,
+                    coolingRate: 0.9995,
+                    iterationsPerTemperature: cityCount * 10,
+                    logger: _loggerFactory.CreateLogger<SimulatedAnnealingSolver>()),
+                new GeneticAlgorithmSolver(
+                    populationSize: Math.Max(200, cityCount * 2),
+                    generations: Math.Min(5000, cityCount * 20),
+                    mutationRate: 0.1,
+                    elitismRate: 0.1,
+                    logger: _loggerFactory.CreateLogger<GeneticAlgorithmSolver>())
+            };
+
+            Console.Write("Processing: ");
+            var stopwatch = Stopwatch.StartNew();
+            var results = await benchmark.RunBenchmarkAsync(cities, solvers);
+            stopwatch.Stop();
+
+            Console.WriteLine(" Done!");
+
+            // Log detailed benchmark results
+            _logger.LogInformation("Benchmark completed - Cities: {CityCount}, TotalTime: {TotalTimeMs}ms",
+                cityCount, stopwatch.ElapsedMilliseconds);
+
+            foreach (var result in results)
+            {
+                _logger.LogInformation("Benchmark result - Algorithm: {Algorithm}, Distance: {Distance:F2}, " +
+                              "Time: {TimeMs}ms, Rank: {Rank}",
+                              result.SolverName, result.Distance, result.ExecutionTime.TotalMilliseconds,
+                              results.ToList().IndexOf(result) + 1);
+            }
+
+            Log.Information(benchmark.FormatResults(results));
+
+            // Display winner details
+            var winner = results.First();
+            Log.Information("🏆 Winner: {SolverName}", winner.SolverName);
+            Log.Information("   Distance: {Distance:F2}", winner.Distance);
+            Log.Information("   Time: {TimeMs:F1} ms", winner.ExecutionTime.TotalMilliseconds);
+
+            _logger.LogInformation("Benchmark session completed - Winner: {Winner}, Distance: {Distance:F2}",
+                winner.SolverName, winner.Distance);
+        }
+
+        static async Task RunDemonstration()
+        {
+            _logger.LogInformation("Starting demonstration session");
+            LogSectionHeader("Visual Algorithm Demonstration");
+
+            Log.Information("This demonstration will show how different algorithms");
+            Log.Information("approach the TSP problem step by step.");
+
+            var generator = new TspDataGenerator(42, _loggerFactory.CreateLogger<TspDataGenerator>());
+            var cities = generator.GenerateCircularCities(8); // Small number for clarity
+
+            Log.Information("Generated {CityCount} cities in a circular pattern.", cities.Count);
+            Log.Information("Cities:");
+            foreach (var city in cities)
+            {
+                Log.Information("  {CityName}: ({X:F1}, {Y:F1})", city.Name, city.X, city.Y);
+            }
+
+            Log.Information("Press any key to start the demonstration...");
+            Console.ReadKey();
+            Console.WriteLine(); // Add newline after keypress
+
+            // Demonstrate each algorithm
+            var algorithms = new (string name, ITspSolver solver)[]
+            {
+                ("Nearest Neighbor", new NearestNeighborSolver(_loggerFactory.CreateLogger<NearestNeighborSolver>())),
+                ("2-Opt Improvement", new TwoOptSolver(100, _loggerFactory.CreateLogger<TwoOptSolver>())),
+                ("Simulated Annealing", new SimulatedAnnealingSolver(1000, 0.99, 50, logger: _loggerFactory.CreateLogger<SimulatedAnnealingSolver>())),
+                ("Genetic Algorithm", new GeneticAlgorithmSolver(20, 50, 0.05, 0.3, logger: _loggerFactory.CreateLogger<GeneticAlgorithmSolver>()))
+            };
+
+            foreach (var (name, solver) in algorithms)
+            {
+                _logger.LogInformation("Running demonstration for {Algorithm}", name);
+                Log.Information(new string('─', 60));
+                LogSectionHeader($"Algorithm: {name}");
+
+                Log.Information("🔄 Running {Algorithm}...", name);
+
+                var iterations = new List<(int iteration, double distance, string message)>();
+                solver.ProgressChanged += (s, e) =>
+                {
+                    iterations.Add((e.Iteration, e.CurrentBestDistance, e.Message));
+                };
+
+                var tour = await solver.SolveAsync(cities);
+
+                // Display progress summary
+                if (iterations.Count > 0)
+                {
+                    Log.Information("Algorithm Progress Summary:");
+                    Log.Information(new string('-', 50));
+
+                    var first = iterations.First();
+                    var last = iterations.Last();
+                    var best = iterations.MinBy(i => i.distance);
+
+                    Log.Information("  Initial: Distance = {Distance:F2}", first.distance);
+                    if (iterations.Count > 2)
+                    {
+                        Log.Information("  Best:    Distance = {Distance:F2} (at iteration {Iteration})", best.distance, best.iteration);
+                    }
+                    Log.Information("  Final:   Distance = {Distance:F2}", last.distance);
+                    Log.Information("  Total iterations: {IterationCount}", iterations.Count);
+                }
+
+                Log.Information(new string('-', 50));
+                Log.Information("✓ Final Solution:");
+                Log.Information("  Distance: {Distance:F2}", tour.TotalDistance);
+                Log.Information("  Route: {Route} → {FirstCity}", string.Join(" → ", tour.Cities.Select(c => c.Name)), tour.Cities[0].Name);
+
+                DrawSimpleVisualization(tour);
+
+                if (algorithms.Last() != (name, solver))
+                {
+                    Log.Information("Press any key for next algorithm...");
+                    Console.ReadKey();
+                    Console.WriteLine(); // Add newline after keypress
+                }
+            }
+
+            Log.Information(new string('═', 60));
+            Log.Information("Demonstration Complete! All algorithms have been demonstrated.");
+            _logger.LogInformation("Demonstration session completed successfully");
+        }
+
+        static void ShowAlgorithmInfo()
+        {
+            _logger.LogInformation("Displaying algorithm information");
+            LogSectionHeader("Algorithm Information");
+
+            var info = new Dictionary<string, (string complexity, string pros, string cons, string description)>
+            {
+                ["Nearest Neighbor"] = (
+                    "O(n²)",
+                    "Fast, simple, deterministic",
+                    "Can produce suboptimal solutions",
+                    "Builds tour by always visiting the nearest unvisited city."
+                ),
+                ["2-Opt"] = (
+                    "O(n²) per iteration",
+                    "Good improvement over initial solution",
+                    "Can get stuck in local optima",
+                    "Improves existing tour by reversing segments to reduce crossings."
+                ),
+                ["Simulated Annealing"] = (
+                    "O(n) per iteration × iterations",
+                    "Can escape local optima, tunable parameters",
+                    "Slower, non-deterministic",
+                    "Uses controlled randomness to explore solution space, accepting worse solutions probabilistically."
+                ),
+                ["Genetic Algorithm"] = (
+                    "O(p×g×n) where p=population, g=generations",
+                    "Excellent for large problems, parallelizable",
+                    "Slowest, many parameters to tune",
+                    "Evolves population of solutions using selection, crossover, and mutation."
+                )
+            };
+
+            foreach (var (algo, (complexity, pros, cons, description)) in info)
+            {
+                Log.Information("📍 {Algorithm}", algo);
+                Log.Information(new string('-', 40));
+                Log.Information("Description: {Description}", description);
+                Log.Information("Complexity:  {Complexity}", complexity);
+                Log.Information("Pros:        {Pros}", pros);
+                Log.Information("Cons:        {Cons}", cons);
+            }
+
+            Log.Information(new string('═', 60));
+            Log.Information("💡 Recommendations:");
+            Log.Information("  • Small problems (< 20 cities): Nearest Neighbor + 2-Opt");
+            Log.Information("  • Medium problems (20-100 cities): Simulated Annealing");
+            Log.Information("  • Large problems (> 100 cities): Genetic Algorithm");
+            Log.Information("  • Real-time requirements: Nearest Neighbor");
+            Log.Information("  • Best quality: Genetic Algorithm with tuned parameters");
+        }
+
+        static void DrawSimpleVisualization(Tour tour)
+        {
+            Log.Information("Simple ASCII Visualization:");
+            Log.Information(new string('─', 50));
+
+            const int width = 40;
+            const int height = 10;
+            var grid = new char[height, width];
+
+            // Initialize grid
+            for (int i = 0; i < height; i++)
+                for (int j = 0; j < width; j++)
+                    grid[i, j] = ' ';
+
+            // Normalize coordinates to fit grid
+            var minX = tour.Cities.Min(c => c.X);
+            var maxX = tour.Cities.Max(c => c.X);
+            var minY = tour.Cities.Min(c => c.Y);
+            var maxY = tour.Cities.Max(c => c.Y);
+
+            foreach (var city in tour.Cities)
+            {
+                var x = (int)((city.X - minX) / (maxX - minX) * (width - 1));
+                var y = (int)((city.Y - minY) / (maxY - minY) * (height - 1));
+
+                if (x >= 0 && x < width && y >= 0 && y < height)
+                {
+                    grid[height - 1 - y, x] = '●';
+                }
+            }
+
+            // Draw grid
+            for (int i = 0; i < height; i++)
+            {
+                var line = "  ";
+                for (int j = 0; j < width; j++)
+                {
+                    line += grid[i, j];
+                }
+                Log.Information(line);
+            }
+
+            Log.Information(new string('─', 50));
+        }
+
+        // Solution 3: Dynamic box sizing (recommended)
+        static void PrintHeader()
+        {
+            Console.WriteLine(); // Space from previous output
+
+            var version = GetAssemblyVersion();
+            var titleLine = $"TRAVELING SALESMAN PROBLEM SOLVER v{version}";
+            var subtitleLine = ".NET 9 Implementation";
+
+            // Determine the width needed
+            var maxLength = Math.Max(titleLine.Length, subtitleLine.Length);
+            var boxWidth = Math.Max(maxLength + 4, 65); // At least 65 chars wide, or content + padding
+
+            var topBorder = "╔" + new string('═', boxWidth - 2) + "╗";
+            var bottomBorder = "╚" + new string('═', boxWidth - 2) + "╝";
+
+            // Center the text
+            var titlePadding = (boxWidth - 2 - titleLine.Length) / 2;
+            var titleRightPad = (boxWidth - 2) - titleLine.Length - titlePadding;
+
+            var subtitlePadding = (boxWidth - 2 - subtitleLine.Length) / 2;
+            var subtitleRightPad = (boxWidth - 2) - subtitleLine.Length - subtitlePadding;
+
+            Log.Information(topBorder);
+            Log.Information("║{0}{1}{2}║",
+                new string(' ', titlePadding),
+                titleLine,
+                new string(' ', titleRightPad));
+            Log.Information("║{0}{1}{2}║",
+                new string(' ', subtitlePadding),
+                subtitleLine,
+                new string(' ', subtitleRightPad));
+            Log.Information(bottomBorder);
+        }
+
+        static int ShowMainMenu()
+        {
+            Log.Information("📍 Main Menu:");
+            Log.Information("");
+            Log.Information("  1. Interactive Solver - Solve custom TSP instances");
+            Log.Information("  2. Algorithm Benchmark - Compare all algorithms");
+            Log.Information("  3. Visual Demonstration - See algorithms in action");
+            Log.Information("  4. Algorithm Information - Learn about each algorithm");
+            Log.Information("  5. Exit");
+
+            Log.Information("➤ Select an option (1-5): ");
+
+            if (int.TryParse(Console.ReadLine(), out int option))
+            {
+                return option;
+            }
+
+            return -1;
+        }
+
+        static void LogSectionHeader(string title)
+        {
+            Log.Information(new string('═', 60));
+            Log.Information("  {Title}", title);
+            Log.Information(new string('═', 60));
+        }
+
+        static string GetAssemblyVersion()
+        {
+            var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            return version?.ToString(3) ?? "1.2.0";
+        }
+
+        static void ShowHelp()
+        {
+            Console.WriteLine("TSP Solver - Traveling Salesman Problem Solver");
+            Console.WriteLine();
+            Console.WriteLine("Usage: TSP-solver [options]");
+            Console.WriteLine();
+            Console.WriteLine("Options:");
+            Console.WriteLine("  --version, -v    Show version information");
+            Console.WriteLine("  --help, -h       Show this help message");
+            Console.WriteLine();
+            Console.WriteLine("Interactive mode will start if no options are provided.");
+            Console.WriteLine("Logs are written to the 'logs/' directory.");
+        }
+    }
+}
+
+--- C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs ---
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+
+namespace TravelingSalesman.Core
+{
+    /// <summary>
+    /// Represents a city in the TSP problem
+    /// </summary>
+    public sealed record City(int Id, string Name, double X, double Y)
+    {
+        public double DistanceTo(City other)
+        {
+            var dx = X - other.X;
+            var dy = Y - other.Y;
+            return Math.Sqrt(dx * dx + dy * dy);
+        }
+    }
+
+    /// <summary>
+    /// Represents a tour through cities
+    /// </summary>
+    public sealed class Tour
+    {
+        private readonly List<City> _cities;
+        private readonly double[,] _distanceMatrix;
+        private readonly ILogger<Tour> _logger;
+        private double? _cachedDistance;
+
+        public IReadOnlyList<City> Cities => _cities.AsReadOnly();
+        public double TotalDistance => _cachedDistance ??= CalculateTotalDistance();
+
+        public Tour(IEnumerable<City> cities, double[,] distanceMatrix, ILogger<Tour>? logger = null)
+        {
+            _cities = cities.ToList();
+            _distanceMatrix = distanceMatrix;
+            _logger = logger ?? NullLogger<Tour>.Instance;
+        }
+
+        private double CalculateTotalDistance()
+        {
+            if (_cities.Count < 2)
+            {
+                _logger.LogDebug("Tour has less than 2 cities, returning distance 0");
+                return 0;
+            }
+
+            var distance = 0.0;
+            for (int i = 0; i < _cities.Count - 1; i++)
+            {
+                distance += _distanceMatrix[_cities[i].Id, _cities[i + 1].Id];
+            }
+            // Return to start
+            distance += _distanceMatrix[_cities[^1].Id, _cities[0].Id];
+
+            _logger.LogTrace("Calculated total distance: {Distance:F2} for {CityCount} cities", distance, _cities.Count);
+            return distance;
+        }
+
+        public Tour Clone(ILogger<Tour>? logger = null) => new Tour(_cities, _distanceMatrix, logger ?? _logger);
+
+        public void SwapCities(int index1, int index2)
+        {
+            if (index1 == index2) return;
+
+            var city1 = _cities[index1];
+            var city2 = _cities[index2];
+
+            (_cities[index1], _cities[index2]) = (_cities[index2], _cities[index1]);
+            _cachedDistance = null;
+
+            _logger.LogTrace("Swapped cities {City1} and {City2}", city1.Name, city2.Name);
+        }
+
+        public void Reverse(int start, int end)
+        {
+            _logger.LogTrace("Reversing tour segment from index {Start} to {End}", start, end);
+            while (start < end)
+            {
+                SwapCities(start, end);
+                start++;
+                end--;
+            }
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"Tour Distance: {TotalDistance:F2}");
+            sb.AppendLine("Route:");
+            foreach (var city in _cities)
+            {
+                sb.Append($"{city.Name} -> ");
+            }
+            sb.Append(_cities[0].Name); // Return to start
+            return sb.ToString();
+        }
+    }
+
+    /// <summary>
+    /// Interface for TSP solving algorithms
+    /// </summary>
+    public interface ITspSolver
+    {
+        string Name { get; }
+        Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default);
+        event EventHandler<TspProgressEventArgs>? ProgressChanged;
+    }
+
+    /// <summary>
+    /// Event args for progress reporting
+    /// </summary>
+    public sealed class TspProgressEventArgs : EventArgs
+    {
+        public int Iteration { get; init; }
+        public double CurrentBestDistance { get; init; }
+        public string Message { get; init; } = string.Empty;
+    }
+
+    /// <summary>
+    /// Base class for TSP solvers
+    /// </summary>
+    public abstract class TspSolverBase : ITspSolver
+    {
+        protected readonly ILogger _logger;
+
+        protected TspSolverBase(ILogger? logger = null)
+        {
+            _logger = logger ?? NullLogger.Instance;
+        }
+
+        public abstract string Name { get; }
+        public event EventHandler<TspProgressEventArgs>? ProgressChanged;
+
+        protected double[,] BuildDistanceMatrix(IReadOnlyList<City> cities)
+        {
+            var n = cities.Count;
+            var matrix = new double[n, n];
+
+            _logger.LogDebug("Building distance matrix for {CityCount} cities", n);
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    matrix[i, j] = cities[i].DistanceTo(cities[j]);
+                }
+            }
+
+            _logger.LogDebug("Distance matrix built successfully");
+            return matrix;
+        }
+
+        protected void OnProgressChanged(int iteration, double currentBest, string message = "")
+        {
+            _logger.LogTrace("Algorithm progress: Iteration {Iteration}, Best Distance {Distance:F2}, Message: {Message}",
+                iteration, currentBest, message);
+
+            ProgressChanged?.Invoke(this, new TspProgressEventArgs
+            {
+                Iteration = iteration,
+                CurrentBestDistance = currentBest,
+                Message = message
+            });
+        }
+
+        public abstract Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default);
+    }
+
+    /// <summary>
+    /// Nearest Neighbor heuristic solver
+    /// </summary>
+    public sealed class NearestNeighborSolver : TspSolverBase
+    {
+        public override string Name => "Nearest Neighbor";
+
+        public NearestNeighborSolver(ILogger<NearestNeighborSolver>? logger = null) : base(logger)
+        {
+        }
+
+        public override Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default)
+        {
+            return Task.Run(() =>
+            {
+                _logger.LogInformation("Starting Nearest Neighbor algorithm for {CityCount} cities", cities.Count);
+
+                if (cities.Count < 2)
+                {
+                    _logger.LogWarning("Less than 2 cities provided, returning minimal tour");
+                    return new Tour(cities, BuildDistanceMatrix(cities));
+                }
+
+                var distanceMatrix = BuildDistanceMatrix(cities);
+                var visited = new bool[cities.Count];
+                var route = new List<City> { cities[0] };
+                visited[0] = true;
+
+                var current = 0;
+                for (int i = 1; i < cities.Count; i++)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var nearest = -1;
+                    var nearestDistance = double.MaxValue;
+
+                    for (int j = 0; j < cities.Count; j++)
+                    {
+                        if (!visited[j] && distanceMatrix[current, j] < nearestDistance)
+                        {
+                            nearest = j;
+                            nearestDistance = distanceMatrix[current, j];
+                        }
+                    }
+
+                    if (nearest != -1)
+                    {
+                        visited[nearest] = true;
+                        route.Add(cities[nearest]);
+                        current = nearest;
+
+                        _logger.LogTrace("Added city {CityName} (distance: {Distance:F2})", cities[nearest].Name, nearestDistance);
+                    }
+
+                    OnProgressChanged(i, new Tour(route, distanceMatrix).TotalDistance, $"Added city {cities[current].Name}");
+                }
+
+                var finalTour = new Tour(route, distanceMatrix);
+                _logger.LogInformation("Nearest Neighbor completed: Distance {Distance:F2}", finalTour.TotalDistance);
+
+                return finalTour;
+            }, cancellationToken);
+        }
+    }
+
+    /// <summary>
+    /// 2-Opt local search improvement solver
+    /// </summary>
+    public sealed class TwoOptSolver : TspSolverBase
+    {
+        private readonly int _maxIterations;
+
+        public override string Name => "2-Opt";
+
+        public TwoOptSolver(int maxIterations = 1000, ILogger<TwoOptSolver>? logger = null) : base(logger)
+        {
+            _maxIterations = maxIterations;
+        }
+
+        public override async Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default)
+        {
+            _logger.LogInformation("Starting 2-Opt algorithm for {CityCount} cities (max iterations: {MaxIterations})",
+                cities.Count, _maxIterations);
+
+            // Start with nearest neighbor solution
+            var nnSolver = new NearestNeighborSolver(_logger as ILogger<NearestNeighborSolver>);
+            var tour = await nnSolver.SolveAsync(cities, cancellationToken);
+
+            _logger.LogDebug("Initial tour from Nearest Neighbor: {Distance:F2}", tour.TotalDistance);
+
+            return await Task.Run(() => Improve2Opt(tour, cancellationToken), cancellationToken);
+        }
+
+        private Tour Improve2Opt(Tour tour, CancellationToken cancellationToken)
+        {
+            var improved = true;
+            var iteration = 0;
+            var bestTour = tour.Clone();
+            var initialDistance = bestTour.TotalDistance;
+
+            _logger.LogDebug("Starting 2-Opt improvement from distance {InitialDistance:F2}", initialDistance);
+
+            while (improved && iteration < _maxIterations)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                improved = false;
+
+                for (int i = 1; i < tour.Cities.Count - 2; i++)
+                {
+                    for (int j = i + 1; j < tour.Cities.Count; j++)
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+
+                        // Try reversing the tour between i and j
+                        var newTour = bestTour.Clone();
+                        newTour.Reverse(i, j);
+
+                        if (newTour.TotalDistance < bestTour.TotalDistance)
+                        {
+                            _logger.LogTrace("2-Opt improvement found: {OldDistance:F2} -> {NewDistance:F2}",
+                                bestTour.TotalDistance, newTour.TotalDistance);
+                            bestTour = newTour;
+                            improved = true;
+                        }
+                    }
+                }
+
+                iteration++;
+                OnProgressChanged(iteration, bestTour.TotalDistance, $"2-Opt iteration {iteration}");
+            }
+
+            var finalImprovement = ((initialDistance - bestTour.TotalDistance) / initialDistance) * 100;
+            _logger.LogInformation("2-Opt completed after {Iterations} iterations. " +
+                                 "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%)",
+                                 iteration, bestTour.TotalDistance, finalImprovement);
+
+            return bestTour;
+        }
+    }
+
+    /// <summary>
+    /// Simulated Annealing solver for TSP
+    /// </summary>
+    public sealed class SimulatedAnnealingSolver : TspSolverBase
+    {
+        private readonly double _initialTemperature;
+        private readonly double _coolingRate;
+        private readonly int _iterationsPerTemperature;
+        private readonly Random _random;
+
+        public override string Name => "Simulated Annealing";
+
+        public SimulatedAnnealingSolver(
+            double initialTemperature = 10000,
+            double coolingRate = 0.9995,
+            int iterationsPerTemperature = 1000,
+            int? seed = null,
+            ILogger<SimulatedAnnealingSolver>? logger = null) : base(logger)
+        {
+            _initialTemperature = initialTemperature;
+            _coolingRate = coolingRate;
+            _iterationsPerTemperature = iterationsPerTemperature;
+            _random = seed.HasValue ? new Random(seed.Value) : new Random();
+        }
+
+        public override async Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default)
+        {
+            _logger.LogInformation("Starting Simulated Annealing for {CityCount} cities " +
+                                 "(temp: {InitialTemp}, cooling: {CoolingRate}, iterations per temp: {IterationsPerTemp})",
+                                 cities.Count, _initialTemperature, _coolingRate, _iterationsPerTemperature);
+
+            // Start with nearest neighbor solution
+            var nnSolver = new NearestNeighborSolver(_logger as ILogger<NearestNeighborSolver>);
+            var initialTour = await nnSolver.SolveAsync(cities, cancellationToken);
+
+            return await Task.Run(() => RunSimulatedAnnealing(initialTour, cancellationToken), cancellationToken);
+        }
+
+        private Tour RunSimulatedAnnealing(Tour initialTour, CancellationToken cancellationToken)
+        {
+            var currentTour = initialTour.Clone();
+            var bestTour = currentTour.Clone();
+            var temperature = _initialTemperature;
+            var iteration = 0;
+            var acceptedMoves = 0;
+            var rejectedMoves = 0;
+            var initialDistance = initialTour.TotalDistance;
+
+            _logger.LogDebug("Starting SA from initial distance: {InitialDistance:F2}", initialDistance);
+
+            while (temperature > 0.1)
+            {
+                for (int i = 0; i < _iterationsPerTemperature; i++)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var newTour = currentTour.Clone();
+
+                    // Random perturbation: swap two random cities
+                    var index1 = _random.Next(1, newTour.Cities.Count);
+                    var index2 = _random.Next(1, newTour.Cities.Count);
+
+                    if (index1 != index2)
+                    {
+                        newTour.SwapCities(index1, index2);
+
+                        var deltaDistance = newTour.TotalDistance - currentTour.TotalDistance;
+
+                        // Accept or reject the new solution
+                        if (deltaDistance < 0 || _random.NextDouble() < Math.Exp(-deltaDistance / temperature))
+                        {
+                            currentTour = newTour;
+                            acceptedMoves++;
+
+                            if (currentTour.TotalDistance < bestTour.TotalDistance)
+                            {
+                                bestTour = currentTour.Clone();
+                                _logger.LogTrace("New best solution found: {Distance:F2} at temperature {Temperature:F2}",
+                                    bestTour.TotalDistance, temperature);
+                            }
+                        }
+                        else
+                        {
+                            rejectedMoves++;
+                        }
+                    }
+
+                    iteration++;
+                    if (iteration % 1000 == 0)
+                    {
+                        OnProgressChanged(iteration, bestTour.TotalDistance,
+                            $"Temperature: {temperature:F2}, Best: {bestTour.TotalDistance:F2}");
+                    }
+                }
+
+                temperature *= _coolingRate;
+            }
+
+            var finalImprovement = ((initialDistance - bestTour.TotalDistance) / initialDistance) * 100;
+            var acceptanceRate = (double)acceptedMoves / (acceptedMoves + rejectedMoves) * 100;
+
+            _logger.LogInformation("Simulated Annealing completed after {Iterations} iterations. " +
+                                 "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%). " +
+                                 "Acceptance rate: {AcceptanceRate:F1}%",
+                                 iteration, bestTour.TotalDistance, finalImprovement, acceptanceRate);
+
+            return bestTour;
+        }
+    }
+
+    /// <summary>
+    /// Genetic Algorithm solver for TSP
+    /// </summary>
+    public sealed class GeneticAlgorithmSolver : TspSolverBase
+    {
+        private readonly int _populationSize;
+        private readonly int _generations;
+        private readonly double _mutationRate;
+        private readonly double _elitismRate;
+        private readonly Random _random;
+
+        public override string Name => "Genetic Algorithm";
+
+        public GeneticAlgorithmSolver(
+            int populationSize = 100,
+            int generations = 500,
+            double mutationRate = 0.02,
+            double elitismRate = 0.2,
+            int? seed = null,
+            ILogger<GeneticAlgorithmSolver>? logger = null) : base(logger)
+        {
+            _populationSize = populationSize;
+            _generations = generations;
+            _mutationRate = mutationRate;
+            _elitismRate = elitismRate;
+            _random = seed.HasValue ? new Random(seed.Value) : new Random();
+        }
+
+        public static GeneticAlgorithmSolver CreateScaledGeneticSolver(int cityCount, int? seed = null, ILogger<GeneticAlgorithmSolver>? logger = null)
+        {
+            return new GeneticAlgorithmSolver(
+                populationSize: Math.Max(200, cityCount * 2),
+                generations: Math.Max(1000, cityCount * 10),
+                mutationRate: 0.1,
+                elitismRate: 0.1,
+                seed: seed,
+                logger: logger
+            );
+        }
+
+        public override Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default)
+        {
+            _logger.LogInformation("Starting Genetic Algorithm for {CityCount} cities " +
+                                 "(population: {Population}, generations: {Generations}, " +
+                                 "mutation rate: {MutationRate:F3}, elitism rate: {ElitismRate:F3})",
+                                 cities.Count, _populationSize, _generations, _mutationRate, _elitismRate);
+
+            return Task.Run(() => RunGeneticAlgorithm(cities, cancellationToken), cancellationToken);
+        }
+
+        private Tour RunGeneticAlgorithm(IReadOnlyList<City> cities, CancellationToken cancellationToken)
+        {
+            var distanceMatrix = BuildDistanceMatrix(cities);
+            var population = InitializePopulation(cities, distanceMatrix);
+            var bestTour = population.OrderBy(t => t.TotalDistance).First();
+            var initialBest = bestTour.TotalDistance;
+            var generationsWithoutImprovement = 0;
+
+            _logger.LogDebug("Initial population created. Best distance: {BestDistance:F2}", initialBest);
+
+            for (int generation = 0; generation < _generations; generation++)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                population = EvolvePopulation(population, distanceMatrix);
+
+                var generationBest = population.OrderBy(t => t.TotalDistance).First();
+                if (generationBest.TotalDistance < bestTour.TotalDistance)
+                {
+                    _logger.LogDebug("Generation {Generation}: New best solution {Distance:F2}",
+                        generation, generationBest.TotalDistance);
+                    bestTour = generationBest.Clone();
+                    generationsWithoutImprovement = 0;
+                }
+                else
+                {
+                    generationsWithoutImprovement++;
+                }
+
+                if (generation % 50 == 0)
+                {
+                    OnProgressChanged(generation, bestTour.TotalDistance,
+                        $"Generation {generation}, Best: {bestTour.TotalDistance:F2}");
+                }
+
+                // Early stopping if no improvement for many generations
+                if (generationsWithoutImprovement > _generations / 4)
+                {
+                    _logger.LogDebug("Early stopping at generation {Generation} due to no improvement", generation);
+                    break;
+                }
+            }
+
+            var finalImprovement = ((initialBest - bestTour.TotalDistance) / initialBest) * 100;
+            _logger.LogInformation("Genetic Algorithm completed. " +
+                                 "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%)",
+                                 bestTour.TotalDistance, finalImprovement);
+
+            return bestTour;
+        }
+
+        private List<Tour> InitializePopulation(IReadOnlyList<City> cities, double[,] distanceMatrix)
+        {
+            var population = new List<Tour>();
+
+            _logger.LogDebug("Initializing population of {PopulationSize} individuals", _populationSize);
+
+            for (int i = 0; i < _populationSize; i++)
+            {
+                var shuffled = cities.Skip(1).OrderBy(_ => _random.Next()).ToList();
+                shuffled.Insert(0, cities[0]); // Keep first city fixed
+                population.Add(new Tour(shuffled, distanceMatrix));
+            }
+
+            return population;
+        }
+
+        private List<Tour> EvolvePopulation(List<Tour> population, double[,] distanceMatrix)
+        {
+            var newPopulation = new List<Tour>();
+
+            // Keep elite individuals
+            var eliteCount = (int)(_populationSize * _elitismRate);
+            var elite = population.OrderBy(t => t.TotalDistance).Take(eliteCount).ToList();
+            newPopulation.AddRange(elite.Select(t => t.Clone()));
+
+            // Fill rest with offspring
+            while (newPopulation.Count < _populationSize)
+            {
+                var parent1 = TournamentSelection(population);
+                var parent2 = TournamentSelection(population);
+                var child = Crossover(parent1, parent2, distanceMatrix);
+
+                if (_random.NextDouble() < _mutationRate)
+                {
+                    Mutate(child);
+                }
+
+                newPopulation.Add(child);
+            }
+
+            return newPopulation;
+        }
+
+        private Tour TournamentSelection(List<Tour> population, int tournamentSize = 5)
+        {
+            var tournament = new List<Tour>();
+
+            for (int i = 0; i < tournamentSize; i++)
+            {
+                tournament.Add(population[_random.Next(population.Count)]);
+            }
+
+            return tournament.OrderBy(t => t.TotalDistance).First();
+        }
+
+        private Tour Crossover(Tour parent1, Tour parent2, double[,] distanceMatrix)
+        {
+            var cities = parent1.Cities.ToList();
+            var start = _random.Next(1, cities.Count - 1);
+            var end = _random.Next(start + 1, cities.Count);
+
+            var childCities = new List<City> { cities[0] }; // Keep first city fixed
+            var segment = parent1.Cities.Skip(start).Take(end - start).ToList();
+
+            foreach (var city in segment)
+            {
+                if (city.Id != 0) // Skip first city
+                    childCities.Add(city);
+            }
+
+            foreach (var city in parent2.Cities)
+            {
+                if (!childCities.Contains(city) && city.Id != 0)
+                {
+                    childCities.Add(city);
+                }
+            }
+
+            return new Tour(childCities, distanceMatrix);
+        }
+
+        private void Mutate(Tour tour)
+        {
+            var index1 = _random.Next(1, tour.Cities.Count);
+            var index2 = _random.Next(1, tour.Cities.Count);
+
+            if (index1 != index2)
+            {
+                tour.SwapCities(index1, index2);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Factory for creating TSP solvers with logging
+    /// </summary>
+    public static class TspSolverFactory
+    {
+        public enum SolverType
+        {
+            NearestNeighbor,
+            TwoOpt,
+            SimulatedAnnealing,
+            GeneticAlgorithm
+        }
+
+        public static ITspSolver CreateSolver(SolverType type, ILoggerFactory? loggerFactory = null)
+        {
+            return type switch
+            {
+                SolverType.NearestNeighbor => new NearestNeighborSolver(loggerFactory?.CreateLogger<NearestNeighborSolver>()),
+                SolverType.TwoOpt => new TwoOptSolver(logger: loggerFactory?.CreateLogger<TwoOptSolver>()),
+                SolverType.SimulatedAnnealing => new SimulatedAnnealingSolver(logger: loggerFactory?.CreateLogger<SimulatedAnnealingSolver>()),
+                SolverType.GeneticAlgorithm => new GeneticAlgorithmSolver(logger: loggerFactory?.CreateLogger<GeneticAlgorithmSolver>()),
+                _ => throw new ArgumentException($"Unknown solver type: {type}")
+            };
+        }
+
+        public static IEnumerable<ITspSolver> CreateAllSolvers(ILoggerFactory? loggerFactory = null)
+        {
+            yield return new NearestNeighborSolver(loggerFactory?.CreateLogger<NearestNeighborSolver>());
+            yield return new TwoOptSolver(logger: loggerFactory?.CreateLogger<TwoOptSolver>());
+            yield return new SimulatedAnnealingSolver(logger: loggerFactory?.CreateLogger<SimulatedAnnealingSolver>());
+            yield return new GeneticAlgorithmSolver(logger: loggerFactory?.CreateLogger<GeneticAlgorithmSolver>());
+        }
+    }
+
+    /// <summary>
+    /// Service for generating test data
+    /// </summary>
+    public sealed class TspDataGenerator
+    {
+        private readonly Random _random;
+        private readonly ILogger<TspDataGenerator> _logger;
+
+        public TspDataGenerator(int? seed = null, ILogger<TspDataGenerator>? logger = null)
+        {
+            _random = seed.HasValue ? new Random(seed.Value) : new Random();
+            _logger = logger ?? NullLogger<TspDataGenerator>.Instance;
+        }
+
+        public IReadOnlyList<City> GenerateRandomCities(int count, double maxX = 100, double maxY = 100)
+        {
+            _logger.LogDebug("Generating {Count} random cities in area {MaxX}x{MaxY}", count, maxX, maxY);
+
+            var cities = new List<City>();
+
+            for (int i = 0; i < count; i++)
+            {
+                cities.Add(new City(
+                    i,
+                    $"City_{i}",
+                    _random.NextDouble() * maxX,
+                    _random.NextDouble() * maxY
+                ));
+            }
+
+            _logger.LogInformation("Generated {Count} random cities", count);
+            return cities;
+        }
+
+        public IReadOnlyList<City> GenerateCircularCities(int count, double radius = 50, double centerX = 50, double centerY = 50)
+        {
+            _logger.LogDebug("Generating {Count} cities in circular pattern (radius: {Radius})", count, radius);
+
+            var cities = new List<City>();
+            var angleStep = 2 * Math.PI / count;
+
+            for (int i = 0; i < count; i++)
+            {
+                var angle = i * angleStep;
+                cities.Add(new City(
+                    i,
+                    $"City_{i}",
+                    centerX + radius * Math.Cos(angle),
+                    centerY + radius * Math.Sin(angle)
+                ));
+            }
+
+            _logger.LogInformation("Generated {Count} cities in circular pattern", count);
+            return cities;
+        }
+
+        public IReadOnlyList<City> GenerateGridCities(int rows, int cols, double spacing = 10)
+        {
+            _logger.LogDebug("Generating {Rows}x{Cols} cities in grid pattern (spacing: {Spacing})", rows, cols, spacing);
+
+            var cities = new List<City>();
+            var id = 0;
+
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < cols; col++)
+                {
+                    cities.Add(new City(
+                        id,
+                        $"City_{id}",
+                        col * spacing,
+                        row * spacing
+                    ));
+                    id++;
+                }
+            }
+
+            _logger.LogInformation("Generated {Count} cities in {Rows}x{Cols} grid pattern", cities.Count, rows, cols);
+            return cities;
+        }
+    }
+
+    /// <summary>
+    /// Service for comparing different TSP solvers
+    /// </summary>
+    public sealed class TspBenchmark
+    {
+        private readonly ILogger<TspBenchmark> _logger;
+
+        public TspBenchmark(ILogger<TspBenchmark>? logger = null)
+        {
+            _logger = logger ?? NullLogger<TspBenchmark>.Instance;
+        }
+
+        public sealed record BenchmarkResult(
+            string SolverName,
+            double Distance,
+            TimeSpan ExecutionTime,
+            Tour Tour
+        );
+
+        public async Task<IReadOnlyList<BenchmarkResult>> RunBenchmarkAsync(
+            IReadOnlyList<City> cities,
+            IEnumerable<ITspSolver> solvers,
+            CancellationToken cancellationToken = default)
+        {
+            var solverList = solvers.ToList();
+            _logger.LogInformation("Starting benchmark with {CityCount} cities and {SolverCount} algorithms",
+                cities.Count, solverList.Count);
+
+            var results = new List<BenchmarkResult>();
+
+            foreach (var solver in solverList)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                _logger.LogDebug("Running benchmark for {SolverName}", solver.Name);
+                var startTime = DateTime.UtcNow;
+                var tour = await solver.SolveAsync(cities, cancellationToken);
+                var executionTime = DateTime.UtcNow - startTime;
+
+                var result = new BenchmarkResult(solver.Name, tour.TotalDistance, executionTime, tour);
+                results.Add(result);
+
+                _logger.LogInformation("Benchmark completed for {SolverName}: Distance {Distance:F2}, Time {TimeMs}ms",
+                    solver.Name, tour.TotalDistance, executionTime.TotalMilliseconds);
+            }
+
+            var sortedResults = results.OrderBy(r => r.Distance).ToList();
+            _logger.LogInformation("Benchmark completed. Winner: {Winner} with distance {Distance:F2}",
+                sortedResults.First().SolverName, sortedResults.First().Distance);
+
+            return sortedResults;
+        }
+
+        public string FormatResults(IReadOnlyList<BenchmarkResult> results)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("\n=== TSP Solver Benchmark Results ===");
+            sb.AppendLine($"{"Rank",-5} {"Solver",-20} {"Distance",-15} {"Time (ms)",-10} {"% from Best",-12}");
+            sb.AppendLine(new string('-', 75));
+
+            var bestDistance = results.First().Distance;
+
+            for (int i = 0; i < results.Count; i++)
+            {
+                var result = results[i];
+                var percentFromBest = ((result.Distance - bestDistance) / bestDistance) * 100;
+
+                sb.AppendLine($"{i + 1,-5} {result.SolverName,-20} {result.Distance,-15:F2} " +
+                            $"{result.ExecutionTime.TotalMilliseconds,-10:F1} {percentFromBest,-12:F2}%");
+            }
+
+            return sb.ToString();
+        }
+    }
+}
+PS C:\code\TSP>
