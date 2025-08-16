@@ -1,7 +1,7 @@
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is ahead of 'origin/master' by 1 commit.
+Your branch is ahead of 'origin/master' by 3 commits.
   (use "git push" to publish your local commits)
 
 nothing to commit, working tree clean
@@ -15,10 +15,6 @@ nothing to commit, working tree clean
     master merges with remote master
   Local ref configured for 'git push':
     master pushes to master (fast-forwardable)
-Removing TravelingSalesman.ConsoleApp/bin/
-Removing TravelingSalesman.ConsoleApp/obj/
-Removing TravelingSalesman.Core/bin/
-Removing TravelingSalesman.Core/obj/
 Folder PATH listing
 Volume serial number is BE05-6605
 C:.
@@ -327,8 +323,7 @@ jobs:
             rid: win-x64
           - os: ubuntu-latest
             rid: linux-x64
-          - os: ubuntu-latest
-            rid: linux-arm64
+          # ARM64 Linux removed - requires special cross-compilation setup
           - os: macos-latest
             rid: osx-x64
           - os: macos-latest
@@ -339,13 +334,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # Need full history for version calculation
+        fetch-depth: 0
 
     - name: Generate version info
       id: version
       shell: bash
       run: |
-        # Generate version based on date and commit count
         VERSION="$(date +'%Y.%m.%d').$(git rev-list --count HEAD)"
         SHORT_SHA=$(git rev-parse --short HEAD)
         FULL_VERSION="${VERSION}-${SHORT_SHA}"
@@ -446,9 +440,8 @@ jobs:
           ### 📦 Downloads
           - Windows x64: `TSP-win-x64-${{ steps.version.outputs.sha }}.exe`
           - Linux x64: `TSP-linux-x64-${{ steps.version.outputs.sha }}`
-          - Linux ARM64: `TSP-linux-arm64-${{ steps.version.outputs.sha }}`
-          - macOS x64: `TSP-osx-x64-${{ steps.version.outputs.sha }}`
-          - macOS ARM64: `TSP-osx-arm64-${{ steps.version.outputs.sha }}`
+          - macOS x64 (Intel): `TSP-osx-x64-${{ steps.version.outputs.sha }}`
+          - macOS ARM64 (M1/M2): `TSP-osx-arm64-${{ steps.version.outputs.sha }}`
 
           ### 🔄 Changes
           ${{ github.event.head_commit.message }}
