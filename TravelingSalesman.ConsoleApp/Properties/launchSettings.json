@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "TravelingSalesman.ConsoleApp": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
