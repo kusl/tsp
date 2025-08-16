@@ -2,6 +2,7 @@
   <!-- Everything inherited from Directory.Build.props -->
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+    <!-- Package version managed by Directory.Packages.props -->
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>
 </Project>

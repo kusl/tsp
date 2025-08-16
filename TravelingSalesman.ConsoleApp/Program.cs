@@ -63,27 +63,27 @@ namespace TravelingSalesman.ConsoleApp
                             break;
                         case 5:
                             _logger.LogInformation("User requested application exit");
-                            LogToConsole("\nThank you for using TSP Solver! Goodbye!");
+                            Log.Information("Thank you for using TSP Solver! Goodbye!");
                             return;
                         default:
                             _logger.LogWarning("Invalid menu option selected: {Option}", option);
-                            LogError("Invalid option. Please try again.");
+                            Log.Error("Invalid option. Please try again.");
                             break;
                     }
 
                     if (option != 5)
                     {
-                        LogToConsole("\nPress any key to return to main menu...");
+                        Log.Information("Press any key to return to main menu...");
                         Console.ReadKey();
-                        LogToConsole(""); // Add newline after keypress
+                        Console.WriteLine(); // Still need Console.WriteLine for newline after keypress
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogFatal(ex, "Unexpected error occurred in main application loop");
-                LogError($"An unexpected error occurred: {ex.Message}");
-                LogToConsole("\nPress any key to exit...");
+                Log.Fatal("An unexpected error occurred: {ErrorMessage}", ex.Message);
+                Log.Information("Press any key to exit...");
                 Console.ReadKey();
             }
             finally
@@ -99,11 +99,11 @@ namespace TravelingSalesman.ConsoleApp
             LogSectionHeader("Interactive TSP Solver");
 
             // Get number of cities
-            LogToConsole("\nHow many cities? (minimum 2): ");
+            Log.Information("How many cities? (minimum 2): ");
             if (!int.TryParse(Console.ReadLine(), out int cityCount) || cityCount < 2)
             {
                 _logger.LogWarning("Invalid city count input, using default of 10");
-                LogError("Invalid input. Using default of 10 cities.");
+                Log.Error("Invalid input. Using default of 10 cities.");
                 cityCount = 10;
             }
 
@@ -113,24 +113,24 @@ namespace TravelingSalesman.ConsoleApp
             if (cityCount > 100)
             {
                 _logger.LogWarning("Large city count requested: {CityCount}", cityCount);
-                LogWarning($"\n⚠️ Note: {cityCount} cities may take significant time with some algorithms.");
-                LogWarning("   Nearest Neighbor will be fast, but Genetic Algorithm may take minutes.");
-                LogToConsole("   Continue? (y/n): ");
+                Log.Warning("⚠️ Note: {CityCount} cities may take significant time with some algorithms.", cityCount);
+                Log.Warning("   Nearest Neighbor will be fast, but Genetic Algorithm may take minutes.");
+                Log.Information("   Continue? (y/n): ");
 
                 if (Console.ReadLine()?.ToLower() != "y")
                 {
-                    LogToConsole("Using 50 cities instead.");
+                    Log.Information("Using 50 cities instead.");
                     cityCount = 50;
                     _logger.LogInformation("User reduced city count to {CityCount}", cityCount);
                 }
             }
 
             // Select data pattern
-            LogToConsole("\nSelect city distribution pattern:");
-            LogToConsole("  1. Random");
-            LogToConsole("  2. Circular");
-            LogToConsole("  3. Grid");
-            LogToConsole("\n➤ Select pattern (1-3): ");
+            Log.Information("Select city distribution pattern:");
+            Log.Information("  1. Random");
+            Log.Information("  2. Circular"); 
+            Log.Information("  3. Grid");
+            Log.Information("➤ Select pattern (1-3): ");
 
             var generator = new TspDataGenerator(42, _loggerFactory.CreateLogger<TspDataGenerator>());
             IReadOnlyList<City> cities;
@@ -142,31 +142,31 @@ namespace TravelingSalesman.ConsoleApp
                 case "2":
                     cities = generator.GenerateCircularCities(cityCount);
                     pattern = "circular";
-                    LogSuccess($"\n✓ Generated {cityCount} cities in circular pattern");
+                    Log.Information("✓ Generated {CityCount} cities in circular pattern", cityCount);
                     break;
                 case "3":
                     var gridSize = (int)Math.Sqrt(cityCount);
                     cities = generator.GenerateGridCities(gridSize, gridSize + (cityCount - gridSize * gridSize) / gridSize + 1);
                     cities = cities.Take(cityCount).ToList();
                     pattern = "grid";
-                    LogSuccess($"\n✓ Generated {cityCount} cities in grid pattern");
+                    Log.Information("✓ Generated {CityCount} cities in grid pattern", cityCount);
                     break;
                 default:
                     cities = generator.GenerateRandomCities(cityCount);
                     pattern = "random";
-                    LogSuccess($"\n✓ Generated {cityCount} random cities");
+                    Log.Information("✓ Generated {CityCount} random cities", cityCount);
                     break;
             }
 
             _logger.LogInformation("Generated {CityCount} cities with {Pattern} pattern", cityCount, pattern);
 
             // Select algorithm
-            LogToConsole("\nSelect algorithm:");
-            LogToConsole("  1. Nearest Neighbor (Fast, Good)");
-            LogToConsole("  2. 2-Opt (Medium, Better)");
-            LogToConsole("  3. Simulated Annealing (Slow, Very Good)");
-            LogToConsole("  4. Genetic Algorithm (Slowest, Best)");
-            LogToConsole("\n➤ Select algorithm (1-4): ");
+            Log.Information("Select algorithm:");
+            Log.Information("  1. Nearest Neighbor (Fast, Good)");
+            Log.Information("  2. 2-Opt (Medium, Better)");
+            Log.Information("  3. Simulated Annealing (Slow, Very Good)");
+            Log.Information("  4. Genetic Algorithm (Slowest, Best)");
+            Log.Information("➤ Select algorithm (1-4): ");
 
             ITspSolver solver;
             var algoChoice = Console.ReadLine();
@@ -187,7 +187,7 @@ namespace TravelingSalesman.ConsoleApp
             }
 
             _logger.LogInformation("Selected algorithm: {Algorithm} for {CityCount} cities", solver.Name, cityCount);
-            LogToConsole($"\n🔄 Running {solver.Name} algorithm...\n");
+            Log.Information("🔄 Running {Algorithm} algorithm...", solver.Name);
 
             // Setup progress reporting - show dots for visual feedback
             var progressCount = 0;
@@ -212,14 +212,16 @@ namespace TravelingSalesman.ConsoleApp
                           solver.Name, cityCount, pattern, tour.TotalDistance, stopwatch.ElapsedMilliseconds);
 
             // Display results
-            LogToConsole("\n\n" + new string('═', 60));
-            LogSuccess("✓ Solution Found!");
-            LogToConsole(new string('═', 60));
+            Console.WriteLine(); // Clear progress dots
+            Console.WriteLine();
+            Log.Information(new string('═', 60));
+            Log.Information("✓ Solution Found!");
+            Log.Information(new string('═', 60));
 
-            LogToConsole($"\nAlgorithm: {solver.Name}");
-            LogToConsole($"Execution Time: {stopwatch.ElapsedMilliseconds:N0} ms");
-            LogToConsole($"Total Distance: {tour.TotalDistance:F2} units");
-            LogToConsole($"\nRoute ({tour.Cities.Count} cities):");
+            Log.Information("Algorithm: {Algorithm}", solver.Name);
+            Log.Information("Execution Time: {TimeMs:N0} ms", stopwatch.ElapsedMilliseconds);
+            Log.Information("Total Distance: {Distance:F2} units", tour.TotalDistance);
+            Log.Information("Route ({CityCount} cities):", tour.Cities.Count);
 
             var routeStr = string.Join(" → ", tour.Cities.Take(Math.Min(10, tour.Cities.Count)).Select(c => c.Name));
             if (tour.Cities.Count > 10)
@@ -228,20 +230,20 @@ namespace TravelingSalesman.ConsoleApp
             }
             routeStr += " → " + tour.Cities[0].Name;
 
-            LogToConsole(routeStr);
+            Log.Information(routeStr);
 
             // Show city coordinates if requested
-            LogToConsole("\nShow city coordinates? (y/n): ");
+            Log.Information("Show city coordinates? (y/n): ");
             if (Console.ReadLine()?.ToLower() == "y")
             {
-                LogToConsole("\nCity Coordinates:");
+                Log.Information("City Coordinates:");
                 foreach (var city in cities.Take(Math.Min(20, cities.Count)))
                 {
-                    LogToConsole($"  {city.Name}: ({city.X:F2}, {city.Y:F2})");
+                    Log.Information("  {CityName}: ({X:F2}, {Y:F2})", city.Name, city.X, city.Y);
                 }
                 if (cities.Count > 20)
                 {
-                    LogToConsole($"  ... and {cities.Count - 20} more cities");
+                    Log.Information("  ... and {AdditionalCount} more cities", cities.Count - 20);
                 }
             }
 
@@ -253,17 +255,17 @@ namespace TravelingSalesman.ConsoleApp
             _logger.LogInformation("Starting benchmark session");
             LogSectionHeader("Algorithm Benchmark");
 
-            LogToConsole("\nNumber of cities for benchmark: ");
+            Log.Information("Number of cities for benchmark: ");
             if (!int.TryParse(Console.ReadLine(), out int cityCount) || cityCount < 2)
             {
                 cityCount = 15;
-                LogToConsole($"Invalid input. Using default of {cityCount} cities.");
+                Log.Information("Invalid input. Using default of {CityCount} cities.", cityCount);
                 _logger.LogWarning("Invalid benchmark city count, using default: {CityCount}", cityCount);
             }
 
             if (cityCount > 50)
             {
-                LogWarning($"\n⚠️ Benchmark with {cityCount} cities may take several minutes.");
+                Log.Warning("⚠️ Benchmark with {CityCount} cities may take several minutes.", cityCount);
                 _logger.LogWarning("Large benchmark requested: {CityCount} cities", cityCount);
             }
 
@@ -272,8 +274,8 @@ namespace TravelingSalesman.ConsoleApp
 
             _logger.LogInformation("Generated {CityCount} random cities for benchmark", cityCount);
 
-            LogToConsole($"\n🔄 Running benchmark with {cityCount} cities...\n");
-            LogToConsole("This may take a moment...\n");
+            Log.Information("🔄 Running benchmark with {CityCount} cities...", cityCount);
+            Log.Information("This may take a moment...");
 
             var benchmark = new TspBenchmark(_loggerFactory.CreateLogger<TspBenchmark>());
             var solvers = new List<ITspSolver>
@@ -293,12 +295,12 @@ namespace TravelingSalesman.ConsoleApp
                     logger: _loggerFactory.CreateLogger<GeneticAlgorithmSolver>())
             };
 
-            LogToConsole("Processing: ");
+            Console.Write("Processing: ");
             var stopwatch = Stopwatch.StartNew();
             var results = await benchmark.RunBenchmarkAsync(cities, solvers);
             stopwatch.Stop();
 
-            LogToConsole(" Done!");
+            Console.WriteLine(" Done!");
 
             // Log detailed benchmark results
             _logger.LogInformation("Benchmark completed - Cities: {CityCount}, TotalTime: {TotalTimeMs}ms", 
@@ -312,40 +314,13 @@ namespace TravelingSalesman.ConsoleApp
                               results.ToList().IndexOf(result) + 1);
             }
 
-            LogToConsole(benchmark.FormatResults(results));
+            Log.Information(benchmark.FormatResults(results));
 
             // Display winner details
             var winner = results.First();
-            LogSuccess($"\n🏆 Winner: {winner.SolverName}");
-            LogToConsole($"   Distance: {winner.Distance:F2}");
-            LogToConsole($"   Time: {winner.ExecutionTime.TotalMilliseconds:F1} ms");
-
-            // Show relative performance
-            if (results.Count > 1)
-            {
-                LogToConsole("\n📊 Relative Performance:");
-                var maxBarLength = 40;
-                var bestTime = results.Min(r => r.ExecutionTime.TotalMilliseconds);
-                var bestDistance = results.Min(r => r.Distance);
-
-                foreach (var result in results)
-                {
-                    var distanceRatio = result.Distance / bestDistance;
-                    var timeRatio = result.ExecutionTime.TotalMilliseconds / bestTime;
-
-                    var distanceBar = new string('█', (int)(maxBarLength / distanceRatio));
-                    var timeBar = new string('█', Math.Min(maxBarLength, (int)(maxBarLength / timeRatio)));
-
-                    LogToConsole($"\n  {result.SolverName}:");
-                    LogToConsole("    Distance: ", GetColorForRatio(distanceRatio));
-                    LogToConsole(distanceBar);
-                    Console.ResetColor();
-
-                    LogToConsole("    Speed:    ", GetColorForRatio(timeRatio));
-                    LogToConsole(timeBar);
-                    Console.ResetColor();
-                }
-            }
+            Log.Information("🏆 Winner: {SolverName}", winner.SolverName);
+            Log.Information("   Distance: {Distance:F2}", winner.Distance);
+            Log.Information("   Time: {TimeMs:F1} ms", winner.ExecutionTime.TotalMilliseconds);
 
             _logger.LogInformation("Benchmark session completed - Winner: {Winner}, Distance: {Distance:F2}",
                 winner.SolverName, winner.Distance);
@@ -356,22 +331,22 @@ namespace TravelingSalesman.ConsoleApp
             _logger.LogInformation("Starting demonstration session");
             LogSectionHeader("Visual Algorithm Demonstration");
 
-            LogToConsole("\nThis demonstration will show how different algorithms");
-            LogToConsole("approach the TSP problem step by step.\n");
+            Log.Information("This demonstration will show how different algorithms");
+            Log.Information("approach the TSP problem step by step.");
 
             var generator = new TspDataGenerator(42, _loggerFactory.CreateLogger<TspDataGenerator>());
             var cities = generator.GenerateCircularCities(8); // Small number for clarity
 
-            LogToConsole($"Generated {cities.Count} cities in a circular pattern.\n");
-            LogToConsole("Cities:");
+            Log.Information("Generated {CityCount} cities in a circular pattern.", cities.Count);
+            Log.Information("Cities:");
             foreach (var city in cities)
             {
-                LogToConsole($"  {city.Name}: ({city.X:F1}, {city.Y:F1})");
+                Log.Information("  {CityName}: ({X:F1}, {Y:F1})", city.Name, city.X, city.Y);
             }
 
-            LogToConsole("\nPress any key to start the demonstration...");
+            Log.Information("Press any key to start the demonstration...");
             Console.ReadKey();
-            LogToConsole(""); // Add newline after keypress
+            Console.WriteLine(); // Add newline after keypress
 
             // Demonstrate each algorithm
             var algorithms = new (string name, ITspSolver solver)[]
@@ -385,10 +360,10 @@ namespace TravelingSalesman.ConsoleApp
             foreach (var (name, solver) in algorithms)
             {
                 _logger.LogInformation("Running demonstration for {Algorithm}", name);
-                LogToConsole("\n" + new string('─', 60));
+                Log.Information(new string('─', 60));
                 LogSectionHeader($"Algorithm: {name}");
 
-                LogToConsole($"\n🔄 Running {name}...\n");
+                Log.Information("🔄 Running {Algorithm}...", name);
 
                 var iterations = new List<(int iteration, double distance, string message)>();
                 solver.ProgressChanged += (s, e) =>
@@ -401,39 +376,39 @@ namespace TravelingSalesman.ConsoleApp
                 // Display progress summary
                 if (iterations.Count > 0)
                 {
-                    LogToConsole("Algorithm Progress Summary:");
-                    LogToConsole(new string('-', 50));
+                    Log.Information("Algorithm Progress Summary:");
+                    Log.Information(new string('-', 50));
 
                     var first = iterations.First();
                     var last = iterations.Last();
                     var best = iterations.MinBy(i => i.distance);
 
-                    LogToConsole($"  Initial: Distance = {first.distance:F2}");
+                    Log.Information("  Initial: Distance = {Distance:F2}", first.distance);
                     if (iterations.Count > 2)
                     {
-                        LogToConsole($"  Best:    Distance = {best.distance:F2} (at iteration {best.iteration})");
+                        Log.Information("  Best:    Distance = {Distance:F2} (at iteration {Iteration})", best.distance, best.iteration);
                     }
-                    LogToConsole($"  Final:   Distance = {last.distance:F2}");
-                    LogToConsole($"  Total iterations: {iterations.Count}");
+                    Log.Information("  Final:   Distance = {Distance:F2}", last.distance);
+                    Log.Information("  Total iterations: {IterationCount}", iterations.Count);
                 }
 
-                LogToConsole(new string('-', 50));
-                LogToConsole($"\n✓ Final Solution:");
-                LogToConsole($"  Distance: {tour.TotalDistance:F2}");
-                LogToConsole($"  Route: {string.Join(" → ", tour.Cities.Select(c => c.Name))} → {tour.Cities[0].Name}");
+                Log.Information(new string('-', 50));
+                Log.Information("✓ Final Solution:");
+                Log.Information("  Distance: {Distance:F2}", tour.TotalDistance);
+                Log.Information("  Route: {Route} → {FirstCity}", string.Join(" → ", tour.Cities.Select(c => c.Name)), tour.Cities[0].Name);
 
                 DrawSimpleVisualization(tour);
 
                 if (algorithms.Last() != (name, solver))
                 {
-                    LogToConsole("\nPress any key for next algorithm...");
+                    Log.Information("Press any key for next algorithm...");
                     Console.ReadKey();
-                    LogToConsole(""); // Add newline after keypress
+                    Console.WriteLine(); // Add newline after keypress
                 }
             }
 
-            LogToConsole("\n" + new string('═', 60));
-            LogSuccess("Demonstration Complete! All algorithms have been demonstrated.");
+            Log.Information(new string('═', 60));
+            Log.Information("Demonstration Complete! All algorithms have been demonstrated.");
             _logger.LogInformation("Demonstration session completed successfully");
         }
 
@@ -472,27 +447,27 @@ namespace TravelingSalesman.ConsoleApp
 
             foreach (var (algo, (complexity, pros, cons, description)) in info)
             {
-                LogInfo($"\n📍 {algo}");
-                LogToConsole(new string('-', 40));
-                LogToConsole($"Description: {description}");
-                LogToConsole($"Complexity:  {complexity}");
-                LogSuccess($"Pros:        {pros}");
-                LogWarning($"Cons:        {cons}");
+                Log.Information("📍 {Algorithm}", algo);
+                Log.Information(new string('-', 40));
+                Log.Information("Description: {Description}", description);
+                Log.Information("Complexity:  {Complexity}", complexity);
+                Log.Information("Pros:        {Pros}", pros);
+                Log.Information("Cons:        {Cons}", cons);
             }
 
-            LogToConsole("\n" + new string('═', 60));
-            LogToConsole("\n💡 Recommendations:");
-            LogToConsole("  • Small problems (< 20 cities): Nearest Neighbor + 2-Opt");
-            LogToConsole("  • Medium problems (20-100 cities): Simulated Annealing");
-            LogToConsole("  • Large problems (> 100 cities): Genetic Algorithm");
-            LogToConsole("  • Real-time requirements: Nearest Neighbor");
-            LogToConsole("  • Best quality: Genetic Algorithm with tuned parameters");
+            Log.Information(new string('═', 60));
+            Log.Information("💡 Recommendations:");
+            Log.Information("  • Small problems (< 20 cities): Nearest Neighbor + 2-Opt");
+            Log.Information("  • Medium problems (20-100 cities): Simulated Annealing");
+            Log.Information("  • Large problems (> 100 cities): Genetic Algorithm");
+            Log.Information("  • Real-time requirements: Nearest Neighbor");
+            Log.Information("  • Best quality: Genetic Algorithm with tuned parameters");
         }
 
         static void DrawSimpleVisualization(Tour tour)
         {
-            LogToConsole("\nSimple ASCII Visualization:");
-            LogToConsole(new string('─', 50));
+            Log.Information("Simple ASCII Visualization:");
+            Log.Information(new string('─', 50));
 
             const int width = 40;
             const int height = 10;
@@ -523,43 +498,37 @@ namespace TravelingSalesman.ConsoleApp
             // Draw grid
             for (int i = 0; i < height; i++)
             {
-                LogToConsole("  ");
+                var line = "  ";
                 for (int j = 0; j < width; j++)
                 {
-                    if (grid[i, j] == '●')
-                    {
-                        LogToConsole(grid[i, j].ToString(), ConsoleColor.Red);
-                    }
-                    else
-                    {
-                        LogToConsole(grid[i, j].ToString());
-                    }
+                    line += grid[i, j];
                 }
-                LogToConsole("");
+                Log.Information(line);
             }
 
-            LogToConsole(new string('─', 50));
+            Log.Information(new string('─', 50));
         }
 
         static void PrintHeader()
         {
-            LogToConsole(""); // Space from previous output
-            LogInfo("╔═══════════════════════════════════════════════════════════════╗");
-            LogInfo("║          TRAVELING SALESMAN PROBLEM SOLVER v" + GetAssemblyVersion().PadRight(12) + " ║");
-            LogInfo("║                  .NET 9 Implementation                        ║");
-            LogInfo("╚═══════════════════════════════════════════════════════════════╝");
+            Console.WriteLine(); // Space from previous output
+            Log.Information("╔═══════════════════════════════════════════════════════════════╗");
+            Log.Information("║          TRAVELING SALESMAN PROBLEM SOLVER v{Version,-12} ║", GetAssemblyVersion());
+            Log.Information("║                  .NET 9 Implementation                        ║");
+            Log.Information("╚═══════════════════════════════════════════════════════════════╝");
         }
 
         static int ShowMainMenu()
         {
-            LogToConsole("\n📍 Main Menu:\n");
-            LogToConsole("  1. Interactive Solver - Solve custom TSP instances");
-            LogToConsole("  2. Algorithm Benchmark - Compare all algorithms");
-            LogToConsole("  3. Visual Demonstration - See algorithms in action");
-            LogToConsole("  4. Algorithm Information - Learn about each algorithm");
-            LogToConsole("  5. Exit");
+            Log.Information("📍 Main Menu:");
+            Log.Information("");
+            Log.Information("  1. Interactive Solver - Solve custom TSP instances");
+            Log.Information("  2. Algorithm Benchmark - Compare all algorithms");
+            Log.Information("  3. Visual Demonstration - See algorithms in action");
+            Log.Information("  4. Algorithm Information - Learn about each algorithm");
+            Log.Information("  5. Exit");
 
-            LogToConsole("\n➤ Select an option (1-5): ");
+            Log.Information("➤ Select an option (1-5): ");
 
             if (int.TryParse(Console.ReadLine(), out int option))
             {
@@ -571,37 +540,15 @@ namespace TravelingSalesman.ConsoleApp
 
         static void LogSectionHeader(string title)
         {
-            LogInfo("\n" + new string('═', 60));
-            LogInfo($"  {title}");
-            LogInfo(new string('═', 60));
+            Log.Information(new string('═', 60));
+            Log.Information("  {Title}", title);
+            Log.Information(new string('═', 60));
         }
 
-        static void LogToConsole(string message, ConsoleColor? color = null)
+        static string GetAssemblyVersion()
         {
-            if (color.HasValue)
-            {
-                Console.ForegroundColor = color.Value;
-            }
-            Console.Write(message);
-            if (color.HasValue)
-            {
-                Console.ResetColor();
-            }
+            var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            return version?.ToString(3) ?? "1.2.0";
         }
-
-        static void LogSuccess(string message)
-        {
-            LogToConsole(message, ConsoleColor.Green);
-        }
-
-        static void LogError(string message)
-        {
-            LogToConsole($"\n❌ Error: {message}", ConsoleColor.Red);
-        }
-
-        static void LogWarning(string message)
-        {
-            LogToConsole(message, ConsoleColor.Yellow);
-        }
-
-        static void LogInfo(string message
+    }
+}
