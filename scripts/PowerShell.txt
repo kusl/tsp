@@ -2086,3 +2086,65 @@ namespace TravelingSalesman.Core
     }
 }
 PS C:\code\TSP>
+
+
+
+
+
+
+
+
+
+
+
+
+Looking at your GitHub Actions failure, I can see the issue. The error is:
+
+```
+The specified version string '2025.08.16.62.0' does not conform to the required format - major[.minor[.build[.revision]]]
+```
+
+The problem is in your release workflow where you're generating a version string with 5 parts instead of the maximum 4 that .NET allows. Here's what's happening:
+
+1. Your workflow generates a version like `2025.08.16.62.0` (5 parts)
+2. But .NET AssemblyVersion only supports 4 parts: `major.minor.build.revision`
+3. Each part must be between 0 and 65535The key changes I made to fix the version issue:
+
+1. **Use 2-digit year format**: Changed from `2025.08.16.62.0` to `25.8.16.62` to keep numbers smaller
+2. **Remove leading zeros**: Convert month/day to numbers (`08` → `8`, `16` → `16`)  
+3. **Constrain build number**: Ensure build number doesn't exceed 65535 using modulo operation
+4. **Proper 4-part versioning**: Only use 4 parts for AssemblyVersion, FileVersion, and Version
+5. **Separate display version**: Use the full version with SHA for tagging and display
+
+The fixed workflow will generate versions like:
+- **Assembly Version**: `25.8.16.62` (4 parts, all under 65535)
+- **Display Version**: `25.8.16.62-abc1234` (for tags and release names)
+
+You should also update your `Directory.Build.props` to use a static version that gets replaced by the workflow:**Additional recommendations:**
+
+1. **Alternative versioning strategy**: If you prefer semantic versioning, you could use:
+   ```bash
+   VERSION="1.2.${BUILD_NUMBER}.0"  # Results in 1.2.123.0
+   ```
+
+2. **Test locally**: Before committing, you can test the version generation:
+   ```bash
+   # Test version format
+   echo "25.8.16.62" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
+   ```
+
+3. **Rollback plan**: If you want to revert quickly, you can temporarily use:
+   ```yaml
+   VERSION="1.2.0.${BUILD_NUMBER}"
+   ```
+
+The workflow should now pass the .NET version validation and successfully build your cross-platform binaries. The version numbers will be valid .NET assembly versions while still providing meaningful build information.
+
+
+
+
+
+
+
+
+

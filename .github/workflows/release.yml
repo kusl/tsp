@@ -16,7 +16,6 @@ jobs:
             rid: win-x64
           - os: ubuntu-latest
             rid: linux-x64
-          # ARM64 Linux removed - requires special cross-compilation setup
           - os: macos-latest
             rid: osx-x64
           - os: macos-latest
@@ -33,15 +32,28 @@ jobs:
       id: version
       shell: bash
       run: |
-        # Generate date-based version but keep it to 4 parts
+        # Generate date-based version with proper 4-part format for .NET
         YEAR="$(date +'%Y')"
         MONTH="$(date +'%m')"
         DAY="$(date +'%d')"
         BUILD_NUMBER="$(git rev-list --count HEAD)"
         SHORT_SHA=$(git rev-parse --short HEAD)
 
-        # Create 4-part version: YYYY.MM.DD.BUILD
-        VERSION="${YEAR}.${MONTH}.${DAY}.${BUILD_NUMBER}"
+        # Ensure build number doesn't exceed 65535 (max for .NET version parts)
+        if [ $BUILD_NUMBER -gt 65535 ]; then
+          BUILD_NUMBER=$((BUILD_NUMBER % 65535))
+        fi
+
+        # Create 4-part version: YYYY.M.D.BUILD (remove leading zeros to keep numbers smaller)
+        MONTH_NUM=$((10#$MONTH))  # Convert to number, removing leading zero
+        DAY_NUM=$((10#$DAY))      # Convert to number, removing leading zero
+        
+        # Alternative: Use a more compact format to avoid large numbers
+        # Option 1: Use 2-digit year: YY.MM.DD.BUILD
+        YEAR_SHORT=$((YEAR - 2000))
+        VERSION="${YEAR_SHORT}.${MONTH_NUM}.${DAY_NUM}.${BUILD_NUMBER}"
+        
+        # Create full version string for display/tagging (not for AssemblyVersion)
         FULL_VERSION="${VERSION}-${SHORT_SHA}"
 
         echo "version=${VERSION}" >> $GITHUB_OUTPUT
@@ -49,7 +61,7 @@ jobs:
         echo "sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
 
         echo "Generated version: ${FULL_VERSION}"
-        echo "Assembly version: ${VERSION} (4 parts)"
+        echo "Assembly version (4 parts): ${VERSION}"
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -59,13 +71,13 @@ jobs:
     - name: Update version in Directory.Build.props
       shell: bash
       run: |
-        # Update the version in Directory.Build.props with generated version
+        # Update the version in Directory.Build.props with generated 4-part version
         sed -i.bak "s/<Version>.*<\/Version>/<Version>${{ steps.version.outputs.version }}<\/Version>/g" Directory.Build.props
-        sed -i.bak "s/<AssemblyVersion>.*<\/AssemblyVersion>/<AssemblyVersion>${{ steps.version.outputs.version }}.0<\/AssemblyVersion>/g" Directory.Build.props
-        sed -i.bak "s/<FileVersion>.*<\/FileVersion>/<FileVersion>${{ steps.version.outputs.version }}.0<\/FileVersion>/g" Directory.Build.props
+        sed -i.bak "s/<AssemblyVersion>.*<\/AssemblyVersion>/<AssemblyVersion>${{ steps.version.outputs.version }}<\/AssemblyVersion>/g" Directory.Build.props
+        sed -i.bak "s/<FileVersion>.*<\/FileVersion>/<FileVersion>${{ steps.version.outputs.version }}<\/FileVersion>/g" Directory.Build.props
         sed -i.bak "s/<InformationalVersion>.*<\/InformationalVersion>/<InformationalVersion>${{ steps.version.outputs.full_version }}<\/InformationalVersion>/g" Directory.Build.props
-        
-        echo "Updated Directory.Build.props:"
+
+        echo "Updated Directory.Build.props with version ${{ steps.version.outputs.version }}:"
         grep -A 5 -B 1 "Version>" Directory.Build.props || true
 
     - name: Build native binary
@@ -94,16 +106,16 @@ jobs:
       run: |
         echo "Testing binary with logging functionality..."
         cd artifacts
-        
+
         if [[ "${{ matrix.rid }}" == win-* ]]; then
           BINARY="./TSP-${{ matrix.rid }}-${{ steps.version.outputs.sha }}.exe"
         else
           BINARY="./TSP-${{ matrix.rid }}-${{ steps.version.outputs.sha }}"
         fi
-        
+
         # Test that binary runs and creates logs
         echo -e "4\n5\n" | timeout 10s $BINARY || true
-        
+
         # Check if logs were created
         if [ -d "logs" ]; then
           echo "✅ Binary successfully creates log files"
@@ -138,15 +150,24 @@ jobs:
       id: version
       shell: bash
       run: |
-        # Use semantic versioning with build number
-        MAJOR="1"
-        MINOR="2"
-        PATCH="0"
+        # Use same logic as build job for consistency
+        YEAR="$(date +'%Y')"
+        MONTH="$(date +'%m')"
+        DAY="$(date +'%d')"
         BUILD_NUMBER="$(git rev-list --count HEAD)"
         SHORT_SHA=$(git rev-parse --short HEAD)
 
-        # Create 4-part version for .NET (max 65535 per part)
-        VERSION="${MAJOR}.${MINOR}.${PATCH}.${BUILD_NUMBER}"
+        # Ensure build number doesn't exceed 65535
+        if [ $BUILD_NUMBER -gt 65535 ]; then
+          BUILD_NUMBER=$((BUILD_NUMBER % 65535))
+        fi
+
+        # Use 2-digit year format to keep numbers manageable
+        YEAR_SHORT=$((YEAR - 2000))
+        MONTH_NUM=$((10#$MONTH))
+        DAY_NUM=$((10#$DAY))
+        
+        VERSION="${YEAR_SHORT}.${MONTH_NUM}.${DAY_NUM}.${BUILD_NUMBER}"
         FULL_VERSION="${VERSION}-${SHORT_SHA}"
 
         echo "version=${VERSION}" >> $GITHUB_OUTPUT
@@ -170,14 +191,14 @@ jobs:
         Commit: ${{ github.sha }}
         Branch: ${{ github.ref_name }}
         Build Date: $(date -u +'%Y-%m-%d %H:%M:%S UTC')
-        
+
         Features:
         - Multiple TSP algorithms (Nearest Neighbor, 2-Opt, Simulated Annealing, Genetic Algorithm)
         - Comprehensive logging with Serilog
         - Interactive and benchmark modes
         - Cross-platform native AOT compilation
         - Docker support
-        
+
         Logging:
         - Console output for user interaction
         - Detailed file logging in logs/ directory
@@ -219,7 +240,7 @@ jobs:
           ```bash
           # Run interactive mode
           ./TSP-linux-x64-${{ steps.version.outputs.sha }}
-          
+
           # Check logs (created in logs/ directory)
           ls -la logs/
           ```

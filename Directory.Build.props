@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <!-- Version Management -->
+    <!-- Version Management - these will be updated by CI/CD -->
     <Version>1.2.0</Version>
     <AssemblyVersion>1.2.0.0</AssemblyVersion>
     <FileVersion>1.2.0.0</FileVersion>
