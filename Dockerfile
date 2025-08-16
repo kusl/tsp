@@ -23,9 +23,10 @@ RUN apt-get update \
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-# Copy solution and Directory.Build.props FIRST
+# Copy solution and MSBuild configuration files FIRST
 COPY ["TSP.sln", "./"]
 COPY ["Directory.Build.props", "./"]
+COPY ["Directory.Packages.props", "./"]
 
 # Copy project files for both projects
 COPY ["TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj", "TravelingSalesman.ConsoleApp/"]
@@ -59,5 +60,10 @@ USER app
 ARG DOTNET_VERSION=9.0
 FROM ${FINAL_BASE_IMAGE:-mcr.microsoft.com/dotnet/runtime-deps:${DOTNET_VERSION}} AS final
 WORKDIR /app
+
+# Create logs directory for Serilog file output
+RUN mkdir -p /app/logs && \
+    chmod 755 /app/logs
+
 COPY --from=publish /app/publish .
 ENTRYPOINT ["./TravelingSalesman.ConsoleApp"]

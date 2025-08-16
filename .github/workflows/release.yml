@@ -36,11 +36,11 @@ jobs:
         VERSION="$(date +'%Y.%m.%d').$(git rev-list --count HEAD)"
         SHORT_SHA=$(git rev-parse --short HEAD)
         FULL_VERSION="${VERSION}-${SHORT_SHA}"
-        
+
         echo "version=${VERSION}" >> $GITHUB_OUTPUT
         echo "full_version=${FULL_VERSION}" >> $GITHUB_OUTPUT
         echo "sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
-        
+
         echo "Generated version: ${FULL_VERSION}"
 
     - name: Setup .NET
@@ -48,19 +48,29 @@ jobs:
       with:
         dotnet-version: '9.0.x'
 
+    - name: Update version in Directory.Build.props
+      shell: bash
+      run: |
+        # Update the version in Directory.Build.props with generated version
+        sed -i.bak "s/<Version>.*<\/Version>/<Version>${{ steps.version.outputs.version }}<\/Version>/g" Directory.Build.props
+        sed -i.bak "s/<AssemblyVersion>.*<\/AssemblyVersion>/<AssemblyVersion>${{ steps.version.outputs.version }}.0<\/AssemblyVersion>/g" Directory.Build.props
+        sed -i.bak "s/<FileVersion>.*<\/FileVersion>/<FileVersion>${{ steps.version.outputs.version }}.0<\/FileVersion>/g" Directory.Build.props
+        sed -i.bak "s/<InformationalVersion>.*<\/InformationalVersion>/<InformationalVersion>${{ steps.version.outputs.full_version }}<\/InformationalVersion>/g" Directory.Build.props
+        
+        echo "Updated Directory.Build.props:"
+        grep -A 5 -B 1 "Version>" Directory.Build.props || true
+
     - name: Build native binary
       shell: bash
       run: |
         mkdir -p artifacts
-        
+
         echo "Building for ${{ matrix.rid }}..."
         dotnet publish TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj \
           -c Release -r ${{ matrix.rid }} \
           --self-contained -p:PublishAot=true -p:PublishSingleFile=true \
-          -p:AssemblyVersion=${{ steps.version.outputs.version }} \
-          -p:FileVersion=${{ steps.version.outputs.version }} \
           -o ./publish-${{ matrix.rid }}
-        
+
         # Package the binary
         if [[ "${{ matrix.rid }}" == win-* ]]; then
           mv ./publish-${{ matrix.rid }}/TravelingSalesman.ConsoleApp.exe ./artifacts/TSP-${{ matrix.rid }}-${{ steps.version.outputs.sha }}.exe
@@ -68,14 +78,41 @@ jobs:
           mv ./publish-${{ matrix.rid }}/TravelingSalesman.ConsoleApp ./artifacts/TSP-${{ matrix.rid }}-${{ steps.version.outputs.sha }}
           chmod +x ./artifacts/TSP-${{ matrix.rid }}-${{ steps.version.outputs.sha }}
         fi
-        
+
         ls -lah ./artifacts/
+
+    - name: Test binary with logging
+      shell: bash
+      run: |
+        echo "Testing binary with logging functionality..."
+        cd artifacts
+        
+        if [[ "${{ matrix.rid }}" == win-* ]]; then
+          BINARY="./TSP-${{ matrix.rid }}-${{ steps.version.outputs.sha }}.exe"
+        else
+          BINARY="./TSP-${{ matrix.rid }}-${{ steps.version.outputs.sha }}"
+        fi
+        
+        # Test that binary runs and creates logs
+        echo -e "4\n5\n" | timeout 10s $BINARY || true
+        
+        # Check if logs were created
+        if [ -d "logs" ]; then
+          echo "✅ Binary successfully creates log files"
+          ls -la logs/ || true
+          echo "Sample log content:"
+          head -3 logs/* 2>/dev/null || true
+        else
+          echo "⚠️ Logs directory not created by binary"
+        fi
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: binary-${{ matrix.rid }}
-        path: ./artifacts/*
+        path: |
+          ./artifacts/*
+          ./artifacts/logs/
 
   create-release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -95,7 +132,7 @@ jobs:
         VERSION="$(date +'%Y.%m.%d').$(git rev-list --count HEAD)"
         SHORT_SHA=$(git rev-parse --short HEAD)
         FULL_VERSION="${VERSION}-${SHORT_SHA}"
-        
+
         echo "version=${VERSION}" >> $GITHUB_OUTPUT
         echo "full_version=${FULL_VERSION}" >> $GITHUB_OUTPUT
         echo "sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
@@ -108,33 +145,68 @@ jobs:
     - name: Create version info file
       run: |
         cat > ./artifacts/version.txt << EOF
+        TSP Solver Release Information
+        ============================
         Version: ${{ steps.version.outputs.full_version }}
         Commit: ${{ github.sha }}
         Branch: ${{ github.ref_name }}
         Build Date: $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+        
+        Features:
+        - Multiple TSP algorithms (Nearest Neighbor, 2-Opt, Simulated Annealing, Genetic Algorithm)
+        - Comprehensive logging with Serilog
+        - Interactive and benchmark modes
+        - Cross-platform native AOT compilation
+        - Docker support
+        
+        Logging:
+        - Console output for user interaction
+        - Detailed file logging in logs/ directory
+        - Daily rotating log files (30 day retention)
+        - Structured logging for performance analysis
         EOF
 
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ steps.version.outputs.full_version }}
-        name: Release ${{ steps.version.outputs.full_version }}
+        name: TSP Solver v${{ steps.version.outputs.full_version }}
         draft: false
         prerelease: true
         generate_release_notes: true
         files: |
           ./artifacts/**/*
         body: |
-          ## Automated Release for commit ${{ github.sha }}
-          
-          **Version:** ${{ steps.version.outputs.full_version }}
-          **Commit:** ${{ github.sha }}
-          
+          ## 🚀 TSP Solver v${{ steps.version.outputs.full_version }}
+
+          **Automated Release** - Built from commit [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+
           ### 📦 Downloads
-          - Windows x64: `TSP-win-x64-${{ steps.version.outputs.sha }}.exe`
-          - Linux x64: `TSP-linux-x64-${{ steps.version.outputs.sha }}`
-          - macOS x64 (Intel): `TSP-osx-x64-${{ steps.version.outputs.sha }}`
-          - macOS ARM64 (M1/M2): `TSP-osx-arm64-${{ steps.version.outputs.sha }}`
+          - **Windows x64**: `TSP-win-x64-${{ steps.version.outputs.sha }}.exe`
+          - **Linux x64**: `TSP-linux-x64-${{ steps.version.outputs.sha }}`
+          - **macOS x64 (Intel)**: `TSP-osx-x64-${{ steps.version.outputs.sha }}`
+          - **macOS ARM64 (Apple Silicon)**: `TSP-osx-arm64-${{ steps.version.outputs.sha }}`
+
+          ### ✨ Key Features
+          - 🧠 **Multiple Algorithms**: Nearest Neighbor, 2-Opt, Simulated Annealing, Genetic Algorithm
+          - 📊 **Comprehensive Logging**: Console + file logging with Serilog
+          - 🎯 **Interactive Mode**: Solve custom TSP instances
+          - 🏆 **Benchmark Mode**: Compare all algorithms
+          - 📈 **Performance Tracking**: Detailed metrics and progress reporting
+          - 🐳 **Docker Support**: Containerized execution
+          - ⚡ **Native AOT**: Fast startup, single-file deployment
+
+          ### 📋 Usage
+          ```bash
+          # Run interactive mode
+          ./TSP-linux-x64-${{ steps.version.outputs.sha }}
           
+          # Check logs (created in logs/ directory)
+          ls -la logs/
+          ```
+
           ### 🔄 Changes
           ${{ github.event.head_commit.message }}
+
+          ---
+          Built with .NET 9 | Native AOT | Serilog Logging

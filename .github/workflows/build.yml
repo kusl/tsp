@@ -10,7 +10,7 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -28,8 +28,8 @@ jobs:
       run: |
         echo "Running benchmark test with 10 cities..."
         echo -e "2\n10\n5\n" | timeout 30s docker run --rm -i tsp-solver:latest | tee benchmark_output.log || true
-        
-        if grep -q "TSP Solver Benchmark Results" benchmark_output.log; then
+
+        if grep -q "Benchmark completed" benchmark_output.log; then
           echo "✅ Benchmark completed successfully"
           grep -A 5 "Winner:" benchmark_output.log || true
         else
@@ -40,8 +40,8 @@ jobs:
       run: |
         echo "Testing Nearest Neighbor algorithm with 8 cities..."
         echo -e "1\n8\n1\n1\nn\n5\n" | timeout 20s docker run --rm -i tsp-solver:latest | tee nn_output.log || true
-        
-        if grep -q "Solution Found!" nn_output.log; then
+
+        if grep -q "Solution Found" nn_output.log; then
           echo "✅ Nearest Neighbor test completed"
           grep "Total Distance:" nn_output.log || true
         else
@@ -52,7 +52,7 @@ jobs:
       run: |
         echo "Running demonstration mode..."
         echo -e "3\n5\n" | timeout 60s docker run --rm -i tsp-solver:latest | tee demo_output.log || true
-        
+
         if grep -q "Demonstration Complete" demo_output.log; then
           echo "✅ Demonstration completed successfully"
         else
@@ -63,11 +63,26 @@ jobs:
       run: |
         echo "Getting algorithm information..."
         echo -e "4\n5\n" | timeout 10s docker run --rm -i tsp-solver:latest | tee info_output.log || true
-        
+
         if grep -q "Algorithm Information" info_output.log; then
           echo "✅ Algorithm info displayed successfully"
         else
           echo "⚠️ Algorithm info test may not have completed"
+        fi
+
+    - name: Test - Log File Creation
+      run: |
+        echo "Testing log file creation..."
+        # Run a quick test and check if logs directory is created
+        echo -e "4\n5\n" | timeout 10s docker run --rm -v $(pwd)/test-logs:/app/logs tsp-solver:latest | tee log_test.log || true
+        
+        if [ -d "test-logs" ] && [ "$(ls -A test-logs)" ]; then
+          echo "✅ Log files created successfully"
+          ls -la test-logs/ || true
+          echo "Sample log content:"
+          head -5 test-logs/* 2>/dev/null || true
+        else
+          echo "⚠️ Log files may not have been created"
         fi
 
     - name: Upload test results
@@ -77,6 +92,8 @@ jobs:
         name: test-outputs
         path: |
           *_output.log
+          log_test.log
+          test-logs/
 
     - name: Display summary
       if: always()
@@ -84,14 +101,23 @@ jobs:
         echo "## Test Summary"
         echo "Docker image size:"
         docker images tsp-solver:latest --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
-        
+
         echo ""
         echo "Test files generated:"
-        ls -lh *_output.log || echo "No output files found"
+        ls -lh *_output.log log_test.log 2>/dev/null || echo "No output files found"
+
+        echo ""
+        echo "Log directory test:"
+        if [ -d "test-logs" ]; then
+          echo "✅ Logs directory created"
+          du -sh test-logs/ 2>/dev/null || true
+        else
+          echo "❌ Logs directory not found"
+        fi
 
   build-native-dotnet:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -107,21 +133,65 @@ jobs:
     - name: Build
       run: dotnet build TSP.sln --configuration Release --no-restore
 
+    - name: Test Version Information
+      run: |
+        echo "Testing assembly version information..."
+        cd TravelingSalesman.ConsoleApp/bin/Release/net9.0
+        
+        # Check if version is properly embedded
+        if command -v strings >/dev/null 2>&1; then
+          echo "Assembly version info:"
+          strings TravelingSalesman.ConsoleApp.dll | grep -E "^[0-9]+\.[0-9]+\.[0-9]+" || echo "Version strings not found"
+        fi
+
     - name: Run without Docker
       run: |
-        echo "Testing native .NET build..."
+        echo "Testing native .NET build with logging..."
         cd TravelingSalesman.ConsoleApp/bin/Release/net9.0
-        echo -e "2\n5\n5\n" | timeout 10s dotnet TravelingSalesman.ConsoleApp.dll || true
+        
+        # Test basic functionality and log creation
+        echo -e "4\n5\n" | timeout 10s dotnet TravelingSalesman.ConsoleApp.dll || true
+        
+        # Check if logs directory was created
+        if [ -d "logs" ]; then
+          echo "✅ Logs directory created in native build"
+          ls -la logs/ || true
+        else
+          echo "❌ Logs directory not created in native build"
+        fi
 
     - name: Publish AOT (if supported)
       continue-on-error: true
       run: |
+        echo "Publishing AOT build..."
         dotnet publish TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj \
           -c Release \
           -r linux-x64 \
           --self-contained true \
           -p:PublishAot=true \
           -o ./publish-aot
-        
+
         echo "AOT published files:"
         ls -lh ./publish-aot/ || true
+        
+        # Test AOT binary
+        if [ -f "./publish-aot/TravelingSalesman.ConsoleApp" ]; then
+          echo "Testing AOT binary..."
+          echo -e "4\n5\n" | timeout 10s ./publish-aot/TravelingSalesman.ConsoleApp || true
+          
+          # Check logs for AOT build
+          if [ -d "./publish-aot/logs" ]; then
+            echo "✅ AOT build creates logs successfully"
+          else
+            echo "⚠️ AOT build may not create logs directory"
+          fi
+        fi
+
+    - name: Upload native build artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: native-build-logs
+        path: |
+          TravelingSalesman.ConsoleApp/bin/Release/net9.0/logs/
+          publish-aot/logs/
