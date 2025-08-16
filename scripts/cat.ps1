@@ -7,6 +7,8 @@ Write-Host "`n=== SLN FILE ===" -ForegroundColor Cyan; `
 Get-Content *.sln; `
 Write-Host "`n=== DOCKERFILE ===" -ForegroundColor Cyan; `
 Get-Content Dockerfile; `
+Write-Host "`n=== Properties FILE ===" -ForegroundColor Cyan; `
+Get-Content *.props; `
 Write-Host "`n=== GITHUB ACTIONS ===" -ForegroundColor Cyan; `
 Get-Content .github\workflows\*.yml; `
 Write-Host "`n=== CSPROJ FILES ===" -ForegroundColor Cyan; `
