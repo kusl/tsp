@@ -110,7 +110,7 @@ jobs:
     - name: Run without Docker
       run: |
         echo "Testing native .NET build..."
-        cd TravelingSalesman.ConsoleApp/bin/Release/net10.0
+        cd TravelingSalesman.ConsoleApp/bin/Release/net9.0
         echo -e "2\n5\n5\n" | timeout 10s dotnet TravelingSalesman.ConsoleApp.dll || true
 
     - name: Publish AOT (if supported)
