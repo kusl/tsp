@@ -19,23 +19,26 @@ RUN apt-get update \
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
+# Copy solution file (adjust name if needed)
+COPY ["TSP.sln", "./"]
+
 # Copy project files for both projects
 COPY ["TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj", "TravelingSalesman.ConsoleApp/"]
 COPY ["TravelingSalesman.Core/TravelingSalesman.Core.csproj", "TravelingSalesman.Core/"]
 
 # Restore the console app (which will also restore its dependencies)
-RUN dotnet restore "./TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj"
+RUN dotnet restore "TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj"
 
 # Copy all source code
 COPY . .
 
 WORKDIR "/src/TravelingSalesman.ConsoleApp"
-RUN dotnet build "./TravelingSalesman.ConsoleApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "TravelingSalesman.ConsoleApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./TravelingSalesman.ConsoleApp.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=true
+RUN dotnet publish "TravelingSalesman.ConsoleApp.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=true
 
 # This stage is used as the base for the final stage when launching from VS to support debugging in regular mode (Default when not using the Debug configuration)
 FROM base AS aotdebug
@@ -46,8 +49,4 @@ RUN apt-get update \
     gdb
 USER app
 
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
-FROM ${FINAL_BASE_IMAGE:-mcr.microsoft.com/dotnet/runtime-deps:10.0-preview} AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["./TravelingSalesman.ConsoleApp"]
+# This stage is used in production or whe
