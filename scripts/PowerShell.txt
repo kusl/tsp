@@ -1,7 +1,8 @@
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is up to date with 'origin/master'.
+Your branch is ahead of 'origin/master' by 2 commits.
+  (use "git push" to publish your local commits)
 
 nothing to commit, working tree clean
 * remote origin
@@ -13,7 +14,7 @@ nothing to commit, working tree clean
   Local branch configured for 'git pull':
     master merges with remote master
   Local ref configured for 'git push':
-    master pushes to master (up to date)
+    master pushes to master (fast-forwardable)
 Folder PATH listing
 Volume serial number is BE05-6605
 C:.
@@ -441,7 +442,12 @@ jobs:
           ### 📦 Downloads
           - Windows x64: `TSP-win-x64-${{ steps.version.outputs.sha }}.exe`
           - Linux x64: `TSP-linux-x64-${{ steps.version.outputs.sha }}`
-          - Linux ARM64: `TSP-linux-arm64-${{ s
+          - Linux ARM64: `TSP-linux-arm64-${{ steps.version.outputs.sha }}`
+          - macOS x64: `TSP-osx-x64-${{ steps.version.outputs.sha }}`
+          - macOS ARM64: `TSP-osx-arm64-${{ steps.version.outputs.sha }}`
+
+          ### 🔄 Changes
+          ${{ github.event.head_commit.message }}
 
 === CSPROJ FILES ===
 
