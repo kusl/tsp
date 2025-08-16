@@ -1,7 +1,7 @@
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is ahead of 'origin/master' by 6 commits.
+Your branch is ahead of 'origin/master' by 8 commits.
   (use "git push" to publish your local commits)
 
 nothing to commit, working tree clean
@@ -15,8 +15,6 @@ nothing to commit, working tree clean
     master merges with remote master
   Local ref configured for 'git push':
     master pushes to master (fast-forwardable)
-Removing TravelingSalesman.ConsoleApp/obj/
-Removing TravelingSalesman.Core/obj/
 Folder PATH listing
 Volume serial number is BE05-6605
 C:.
@@ -116,9 +114,10 @@ RUN apt-get update \
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-# Copy solution and Directory.Build.props FIRST
+# Copy solution and MSBuild configuration files FIRST
 COPY ["TSP.sln", "./"]
 COPY ["Directory.Build.props", "./"]
+COPY ["Directory.Packages.props", "./"]
 
 # Copy project files for both projects
 COPY ["TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj", "TravelingSalesman.ConsoleApp/"]
@@ -152,6 +151,11 @@ USER app
 ARG DOTNET_VERSION=9.0
 FROM ${FINAL_BASE_IMAGE:-mcr.microsoft.com/dotnet/runtime-deps:${DOTNET_VERSION}} AS final
 WORKDIR /app
+
+# Create logs directory for Serilog file output
+RUN mkdir -p /app/logs && \
+    chmod 755 /app/logs
+
 COPY --from=publish /app/publish .
 ENTRYPOINT ["./TravelingSalesman.ConsoleApp"]
 
@@ -242,7 +246,7 @@ jobs:
         echo "Running benchmark test with 10 cities..."
         echo -e "2\n10\n5\n" | timeout 30s docker run --rm -i tsp-solver:latest | tee benchmark_output.log || true
 
-        if grep -q "TSP Solver Benchmark Results" benchmark_output.log; then
+        if grep -q "Benchmark completed" benchmark_output.log; then
           echo "✅ Benchmark completed successfully"
           grep -A 5 "Winner:" benchmark_output.log || true
         else
@@ -254,7 +258,7 @@ jobs:
         echo "Testing Nearest Neighbor algorithm with 8 cities..."
         echo -e "1\n8\n1\n1\nn\n5\n" | timeout 20s docker run --rm -i tsp-solver:latest | tee nn_output.log || true
 
-        if grep -q "Solution Found!" nn_output.log; then
+        if grep -q "Solution Found" nn_output.log; then
           echo "✅ Nearest Neighbor test completed"
           grep "Total Distance:" nn_output.log || true
         else
@@ -283,6 +287,21 @@ jobs:
           echo "⚠️ Algorithm info test may not have completed"
         fi
 
+    - name: Test - Log File Creation
+      run: |
+        echo "Testing log file creation..."
+        # Run a quick test and check if logs directory is created
+        echo -e "4\n5\n" | timeout 10s docker run --rm -v $(pwd)/test-logs:/app/logs tsp-solver:latest | tee log_test.log || true
+
+        if [ -d "test-logs" ] && [ "$(ls -A test-logs)" ]; then
+          echo "✅ Log files created successfully"
+          ls -la test-logs/ || true
+          echo "Sample log content:"
+          head -5 test-logs/* 2>/dev/null || true
+        else
+          echo "⚠️ Log files may not have been created"
+        fi
+
     - name: Upload test results
       if: always()
       uses: actions/upload-artifact@v4
@@ -290,6 +309,8 @@ jobs:
         name: test-outputs
         path: |
           *_output.log
+          log_test.log
+          test-logs/
 
     - name: Display summary
       if: always()
@@ -300,7 +321,16 @@ jobs:
 
         echo ""
         echo "Test files generated:"
-        ls -lh *_output.log || echo "No output files found"
+        ls -lh *_output.log log_test.log 2>/dev/null || echo "No output files found"
+
+        echo ""
+        echo "Log directory test:"
+        if [ -d "test-logs" ]; then
+          echo "✅ Logs directory created"
+          du -sh test-logs/ 2>/dev/null || true
+        else
+          echo "❌ Logs directory not found"
+        fi
 
   build-native-dotnet:
     runs-on: ubuntu-latest
@@ -320,15 +350,37 @@ jobs:
     - name: Build
       run: dotnet build TSP.sln --configuration Release --no-restore
 
+    - name: Test Version Information
+      run: |
+        echo "Testing assembly version information..."
+        cd TravelingSalesman.ConsoleApp/bin/Release/net9.0
+
+        # Check if version is properly embedded
+        if command -v strings >/dev/null 2>&1; then
+          echo "Assembly version info:"
+          strings TravelingSalesman.ConsoleApp.dll | grep -E "^[0-9]+\.[0-9]+\.[0-9]+" || echo "Version strings not found"
+        fi
+
     - name: Run without Docker
       run: |
-        echo "Testing native .NET build..."
+        echo "Testing native .NET build with logging..."
         cd TravelingSalesman.ConsoleApp/bin/Release/net9.0
-        echo -e "2\n5\n5\n" | timeout 10s dotnet TravelingSalesman.ConsoleApp.dll || true
+
+        # Test basic functionality and log creation
+        echo -e "4\n5\n" | timeout 10s dotnet TravelingSalesman.ConsoleApp.dll || true
+
+        # Check if logs directory was created
+        if [ -d "logs" ]; then
+          echo "✅ Logs directory created in native build"
+          ls -la logs/ || true
+        else
+          echo "❌ Logs directory not created in native build"
+        fi
 
     - name: Publish AOT (if supported)
       continue-on-error: true
       run: |
+        echo "Publishing AOT build..."
         dotnet publish TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj \
           -c Release \
           -r linux-x64 \
@@ -338,6 +390,28 @@ jobs:
 
         echo "AOT published files:"
         ls -lh ./publish-aot/ || true
+
+        # Test AOT binary
+        if [ -f "./publish-aot/TravelingSalesman.ConsoleApp" ]; then
+          echo "Testing AOT binary..."
+          echo -e "4\n5\n" | timeout 10s ./publish-aot/TravelingSalesman.ConsoleApp || true
+
+          # Check logs for AOT build
+          if [ -d "./publish-aot/logs" ]; then
+            echo "✅ AOT build creates logs successfully"
+          else
+            echo "⚠️ AOT build may not create logs directory"
+          fi
+        fi
+
+    - name: Upload native build artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: native-build-logs
+        path: |
+          TravelingSalesman.ConsoleApp/bin/Release/net9.0/logs/
+          publish-aot/logs/
 name: Continuous Release
 
 on:
@@ -388,6 +462,18 @@ jobs:
       with:
         dotnet-version: '9.0.x'
 
+    - name: Update version in Directory.Build.props
+      shell: bash
+      run: |
+        # Update the version in Directory.Build.props with generated version
+        sed -i.bak "s/<Version>.*<\/Version>/<Version>${{ steps.version.outputs.version }}<\/Version>/g" Directory.Build.props
+        sed -i.bak "s/<AssemblyVersion>.*<\/AssemblyVersion>/<AssemblyVersion>${{ steps.version.outputs.version }}.0<\/AssemblyVersion>/g" Directory.Build.props
+        sed -i.bak "s/<FileVersion>.*<\/FileVersion>/<FileVersion>${{ steps.version.outputs.version }}.0<\/FileVersion>/g" Directory.Build.props
+        sed -i.bak "s/<InformationalVersion>.*<\/InformationalVersion>/<InformationalVersion>${{ steps.version.outputs.full_version }}<\/InformationalVersion>/g" Directory.Build.props
+
+        echo "Updated Directory.Build.props:"
+        grep -A 5 -B 1 "Version>" Directory.Build.props || true
+
     - name: Build native binary
       shell: bash
       run: |
@@ -397,8 +483,6 @@ jobs:
         dotnet publish TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj \
           -c Release -r ${{ matrix.rid }} \
           --self-contained -p:PublishAot=true -p:PublishSingleFile=true \
-          -p:AssemblyVersion=${{ steps.version.outputs.version }} \
-          -p:FileVersion=${{ steps.version.outputs.version }} \
           -o ./publish-${{ matrix.rid }}
 
         # Package the binary
@@ -411,11 +495,38 @@ jobs:
 
         ls -lah ./artifacts/
 
+    - name: Test binary with logging
+      shell: bash
+      run: |
+        echo "Testing binary with logging functionality..."
+        cd artifacts
+
+        if [[ "${{ matrix.rid }}" == win-* ]]; then
+          BINARY="./TSP-${{ matrix.rid }}-${{ steps.version.outputs.sha }}.exe"
+        else
+          BINARY="./TSP-${{ matrix.rid }}-${{ steps.version.outputs.sha }}"
+        fi
+
+        # Test that binary runs and creates logs
+        echo -e "4\n5\n" | timeout 10s $BINARY || true
+
+        # Check if logs were created
+        if [ -d "logs" ]; then
+          echo "✅ Binary successfully creates log files"
+          ls -la logs/ || true
+          echo "Sample log content:"
+          head -3 logs/* 2>/dev/null || true
+        else
+          echo "⚠️ Logs directory not created by binary"
+        fi
+
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: binary-${{ matrix.rid }}
-        path: ./artifacts/*
+        path: |
+          ./artifacts/*
+          ./artifacts/logs/
 
   create-release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -448,36 +559,71 @@ jobs:
     - name: Create version info file
       run: |
         cat > ./artifacts/version.txt << EOF
+        TSP Solver Release Information
+        ============================
         Version: ${{ steps.version.outputs.full_version }}
         Commit: ${{ github.sha }}
         Branch: ${{ github.ref_name }}
         Build Date: $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+
+        Features:
+        - Multiple TSP algorithms (Nearest Neighbor, 2-Opt, Simulated Annealing, Genetic Algorithm)
+        - Comprehensive logging with Serilog
+        - Interactive and benchmark modes
+        - Cross-platform native AOT compilation
+        - Docker support
+
+        Logging:
+        - Console output for user interaction
+        - Detailed file logging in logs/ directory
+        - Daily rotating log files (30 day retention)
+        - Structured logging for performance analysis
         EOF
 
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ steps.version.outputs.full_version }}
-        name: Release ${{ steps.version.outputs.full_version }}
+        name: TSP Solver v${{ steps.version.outputs.full_version }}
         draft: false
         prerelease: true
         generate_release_notes: true
         files: |
           ./artifacts/**/*
         body: |
-          ## Automated Release for commit ${{ github.sha }}
+          ## 🚀 TSP Solver v${{ steps.version.outputs.full_version }}
 
-          **Version:** ${{ steps.version.outputs.full_version }}
-          **Commit:** ${{ github.sha }}
+          **Automated Release** - Built from commit [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
 
           ### 📦 Downloads
-          - Windows x64: `TSP-win-x64-${{ steps.version.outputs.sha }}.exe`
-          - Linux x64: `TSP-linux-x64-${{ steps.version.outputs.sha }}`
-          - macOS x64 (Intel): `TSP-osx-x64-${{ steps.version.outputs.sha }}`
-          - macOS ARM64 (M1/M2): `TSP-osx-arm64-${{ steps.version.outputs.sha }}`
+          - **Windows x64**: `TSP-win-x64-${{ steps.version.outputs.sha }}.exe`
+          - **Linux x64**: `TSP-linux-x64-${{ steps.version.outputs.sha }}`
+          - **macOS x64 (Intel)**: `TSP-osx-x64-${{ steps.version.outputs.sha }}`
+          - **macOS ARM64 (Apple Silicon)**: `TSP-osx-arm64-${{ steps.version.outputs.sha }}`
+
+          ### ✨ Key Features
+          - 🧠 **Multiple Algorithms**: Nearest Neighbor, 2-Opt, Simulated Annealing, Genetic Algorithm
+          - 📊 **Comprehensive Logging**: Console + file logging with Serilog
+          - 🎯 **Interactive Mode**: Solve custom TSP instances
+          - 🏆 **Benchmark Mode**: Compare all algorithms
+          - 📈 **Performance Tracking**: Detailed metrics and progress reporting
+          - 🐳 **Docker Support**: Containerized execution
+          - ⚡ **Native AOT**: Fast startup, single-file deployment
+
+          ### 📋 Usage
+          ```bash
+          # Run interactive mode
+          ./TSP-linux-x64-${{ steps.version.outputs.sha }}
+
+          # Check logs (created in logs/ directory)
+          ls -la logs/
+          ```
 
           ### 🔄 Changes
           ${{ github.event.head_commit.message }}
+
+          ---
+          Built with .NET 9 | Native AOT | Serilog Logging
 
 === CSPROJ FILES ===
 
@@ -1881,4 +2027,4 @@ namespace TravelingSalesman.Core
         }
     }
 }
-PS C:\code\TSP> C:\code\TSP\scripts\cat.ps1
+PS C:\code\TSP>
