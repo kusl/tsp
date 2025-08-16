@@ -33,13 +33,15 @@ jobs:
       id: version
       shell: bash
       run: |
-        # Generate date-based version: YYYY.MM.DD.BUILD_NUMBER
-        DATE_VERSION="$(date +'%Y.%m.%d')"
+        # Generate date-based version but keep it to 4 parts
+        YEAR="$(date +'%Y')"
+        MONTH="$(date +'%m')"
+        DAY="$(date +'%d')"
         BUILD_NUMBER="$(git rev-list --count HEAD)"
         SHORT_SHA=$(git rev-parse --short HEAD)
-        
-        # Create 4-part version for .NET (max 65535 per part)
-        VERSION="${DATE_VERSION}.${BUILD_NUMBER}"
+
+        # Create 4-part version: YYYY.MM.DD.BUILD
+        VERSION="${YEAR}.${MONTH}.${DAY}.${BUILD_NUMBER}"
         FULL_VERSION="${VERSION}-${SHORT_SHA}"
 
         echo "version=${VERSION}" >> $GITHUB_OUTPUT
