@@ -49,4 +49,8 @@ RUN apt-get update \
     gdb
 USER app
 
-# This stage is used in production or whe
+# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
+FROM ${FINAL_BASE_IMAGE:-mcr.microsoft.com/dotnet/runtime-deps:9.0} AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["./TravelingSalesman.ConsoleApp"]
