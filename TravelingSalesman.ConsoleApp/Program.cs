@@ -525,13 +525,39 @@ namespace TravelingSalesman.ConsoleApp
             Log.Information(new string('─', 50));
         }
 
+        // Solution 3: Dynamic box sizing (recommended)
         static void PrintHeader()
         {
             Console.WriteLine(); // Space from previous output
-            Log.Information("╔═══════════════════════════════════════════════════════════════╗");
-            Log.Information("║          TRAVELING SALESMAN PROBLEM SOLVER v{Version,-12} ║", GetAssemblyVersion());
-            Log.Information("║                  .NET 9 Implementation                        ║");
-            Log.Information("╚═══════════════════════════════════════════════════════════════╝");
+            
+            var version = GetAssemblyVersion();
+            var titleLine = $"TRAVELING SALESMAN PROBLEM SOLVER v{version}";
+            var subtitleLine = ".NET 9 Implementation";
+            
+            // Determine the width needed
+            var maxLength = Math.Max(titleLine.Length, subtitleLine.Length);
+            var boxWidth = Math.Max(maxLength + 4, 65); // At least 65 chars wide, or content + padding
+            
+            var topBorder = "╔" + new string('═', boxWidth - 2) + "╗";
+            var bottomBorder = "╚" + new string('═', boxWidth - 2) + "╝";
+            
+            // Center the text
+            var titlePadding = (boxWidth - 2 - titleLine.Length) / 2;
+            var titleRightPad = (boxWidth - 2) - titleLine.Length - titlePadding;
+            
+            var subtitlePadding = (boxWidth - 2 - subtitleLine.Length) / 2;
+            var subtitleRightPad = (boxWidth - 2) - subtitleLine.Length - subtitlePadding;
+            
+            Log.Information(topBorder);
+            Log.Information("║{0}{1}{2}║", 
+                new string(' ', titlePadding), 
+                titleLine, 
+                new string(' ', titleRightPad));
+            Log.Information("║{0}{1}{2}║", 
+                new string(' ', subtitlePadding), 
+                subtitleLine, 
+                new string(' ', subtitleRightPad));
+            Log.Information(bottomBorder);
         }
 
         static int ShowMainMenu()
