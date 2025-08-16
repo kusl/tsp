@@ -16,25 +16,23 @@ jobs:
             rid: win-x64
           - os: ubuntu-latest
             rid: linux-x64
-          - os: ubuntu-latest
-            rid: linux-arm64
+          # ARM64 Linux removed - requires special cross-compilation setup
           - os: macos-latest
             rid: osx-x64
           - os: macos-latest
             rid: osx-arm64
-    
+
     runs-on: ${{ matrix.os }}
-    
+
     steps:
     - uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # Need full history for version calculation
+        fetch-depth: 0
 
     - name: Generate version info
       id: version
       shell: bash
       run: |
-        # Generate version based on date and commit count
         VERSION="$(date +'%Y.%m.%d').$(git rev-list --count HEAD)"
         SHORT_SHA=$(git rev-parse --short HEAD)
         FULL_VERSION="${VERSION}-${SHORT_SHA}"
@@ -85,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    
+
     steps:
     - uses: actions/checkout@v4
       with:
@@ -135,9 +133,8 @@ jobs:
           ### 📦 Downloads
           - Windows x64: `TSP-win-x64-${{ steps.version.outputs.sha }}.exe`
           - Linux x64: `TSP-linux-x64-${{ steps.version.outputs.sha }}`
-          - Linux ARM64: `TSP-linux-arm64-${{ steps.version.outputs.sha }}`
-          - macOS x64: `TSP-osx-x64-${{ steps.version.outputs.sha }}`
-          - macOS ARM64: `TSP-osx-arm64-${{ steps.version.outputs.sha }}`
+          - macOS x64 (Intel): `TSP-osx-x64-${{ steps.version.outputs.sha }}`
+          - macOS ARM64 (M1/M2): `TSP-osx-arm64-${{ steps.version.outputs.sha }}`
           
           ### 🔄 Changes
           ${{ github.event.head_commit.message }}
