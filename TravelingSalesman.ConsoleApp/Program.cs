@@ -81,7 +81,7 @@ namespace TravelingSalesman.ConsoleApp
             }
             catch (Exception ex)
             {
-                _logger.LogFatal(ex, "Unexpected error occurred in main application loop");
+                _logger.LogCritical(ex, "Unexpected error occurred in main application loop");
                 Log.Fatal("An unexpected error occurred: {ErrorMessage}", ex.Message);
                 Log.Information("Press any key to exit...");
                 Console.ReadKey();
