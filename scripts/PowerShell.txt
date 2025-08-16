@@ -1,47 +1,8 @@
-Annotations
-13 errors and 5 notices
-build-and-release (macos-latest, osx-arm64)
-Process completed with exit code 1.
-build-and-release (macos-latest, osx-arm64): TravelingSalesman.Core/obj/Release/net9.0/TravelingSalesman.Core.AssemblyInfo.cs#L21
-The specified version string '2025.08.16.62.0' does not conform to the required format - major[.minor[.build[.revision]]]
-build-and-release (macos-latest, osx-arm64): TravelingSalesman.Core/obj/Release/net9.0/TravelingSalesman.Core.AssemblyInfo.cs#L17
-The specified version string '2025.08.16.62.0' does not conform to the recommended format - major.minor.build.revision
-build-and-release (macos-latest, osx-x64)
-Process completed with exit code 1.
-build-and-release (macos-latest, osx-x64): TravelingSalesman.Core/obj/Release/net9.0/TravelingSalesman.Core.AssemblyInfo.cs#L21
-The specified version string '2025.08.16.62.0' does not conform to the required format - major[.minor[.build[.revision]]]
-build-and-release (macos-latest, osx-x64): TravelingSalesman.Core/obj/Release/net9.0/TravelingSalesman.Core.AssemblyInfo.cs#L17
-The specified version string '2025.08.16.62.0' does not conform to the recommended format - major.minor.build.revision
-build-and-release (macos-latest, osx-x64)
-The strategy configuration was canceled because "build-and-release.macos-latest_osx-arm64" failed
-build-and-release (ubuntu-latest, linux-x64)
-The operation was canceled.
-build-and-release (ubuntu-latest, linux-x64): TravelingSalesman.Core/obj/Release/net9.0/TravelingSalesman.Core.AssemblyInfo.cs#L21
-The specified version string '2025.08.16.62.0' does not conform to the required format - major[.minor[.build[.revision]]]
-build-and-release (ubuntu-latest, linux-x64): TravelingSalesman.Core/obj/Release/net9.0/TravelingSalesman.Core.AssemblyInfo.cs#L17
-The specified version string '2025.08.16.62.0' does not conform to the recommended format - major.minor.build.revision
-build-and-release (ubuntu-latest, linux-x64)
-The strategy configuration was canceled because "build-and-release.macos-latest_osx-arm64" failed
-build-and-release (windows-latest, win-x64)
-The operation was canceled.
-build-and-release (windows-latest, win-x64)
-The strategy configuration was canceled because "build-and-release.macos-latest_osx-arm64" failed
-build-and-release (macos-latest, osx-arm64)
-The macos-latest label will migrate to macOS 15 beginning August 4, 2025. For more information see https://github.com/actions/runner-images/issues/12520
-build-and-release (macos-latest, osx-arm64)
-The macos-latest label will migrate to macOS 15 beginning August 4, 2025. For more information see https://github.com/actions/runner-images/issues/12520
-build-and-release (macos-latest, osx-x64)
-The macos-latest label will migrate to macOS 15 beginning August 4, 2025. For more information see https://github.com/actions/runner-images/issues/12520
-build-and-release (macos-latest, osx-x64)
-The macos-latest label will migrate to macOS 15 beginning August 4, 2025. For more information see https://github.com/actions/runner-images/issues/12520
-build-and-release (windows-latest, win-x64)
-The windows-latest label will migrate from Windows Server 2022 to Windows Server 2025 beginning September 2, 2025. For more information see https://github.com/actions/runner-images/issues/12677
-
-
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is up to date with 'origin/master'.
+Your branch is ahead of 'origin/master' by 3 commits.
+  (use "git push" to publish your local commits)
 
 nothing to commit, working tree clean
 * remote origin
@@ -53,7 +14,7 @@ nothing to commit, working tree clean
   Local branch configured for 'git pull':
     master merges with remote master
   Local ref configured for 'git push':
-    master pushes to master (up to date)
+    master pushes to master (fast-forwardable)
 Folder PATH listing
 Volume serial number is BE05-6605
 C:.
@@ -201,7 +162,7 @@ ENTRYPOINT ["./TravelingSalesman.ConsoleApp"]
 === Properties FILE ===
 <Project>
   <PropertyGroup>
-    <!-- Version Management -->
+    <!-- Version Management - these will be updated by CI/CD -->
     <Version>1.2.0</Version>
     <AssemblyVersion>1.2.0.0</AssemblyVersion>
     <FileVersion>1.2.0.0</FileVersion>
@@ -469,7 +430,6 @@ jobs:
             rid: win-x64
           - os: ubuntu-latest
             rid: linux-x64
-          # ARM64 Linux removed - requires special cross-compilation setup
           - os: macos-latest
             rid: osx-x64
           - os: macos-latest
@@ -486,15 +446,28 @@ jobs:
       id: version
       shell: bash
       run: |
-        # Generate date-based version but keep it to 4 parts
+        # Generate date-based version with proper 4-part format for .NET
         YEAR="$(date +'%Y')"
         MONTH="$(date +'%m')"
         DAY="$(date +'%d')"
         BUILD_NUMBER="$(git rev-list --count HEAD)"
         SHORT_SHA=$(git rev-parse --short HEAD)
 
-        # Create 4-part version: YYYY.MM.DD.BUILD
-        VERSION="${YEAR}.${MONTH}.${DAY}.${BUILD_NUMBER}"
+        # Ensure build number doesn't exceed 65535 (max for .NET version parts)
+        if [ $BUILD_NUMBER -gt 65535 ]; then
+          BUILD_NUMBER=$((BUILD_NUMBER % 65535))
+        fi
+
+        # Create 4-part version: YYYY.M.D.BUILD (remove leading zeros to keep numbers smaller)
+        MONTH_NUM=$((10#$MONTH))  # Convert to number, removing leading zero
+        DAY_NUM=$((10#$DAY))      # Convert to number, removing leading zero
+
+        # Alternative: Use a more compact format to avoid large numbers
+        # Option 1: Use 2-digit year: YY.MM.DD.BUILD
+        YEAR_SHORT=$((YEAR - 2000))
+        VERSION="${YEAR_SHORT}.${MONTH_NUM}.${DAY_NUM}.${BUILD_NUMBER}"
+
+        # Create full version string for display/tagging (not for AssemblyVersion)
         FULL_VERSION="${VERSION}-${SHORT_SHA}"
 
         echo "version=${VERSION}" >> $GITHUB_OUTPUT
@@ -502,7 +475,7 @@ jobs:
         echo "sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
 
         echo "Generated version: ${FULL_VERSION}"
-        echo "Assembly version: ${VERSION} (4 parts)"
+        echo "Assembly version (4 parts): ${VERSION}"
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -512,13 +485,13 @@ jobs:
     - name: Update version in Directory.Build.props
       shell: bash
       run: |
-        # Update the version in Directory.Build.props with generated version
+        # Update the version in Directory.Build.props with generated 4-part version
         sed -i.bak "s/<Version>.*<\/Version>/<Version>${{ steps.version.outputs.version }}<\/Version>/g" Directory.Build.props
-        sed -i.bak "s/<AssemblyVersion>.*<\/AssemblyVersion>/<AssemblyVersion>${{ steps.version.outputs.version }}.0<\/AssemblyVersion>/g" Directory.Build.props
-        sed -i.bak "s/<FileVersion>.*<\/FileVersion>/<FileVersion>${{ steps.version.outputs.version }}.0<\/FileVersion>/g" Directory.Build.props
+        sed -i.bak "s/<AssemblyVersion>.*<\/AssemblyVersion>/<AssemblyVersion>${{ steps.version.outputs.version }}<\/AssemblyVersion>/g" Directory.Build.props
+        sed -i.bak "s/<FileVersion>.*<\/FileVersion>/<FileVersion>${{ steps.version.outputs.version }}<\/FileVersion>/g" Directory.Build.props
         sed -i.bak "s/<InformationalVersion>.*<\/InformationalVersion>/<InformationalVersion>${{ steps.version.outputs.full_version }}<\/InformationalVersion>/g" Directory.Build.props
 
-        echo "Updated Directory.Build.props:"
+        echo "Updated Directory.Build.props with version ${{ steps.version.outputs.version }}:"
         grep -A 5 -B 1 "Version>" Directory.Build.props || true
 
     - name: Build native binary
@@ -591,15 +564,24 @@ jobs:
       id: version
       shell: bash
       run: |
-        # Use semantic versioning with build number
-        MAJOR="1"
-        MINOR="2"
-        PATCH="0"
+        # Use same logic as build job for consistency
+        YEAR="$(date +'%Y')"
+        MONTH="$(date +'%m')"
+        DAY="$(date +'%d')"
         BUILD_NUMBER="$(git rev-list --count HEAD)"
         SHORT_SHA=$(git rev-parse --short HEAD)
 
-        # Create 4-part version for .NET (max 65535 per part)
-        VERSION="${MAJOR}.${MINOR}.${PATCH}.${BUILD_NUMBER}"
+        # Ensure build number doesn't exceed 65535
+        if [ $BUILD_NUMBER -gt 65535 ]; then
+          BUILD_NUMBER=$((BUILD_NUMBER % 65535))
+        fi
+
+        # Use 2-digit year format to keep numbers manageable
+        YEAR_SHORT=$((YEAR - 2000))
+        MONTH_NUM=$((10#$MONTH))
+        DAY_NUM=$((10#$DAY))
+
+        VERSION="${YEAR_SHORT}.${MONTH_NUM}.${DAY_NUM}.${BUILD_NUMBER}"
         FULL_VERSION="${VERSION}-${SHORT_SHA}"
 
         echo "version=${VERSION}" >> $GITHUB_OUTPUT
@@ -2085,66 +2067,4 @@ namespace TravelingSalesman.Core
         }
     }
 }
-PS C:\code\TSP>
-
-
-
-
-
-
-
-
-
-
-
-
-Looking at your GitHub Actions failure, I can see the issue. The error is:
-
-```
-The specified version string '2025.08.16.62.0' does not conform to the required format - major[.minor[.build[.revision]]]
-```
-
-The problem is in your release workflow where you're generating a version string with 5 parts instead of the maximum 4 that .NET allows. Here's what's happening:
-
-1. Your workflow generates a version like `2025.08.16.62.0` (5 parts)
-2. But .NET AssemblyVersion only supports 4 parts: `major.minor.build.revision`
-3. Each part must be between 0 and 65535The key changes I made to fix the version issue:
-
-1. **Use 2-digit year format**: Changed from `2025.08.16.62.0` to `25.8.16.62` to keep numbers smaller
-2. **Remove leading zeros**: Convert month/day to numbers (`08` → `8`, `16` → `16`)  
-3. **Constrain build number**: Ensure build number doesn't exceed 65535 using modulo operation
-4. **Proper 4-part versioning**: Only use 4 parts for AssemblyVersion, FileVersion, and Version
-5. **Separate display version**: Use the full version with SHA for tagging and display
-
-The fixed workflow will generate versions like:
-- **Assembly Version**: `25.8.16.62` (4 parts, all under 65535)
-- **Display Version**: `25.8.16.62-abc1234` (for tags and release names)
-
-You should also update your `Directory.Build.props` to use a static version that gets replaced by the workflow:**Additional recommendations:**
-
-1. **Alternative versioning strategy**: If you prefer semantic versioning, you could use:
-   ```bash
-   VERSION="1.2.${BUILD_NUMBER}.0"  # Results in 1.2.123.0
-   ```
-
-2. **Test locally**: Before committing, you can test the version generation:
-   ```bash
-   # Test version format
-   echo "25.8.16.62" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
-   ```
-
-3. **Rollback plan**: If you want to revert quickly, you can temporarily use:
-   ```yaml
-   VERSION="1.2.0.${BUILD_NUMBER}"
-   ```
-
-The workflow should now pass the .NET version validation and successfully build your cross-platform binaries. The version numbers will be valid .NET assembly versions while still providing meaningful build information.
-
-
-
-
-
-
-
-
-
+PS C:\code\TSP> C:\code\TSP\scripts\cat.ps1
