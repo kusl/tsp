@@ -888,4 +888,338 @@ You are using a preview version of .NET. See: https://aka.ms/dotnet-support-poli
     C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(111,1): error CS1022: Type or namespace definition, or end-of-file expected
 
 Build failed with 114 error(s) in 5.1s
-PS C:\code\TSP> Set-Location "C:\code\tsp"; git status; git remote show origin; git clean -dfx; tree /F; dotnet restore; dotnet build; dotnet test; dotnet test TravelingSalesman.Specs; dotnet test TravelingSalesman.Specs --logger "console;verbosity=detailed"; dotnet test TravelingSalesman.Specs --logger "html;LogFileName=docs\test-results.html";
+PS C:\code\TSP> tree /F
+Folder PATH listing
+Volume serial number is BE05-6605
+C:.
+│   .dockerignore
+│   .gitattributes
+│   .gitignore
+│   Directory.Build.props
+│   Directory.Packages.props
+│   Dockerfile
+│   LICENSE.txt
+│   README.md
+│   TSP.sln
+│
+├───.github
+│   └───workflows
+│           build.yml
+│           release.yml
+│
+├───docs
+│       index.html
+│
+├───scripts
+│       cat.ps1
+│       PowerShell.txt
+│
+├───TravelingSalesman.ConsoleApp
+│   │   Program.cs
+│   │   TravelingSalesman.ConsoleApp.csproj
+│   │
+│   ├───bin
+│   │   └───Debug
+│   │       └───net9.0
+│   │               Microsoft.Extensions.DependencyInjection.Abstractions.dll
+│   │               Microsoft.Extensions.DependencyInjection.dll
+│   │               Microsoft.Extensions.Logging.Abstractions.dll
+│   │               Microsoft.Extensions.Logging.dll
+│   │               Microsoft.Extensions.Options.dll
+│   │               Microsoft.Extensions.Primitives.dll
+│   │               Serilog.dll
+│   │               Serilog.Extensions.Logging.dll
+│   │               Serilog.Formatting.Compact.dll
+│   │               Serilog.Sinks.Console.dll
+│   │               Serilog.Sinks.File.dll
+│   │               TravelingSalesman.ConsoleApp.deps.json
+│   │               TravelingSalesman.ConsoleApp.dll
+│   │               TravelingSalesman.ConsoleApp.exe
+│   │               TravelingSalesman.ConsoleApp.pdb
+│   │               TravelingSalesman.ConsoleApp.runtimeconfig.json
+│   │               TravelingSalesman.Core.dll
+│   │               TravelingSalesman.Core.pdb
+│   │
+│   ├───obj
+│   │   │   project.assets.json
+│   │   │   project.nuget.cache
+│   │   │   TravelingSalesman.ConsoleApp.csproj.nuget.dgspec.json
+│   │   │   TravelingSalesman.ConsoleApp.csproj.nuget.g.props
+│   │   │   TravelingSalesman.ConsoleApp.csproj.nuget.g.targets
+│   │   │
+│   │   └───Debug
+│   │       └───net9.0
+│   │           │   .NETCoreApp,Version=v9.0.AssemblyAttributes.cs
+│   │           │   apphost.exe
+│   │           │   Travelin.D4C5DFA4.Up2Date
+│   │           │   TravelingSalesman.ConsoleApp.AssemblyInfo.cs
+│   │           │   TravelingSalesman.ConsoleApp.AssemblyInfoInputs.cache
+│   │           │   TravelingSalesman.ConsoleApp.assets.cache
+│   │           │   TravelingSalesman.ConsoleApp.csproj.AssemblyReference.cache
+│   │           │   TravelingSalesman.ConsoleApp.csproj.CoreCompileInputs.cache
+│   │           │   TravelingSalesman.ConsoleApp.csproj.FileListAbsolute.txt
+│   │           │   TravelingSalesman.ConsoleApp.dll
+│   │           │   TravelingSalesman.ConsoleApp.GeneratedMSBuildEditorConfig.editorconfig
+│   │           │   TravelingSalesman.ConsoleApp.genruntimeconfig.cache
+│   │           │   TravelingSalesman.ConsoleApp.GlobalUsings.g.cs
+│   │           │   TravelingSalesman.ConsoleApp.pdb
+│   │           │   TravelingSalesman.ConsoleApp.sourcelink.json
+│   │           │
+│   │           ├───ref
+│   │           │       TravelingSalesman.ConsoleApp.dll
+│   │           │
+│   │           └───refint
+│   │                   TravelingSalesman.ConsoleApp.dll
+│   │
+│   └───Properties
+│           launchSettings.json
+│
+├───TravelingSalesman.Core
+│   │   TravelingSalesman.Core.csproj
+│   │   TravelingSalesmanLibrary.cs
+│   │
+│   ├───bin
+│   │   └───Debug
+│   │       └───net9.0
+│   │               TravelingSalesman.Core.deps.json
+│   │               TravelingSalesman.Core.dll
+│   │               TravelingSalesman.Core.pdb
+│   │
+│   └───obj
+│       │   project.assets.json
+│       │   project.nuget.cache
+│       │   TravelingSalesman.Core.csproj.nuget.dgspec.json
+│       │   TravelingSalesman.Core.csproj.nuget.g.props
+│       │   TravelingSalesman.Core.csproj.nuget.g.targets
+│       │
+│       └───Debug
+│           └───net9.0
+│               │   .NETCoreApp,Version=v9.0.AssemblyAttributes.cs
+│               │   TravelingSalesman.Core.AssemblyInfo.cs
+│               │   TravelingSalesman.Core.AssemblyInfoInputs.cache
+│               │   TravelingSalesman.Core.assets.cache
+│               │   TravelingSalesman.Core.csproj.AssemblyReference.cache
+│               │   TravelingSalesman.Core.csproj.CoreCompileInputs.cache
+│               │   TravelingSalesman.Core.csproj.FileListAbsolute.txt
+│               │   TravelingSalesman.Core.dll
+│               │   TravelingSalesman.Core.GeneratedMSBuildEditorConfig.editorconfig
+│               │   TravelingSalesman.Core.GlobalUsings.g.cs
+│               │   TravelingSalesman.Core.pdb
+│               │   TravelingSalesman.Core.sourcelink.json
+│               │
+│               ├───ref
+│               │       TravelingSalesman.Core.dll
+│               │
+│               └───refint
+│                       TravelingSalesman.Core.dll
+│
+├───TravelingSalesman.Specs
+│   │   Class1.cs
+│   │   reqnroll.json
+│   │   TravelingSalesman.Specs.csproj
+│   │
+│   ├───bin
+│   │   └───Debug
+│   │       └───net9.0
+│   │               .msCoverageSourceRootsMapping_TravelingSalesman.Specs
+│   │               CoverletSourceRootsMapping_TravelingSalesman.Specs
+│   │
+│   ├───Features
+│   │       Benchmarking.feature
+│   │       Benchmarking.feature.cs
+│   │       CityOperations.feature
+│   │       CityOperations.feature.cs
+│   │       DataGeneration.feature
+│   │       DataGeneration.feature.cs
+│   │       TspSolvers.feature
+│   │       TspSolvers.feature.cs
+│   │
+│   ├───obj
+│   │   │   project.assets.json
+│   │   │   project.nuget.cache
+│   │   │   TravelingSalesman.Specs.csproj.nuget.dgspec.json
+│   │   │   TravelingSalesman.Specs.csproj.nuget.g.props
+│   │   │   TravelingSalesman.Specs.csproj.nuget.g.targets
+│   │   │
+│   │   └───Debug
+│   │       └───net9.0
+│   │           │   .NETCoreApp,Version=v9.0.AssemblyAttributes.cs
+│   │           │   TravelingSalesman.Specs.AssemblyInfo.cs
+│   │           │   TravelingSalesman.Specs.AssemblyInfoInputs.cache
+│   │           │   TravelingSalesman.Specs.assets.cache
+│   │           │   TravelingSalesman.Specs.csproj.AssemblyReference.cache
+│   │           │   TravelingSalesman.Specs.csproj.CoreCompileInputs.cache
+│   │           │   TravelingSalesman.Specs.csproj.FileListAbsolute.txt
+│   │           │   TravelingSalesman.Specs.GeneratedMSBuildEditorConfig.editorconfig
+│   │           │   TravelingSalesman.Specs.GlobalUsings.g.cs
+│   │           │   TravelingSalesman.Specs.sourcelink.json
+│   │           │   Verify.Attributes.cs
+│   │           │   xUnit.AssemblyHooks.cs
+│   │           │
+│   │           ├───ref
+│   │           └───refint
+│   ├───StepDefinitions
+│   │       BenchmarkingSteps.cs
+│   │       CityOperationSteps.cs
+│   │       DataGenerationSteps.cs
+│   │       TspSolverSteps.cs
+│   │
+│   └───Support
+│           Hooks.cs
+│
+└───TravelingSalesman.Tests
+    │   Tests.cs
+    │   TravelingSalesman.Tests.csproj
+    │
+    ├───bin
+    │   └───Debug
+    │       └───net9.0
+    │           │   .msCoverageSourceRootsMapping_TravelingSalesman.Tests
+    │           │   CoverletSourceRootsMapping_TravelingSalesman.Tests
+    │           │   Microsoft.Extensions.DependencyInjection.Abstractions.dll
+    │           │   Microsoft.Extensions.Logging.Abstractions.dll
+    │           │   Microsoft.TestPlatform.CommunicationUtilities.dll
+    │           │   Microsoft.TestPlatform.CoreUtilities.dll
+    │           │   Microsoft.TestPlatform.CrossPlatEngine.dll
+    │           │   Microsoft.TestPlatform.PlatformAbstractions.dll
+    │           │   Microsoft.TestPlatform.Utilities.dll
+    │           │   Microsoft.VisualStudio.CodeCoverage.Shim.dll
+    │           │   Microsoft.VisualStudio.TestPlatform.Common.dll
+    │           │   Microsoft.VisualStudio.TestPlatform.ObjectModel.dll
+    │           │   Newtonsoft.Json.dll
+    │           │   testhost.dll
+    │           │   testhost.exe
+    │           │   TravelingSalesman.Core.dll
+    │           │   TravelingSalesman.Core.pdb
+    │           │   TravelingSalesman.Tests.deps.json
+    │           │   TravelingSalesman.Tests.dll
+    │           │   TravelingSalesman.Tests.pdb
+    │           │   TravelingSalesman.Tests.runtimeconfig.json
+    │           │   xunit.abstractions.dll
+    │           │   xunit.assert.dll
+    │           │   xunit.core.dll
+    │           │   xunit.execution.dotnet.dll
+    │           │   xunit.runner.visualstudio.testadapter.dll
+    │           │
+    │           ├───cs
+    │           │       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    │           │
+    │           ├───de
+    │           │       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    │           │
+    │           ├───es
+    │           │       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    │           │
+    │           ├───fr
+    │           │       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    │           │
+    │           ├───it
+    │           │       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    │           │
+    │           ├───ja
+    │           │       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    │           │
+    │           ├───ko
+    │           │       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    │           │
+    │           ├───pl
+    │           │       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    │           │
+    │           ├───pt-BR
+    │           │       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    │           │
+    │           ├───ru
+    │           │       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    │           │
+    │           ├───tr
+    │           │       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    │           │
+    │           ├───zh-Hans
+    │           │       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CoreUtilities.resources.dll
+    │           │       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    │           │       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    │           │
+    │           └───zh-Hant
+    │                   Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+    │                   Microsoft.TestPlatform.CoreUtilities.resources.dll
+    │                   Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+    │                   Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+    │                   Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+    │
+    └───obj
+        │   project.assets.json
+        │   project.nuget.cache
+        │   TravelingSalesman.Tests.csproj.nuget.dgspec.json
+        │   TravelingSalesman.Tests.csproj.nuget.g.props
+        │   TravelingSalesman.Tests.csproj.nuget.g.targets
+        │
+        └───Debug
+            └───net9.0
+                │   .NETCoreApp,Version=v9.0.AssemblyAttributes.cs
+                │   Travelin.EAAC5258.Up2Date
+                │   TravelingSalesman.Tests.AssemblyInfo.cs
+                │   TravelingSalesman.Tests.AssemblyInfoInputs.cache
+                │   TravelingSalesman.Tests.assets.cache
+                │   TravelingSalesman.Tests.csproj.AssemblyReference.cache
+                │   TravelingSalesman.Tests.csproj.CoreCompileInputs.cache
+                │   TravelingSalesman.Tests.csproj.FileListAbsolute.txt
+                │   TravelingSalesman.Tests.dll
+                │   TravelingSalesman.Tests.GeneratedMSBuildEditorConfig.editorconfig
+                │   TravelingSalesman.Tests.genruntimeconfig.cache
+                │   TravelingSalesman.Tests.GlobalUsings.g.cs
+                │   TravelingSalesman.Tests.pdb
+                │   TravelingSalesman.Tests.sourcelink.json
+                │
+                ├───ref
+                │       TravelingSalesman.Tests.dll
+                │
+                └───refint
+                        TravelingSalesman.Tests.dll
+
+PS C:\code\TSP>
