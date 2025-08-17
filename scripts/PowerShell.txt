@@ -4721,4 +4721,10 @@ namespace TravelingSalesman.Tests
         }
     }
 }
-PS C:\code\TSP> C:\code\TSP\scripts\cat.ps1
+PS C:\code\TSP> dotnet test TSP.sln --configuration Release --no-build --verbosity normal
+
+Build succeeded in 0.9s
+PS C:\code\TSP> dotnet test TSP.sln --configuration Release --no-build --verbosity normal
+
+Build succeeded in 0.9s
+PS C:\code\TSP>
