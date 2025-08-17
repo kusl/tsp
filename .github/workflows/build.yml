@@ -133,6 +133,15 @@ jobs:
     - name: Build
       run: dotnet build TSP.sln --configuration Release --no-restore
 
+    - name: Run Tests
+      run: dotnet test TSP.sln --configuration Release --no-build --verbosity normal
+
+    - name: Test Coverage
+      run: |
+        dotnet test TSP.sln --configuration Release --no-build \
+          --collect:"XPlat Code Coverage" \
+          --results-directory ./coverage
+
     - name: Test Version Information
       run: |
         echo "Testing assembly version information..."
