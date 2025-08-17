@@ -1139,27 +1139,21 @@ namespace TravelingSalesman.Tests
         }
 
         [Fact]
-        public void TspSolverFactory_CreateSolver_WithLoggerFactory_ShouldWork()
+        public void TspSolverFactory_CreateSolver_WithNullLoggerFactory_ShouldWork()
         {
-            // Arrange
-            using var loggerFactory = Microsoft.Extensions.Logging.LoggerFactory.Create(builder => { });
-
             // Act
             var solver = TspSolverFactory.CreateSolver(
-                TspSolverFactory.SolverType.NearestNeighbor, loggerFactory);
+                TspSolverFactory.SolverType.NearestNeighbor, null);
 
             // Assert
             Assert.Equal("Nearest Neighbor", solver.Name);
         }
 
         [Fact]
-        public void TspSolverFactory_CreateAllSolvers_WithLoggerFactory_ShouldWork()
+        public void TspSolverFactory_CreateAllSolvers_WithNullLoggerFactory_ShouldWork()
         {
-            // Arrange
-            using var loggerFactory = Microsoft.Extensions.Logging.LoggerFactory.Create(builder => { });
-
             // Act
-            var solvers = TspSolverFactory.CreateAllSolvers(loggerFactory).ToList();
+            var solvers = TspSolverFactory.CreateAllSolvers(null).ToList();
 
             // Assert
             Assert.Equal(4, solvers.Count);
