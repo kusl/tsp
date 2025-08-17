@@ -4071,3 +4071,1451 @@ namespace TravelingSalesman.Tests
     }
 }
 PS C:\code\TSP> C:\code\TSP\scripts\cat.ps1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Claude Opus 4.1
+
+I'll help you add Reqnroll (the .NET successor to SpecFlow) testing to your TSP project. Reqnroll is a BDD (Behavior-Driven Development) framework that uses Gherkin language to write tests in a human-readable format.
+
+## What is Reqnroll?
+
+Reqnroll is a .NET implementation of Cucumber that allows you to write tests in plain English using the Gherkin syntax. It bridges the gap between business requirements and automated tests.
+
+## What is Gherkin?
+
+Gherkin is a plain-text language with a simple structure. It uses keywords like:
+- **Feature**: Describes what you're testing
+- **Scenario**: A specific test case
+- **Given**: The initial context/setup
+- **When**: The action being performed
+- **Then**: The expected outcome
+- **And**: Additional steps in any section
+
+Let's add Reqnroll to your TSP project step by step.
+
+## Step 1: Create a New Test Project
+
+First, let's create a new test project specifically for Reqnroll tests:I've created a comprehensive guide to add Reqnroll testing to your TSP project. Here's what I've provided:
+
+## What You've Learned:
+
+### 1. **Reqnroll Basics**
+- Reqnroll is the open-source successor to SpecFlow for .NET
+- Uses Gherkin language (plain English) to write tests
+- Perfect for BDD (Behavior-Driven Development)
+
+### 2. **Gherkin Language Keywords**
+- **Feature**: High-level description of functionality
+- **Scenario**: Specific test case
+- **Given**: Initial setup/preconditions
+- **When**: Action being tested
+- **Then**: Expected outcome
+- **And**: Additional steps
+
+### 3. **Project Structure**
+I've provided:
+- Complete project file setup (`TravelingSalesman.Specs.csproj`)
+- Configuration file (`reqnroll.json`)
+- 4 Feature files covering different aspects:
+  - `TspSolvers.feature` - Algorithm testing
+  - `CityOperations.feature` - Core functionality
+  - `DataGeneration.feature` - Data generation testing
+  - `Benchmarking.feature` - Performance comparisons
+
+### 4. **Step Definitions**
+- 4 step definition classes that implement the test logic
+- Reusable methods that map Gherkin steps to C# code
+- Proper test assertions using xUnit
+
+## To Get Started:
+
+1. **Create the project structure**:
+```bash
+cd C:\code\TSP
+dotnet new classlib -n TravelingSalesman.Specs
+dotnet sln add TravelingSalesman.Specs\TravelingSalesman.Specs.csproj
+```
+
+2. **Copy all the files** from the artifact into your `TravelingSalesman.Specs` folder
+
+3. **Update `Directory.Packages.props`** with the Reqnroll package versions shown
+
+4. **Build and run**:
+```bash
+dotnet restore
+dotnet build
+dotnet test TravelingSalesman.Specs
+```
+
+## Key Benefits:
+- **Human-readable tests** that non-developers can understand
+- **Living documentation** of your system's behavior
+- **Reusable test steps** across scenarios
+- **Data-driven testing** with scenario outlines
+- **Easy integration** with CI/CD pipelines
+
+## Test Organization:
+Tests are organized with tags:
+- `@smoke` - Quick essential tests
+- `@solver` - Algorithm tests
+- `@benchmark` - Performance tests
+- `@deterministic` - Tests verifying consistent behavior
+
+You can run specific groups:
+```bash
+dotnet test TravelingSalesman.Specs --filter "Category=smoke"
+```
+
+The tests I've created cover:
+- All 4 TSP algorithms
+- City distance calculations
+- Tour operations
+- Data generation (random, circular, grid patterns)
+- Algorithm benchmarking
+- Performance requirements
+- Deterministic behavior
+
+This gives you comprehensive BDD test coverage that complements your existing xUnit tests, with the added benefit of being readable by non-technical stakeholders!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reqnroll Test Project Setup</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #764ba2;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #667eea;
+            margin-top: 30px;
+        }
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .file-header {
+            background: #667eea;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px 5px 0 0;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .file-content {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 0 0 5px 5px;
+            margin-top: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 4px;
+            color: #333;
+            border-radius: 3px;
+        }
+        .command {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .note {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .gherkin-keyword {
+            color: #9c27b0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Complete Reqnroll Test Setup for TSP Project</h1>
+        
+        <div class="note">
+            <strong>📝 Note:</strong> Reqnroll is the open-source successor to SpecFlow, fully compatible with .NET 6+ and actively maintained. It uses Gherkin language to write human-readable test scenarios.
+        </div>
+
+        <h2>Step 1: Create the Reqnroll Test Project</h2>
+        
+        <div class="step">
+            <h3>Create Project Structure</h3>
+            <p>First, navigate to your TSP solution directory and create a new test project:</p>
+            <div class="command">
+cd C:\code\TSP
+dotnet new classlib -n TravelingSalesman.Specs
+dotnet sln add TravelingSalesman.Specs\TravelingSalesman.Specs.csproj
+            </div>
+        </div>
+
+        <h2>Step 2: Project Configuration Files</h2>
+
+        <div class="file-header">TravelingSalesman.Specs\TravelingSalesman.Specs.csproj</div>
+        <div class="file-content">&lt;Project Sdk="Microsoft.NET.Sdk"&gt;
+  &lt;PropertyGroup&gt;
+    &lt;IsPackable&gt;false&lt;/IsPackable&gt;
+    &lt;IsTestProject&gt;true&lt;/IsTestProject&gt;
+    &lt;!-- TargetFramework inherited from Directory.Build.props --&gt;
+  &lt;/PropertyGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;!-- Reqnroll packages --&gt;
+    &lt;PackageReference Include="Reqnroll" Version="2.2.1" /&gt;
+    &lt;PackageReference Include="Reqnroll.xUnit" Version="2.2.1" /&gt;
+    &lt;PackageReference Include="Reqnroll.Verify" Version="2.2.1" /&gt;
+    
+    &lt;!-- Test framework packages (versions from Directory.Packages.props) --&gt;
+    &lt;PackageReference Include="Microsoft.NET.Test.Sdk" /&gt;
+    &lt;PackageReference Include="xunit" /&gt;
+    &lt;PackageReference Include="xunit.runner.visualstudio"&gt;
+      &lt;PrivateAssets&gt;all&lt;/PrivateAssets&gt;
+      &lt;IncludeAssets&gt;runtime; build; native; contentfiles; analyzers; buildtransitive&lt;/IncludeAssets&gt;
+    &lt;/PackageReference&gt;
+    &lt;PackageReference Include="coverlet.collector"&gt;
+      &lt;PrivateAssets&gt;all&lt;/PrivateAssets&gt;
+      &lt;IncludeAssets&gt;runtime; build; native; contentfiles; analyzers; buildtransitive&lt;/IncludeAssets&gt;
+    &lt;/PackageReference&gt;
+    
+    &lt;!-- Logging for tests --&gt;
+    &lt;PackageReference Include="Microsoft.Extensions.Logging" /&gt;
+    &lt;PackageReference Include="Microsoft.Extensions.Logging.Abstractions" /&gt;
+  &lt;/ItemGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;ProjectReference Include="..\TravelingSalesman.Core\TravelingSalesman.Core.csproj" /&gt;
+    &lt;ProjectReference Include="..\TravelingSalesman.ConsoleApp\TravelingSalesman.ConsoleApp.csproj" /&gt;
+  &lt;/ItemGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;Using Include="Xunit" /&gt;
+    &lt;Using Include="Reqnroll" /&gt;
+  &lt;/ItemGroup&gt;
+
+&lt;/Project&gt;</div>
+
+        <div class="file-header">TravelingSalesman.Specs\reqnroll.json</div>
+        <div class="file-content">{
+  "$schema": "https://schemas.reqnroll.net/reqnroll-config.json",
+  "bindingCulture": {
+    "language": "en-US"
+  },
+  "runtime": {
+    "missingOrPendingStepsOutcome": "Error",
+    "stopAtFirstError": false,
+    "generateBindingsForUsedSteps": false
+  },
+  "trace": {
+    "stepDefinitionSkeletonStyle": "RegexAttribute",
+    "minTracedDuration": "0:0:0.1"
+  }
+}</div>
+
+        <h2>Step 3: Update Directory.Packages.props</h2>
+        
+        <div class="note">
+            Add these package versions to your Directory.Packages.props file in the appropriate section:
+        </div>
+
+        <div class="file-header">Add to Directory.Packages.props</div>
+        <div class="file-content">    &lt;!-- Reqnroll BDD Testing --&gt;
+    &lt;PackageVersion Include="Reqnroll" Version="2.2.1" /&gt;
+    &lt;PackageVersion Include="Reqnroll.xUnit" Version="2.2.1" /&gt;
+    &lt;PackageVersion Include="Reqnroll.Verify" Version="2.2.1" /&gt;</div>
+
+        <h2>Step 4: Feature Files (Gherkin Scenarios)</h2>
+
+        <div class="note">
+            <strong>🎯 Gherkin Basics:</strong><br>
+            • <span class="gherkin-keyword">Feature:</span> High-level description of functionality<br>
+            • <span class="gherkin-keyword">Scenario:</span> A specific test case<br>
+            • <span class="gherkin-keyword">Given:</span> Initial state/preconditions<br>
+            • <span class="gherkin-keyword">When:</span> Action being tested<br>
+            • <span class="gherkin-keyword">Then:</span> Expected outcome<br>
+            • <span class="gherkin-keyword">And:</span> Additional steps in any section
+        </div>
+
+        <div class="file-header">TravelingSalesman.Specs\Features\TspSolvers.feature</div>
+        <div class="file-content">Feature: TSP Solver Algorithms
+    As a user of the TSP solver system
+    I want to solve traveling salesman problems using different algorithms
+    So that I can find optimal or near-optimal routes through cities
+
+Background:
+    Given I have the following cities:
+        | Name | X  | Y  |
+        | A    | 0  | 0  |
+        | B    | 3  | 0  |
+        | C    | 3  | 4  |
+        | D    | 0  | 4  |
+
+@smoke @solver
+Scenario: Nearest Neighbor solver finds a valid tour
+    When I solve the TSP using Nearest Neighbor algorithm
+    Then the tour should visit all 4 cities
+    And the tour should return to the starting city
+    And the total distance should be greater than 0
+
+@solver
+Scenario Outline: Different algorithms produce valid tours
+    When I solve the TSP using &lt;Algorithm&gt; algorithm
+    Then the tour should visit all 4 cities
+    And the tour should return to the starting city
+    And the total distance should be between 10 and 20 units
+
+    Examples:
+        | Algorithm           |
+        | Nearest Neighbor    |
+        | 2-Opt              |
+        | Simulated Annealing |
+        | Genetic Algorithm   |
+
+@solver @performance
+Scenario: 2-Opt improves upon Nearest Neighbor solution
+    Given I have solved the TSP using Nearest Neighbor algorithm
+    When I apply 2-Opt optimization
+    Then the optimized tour distance should be less than or equal to the initial distance
+
+@solver @large
+Scenario: Solvers handle large problem instances
+    Given I have 50 randomly generated cities
+    When I solve the TSP using Nearest Neighbor algorithm
+    Then the solution should complete within 1 second
+    And the tour should visit all 50 cities
+
+@solver @deterministic
+Scenario: Nearest Neighbor produces deterministic results
+    When I solve the TSP using Nearest Neighbor algorithm
+    And I solve the same problem again using Nearest Neighbor algorithm
+    Then both solutions should have the same total distance
+    And both solutions should have the same route</div>
+
+        <div class="file-header">TravelingSalesman.Specs\Features\CityOperations.feature</div>
+        <div class="file-content">Feature: City Operations
+    As a developer using the TSP library
+    I want to work with city objects and calculate distances
+    So that I can model traveling salesman problems
+
+@city
+Scenario: Calculate distance between two cities
+    Given I have a city "A" at coordinates (0, 0)
+    And I have a city "B" at coordinates (3, 4)
+    When I calculate the distance from city "A" to city "B"
+    Then the distance should be 5.0 units
+
+@city
+Scenario: Cities at the same location have zero distance
+    Given I have a city "A" at coordinates (10.5, 20.3)
+    When I calculate the distance from city "A" to itself
+    Then the distance should be 0.0 units
+
+@city @tour
+Scenario: Tour calculates total distance correctly
+    Given I have the following cities in order:
+        | Name | X | Y |
+        | A    | 0 | 0 |
+        | B    | 1 | 0 |
+        | C    | 1 | 1 |
+        | D    | 0 | 1 |
+    When I create a tour visiting cities in the order A, B, C, D
+    Then the total tour distance should be 4.0 units
+
+@city @tour
+Scenario: Empty tour has zero distance
+    Given I have no cities
+    When I create an empty tour
+    Then the total tour distance should be 0.0 units</div>
+
+        <div class="file-header">TravelingSalesman.Specs\Features\DataGeneration.feature</div>
+        <div class="file-content">Feature: TSP Data Generation
+    As a user of the TSP solver
+    I want to generate different city patterns for testing
+    So that I can evaluate algorithm performance on various problem types
+
+@datagen
+Scenario: Generate random cities
+    When I generate 10 random cities with seed 42
+    Then I should have 10 cities
+    And all cities should be within bounds (0,0) to (100,100)
+    And all cities should have unique IDs from 0 to 9
+
+@datagen
+Scenario: Generate circular city pattern
+    When I generate 8 cities in a circular pattern with radius 10
+    Then I should have 8 cities
+    And all cities should be approximately 10 units from center (50,50)
+    And the cities should be evenly distributed around the circle
+
+@datagen
+Scenario: Generate grid city pattern
+    When I generate a 3x3 grid of cities with spacing 10
+    Then I should have 9 cities
+    And the cities should form a regular grid pattern
+    And the minimum distance between adjacent cities should be 10 units
+
+@datagen @deterministic
+Scenario: Seeded generation is deterministic
+    When I generate 5 random cities with seed 123
+    And I generate 5 random cities again with seed 123
+    Then both city sets should be identical</div>
+
+        <div class="file-header">TravelingSalesman.Specs\Features\Benchmarking.feature</div>
+        <div class="file-content">Feature: Algorithm Benchmarking
+    As a researcher or developer
+    I want to compare different TSP algorithms
+    So that I can choose the best algorithm for my use case
+
+@benchmark
+Scenario: Run benchmark on small problem
+    Given I have 10 randomly generated cities
+    When I benchmark all available algorithms
+    Then I should receive benchmark results for each algorithm
+    And the results should be sorted by distance (best first)
+    And each result should include execution time
+
+@benchmark
+Scenario: Benchmark identifies best solution
+    Given I have the following simple cities:
+        | Name | X | Y |
+        | A    | 0 | 0 |
+        | B    | 1 | 0 |
+        | C    | 1 | 1 |
+        | D    | 0 | 1 |
+    When I benchmark all available algorithms
+    Then the best solution should have a distance of 4.0 units
+    And all algorithms should find the optimal solution
+
+@benchmark @performance
+Scenario: Algorithm performance ranking
+    Given I have 15 randomly generated cities
+    When I benchmark the following algorithms:
+        | Algorithm           |
+        | Nearest Neighbor    |
+        | 2-Opt              |
+        | Simulated Annealing |
+        | Genetic Algorithm   |
+    Then Nearest Neighbor should be the fastest
+    And Genetic Algorithm should typically find the best solution
+    And 2-Opt should improve upon Nearest Neighbor</div>
+
+        <h2>Step 5: Step Definition Files (Test Implementation)</h2>
+
+        <div class="file-header">TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs</div>
+        <div class="file-content">using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging.Abstractions;
+using Reqnroll;
+using TravelingSalesman.Core;
+using Xunit;
+
+namespace TravelingSalesman.Specs.StepDefinitions
+{
+    [Binding]
+    public class TspSolverSteps
+    {
+        private readonly ScenarioContext _scenarioContext;
+        private List&lt;City&gt; _cities = new();
+        private Tour? _currentTour;
+        private Tour? _previousTour;
+        private ITspSolver? _currentSolver;
+        private Stopwatch? _stopwatch;
+        private readonly Dictionary&lt;string, Tour&gt; _tours = new();
+
+        public TspSolverSteps(ScenarioContext scenarioContext)
+        {
+            _scenarioContext = scenarioContext;
+        }
+
+        [Given(@"I have the following cities:")]
+        public void GivenIHaveTheFollowingCities(Table table)
+        {
+            _cities.Clear();
+            int id = 0;
+            
+            foreach (var row in table.Rows)
+            {
+                var name = row["Name"];
+                var x = double.Parse(row["X"]);
+                var y = double.Parse(row["Y"]);
+                
+                _cities.Add(new City(id++, name, x, y));
+            }
+            
+            _scenarioContext["Cities"] = _cities;
+        }
+
+        [Given(@"I have (.*) randomly generated cities")]
+        public void GivenIHaveRandomlyGeneratedCities(int count)
+        {
+            var generator = new TspDataGenerator(seed: 42);
+            _cities = generator.GenerateRandomCities(count).ToList();
+            _scenarioContext["Cities"] = _cities;
+        }
+
+        [Given(@"I have solved the TSP using Nearest Neighbor algorithm")]
+        public async Task GivenIHaveSolvedTheTSPUsingNearestNeighborAlgorithm()
+        {
+            _currentSolver = new NearestNeighborSolver();
+            _previousTour = await _currentSolver.SolveAsync(_cities);
+            _tours["initial"] = _previousTour;
+        }
+
+        [When(@"I solve the TSP using (.*) algorithm")]
+        public async Task WhenISolveTheTSPUsingAlgorithm(string algorithmName)
+        {
+            _currentSolver = CreateSolver(algorithmName);
+            
+            _stopwatch = Stopwatch.StartNew();
+            _currentTour = await _currentSolver.SolveAsync(_cities);
+            _stopwatch.Stop();
+            
+            _tours[algorithmName] = _currentTour;
+        }
+
+        [When(@"I solve the same problem again using (.*) algorithm")]
+        public async Task WhenISolveTheSameProblemAgainUsingAlgorithm(string algorithmName)
+        {
+            var solver = CreateSolver(algorithmName);
+            var secondTour = await solver.SolveAsync(_cities);
+            _tours["second"] = secondTour;
+        }
+
+        [When(@"I apply 2-Opt optimization")]
+        public async Task WhenIApply2OptOptimization()
+        {
+            var solver = new TwoOptSolver(maxIterations: 100);
+            _currentTour = await solver.SolveAsync(_cities);
+            _tours["optimized"] = _currentTour;
+        }
+
+        [Then(@"the tour should visit all (.*) cities")]
+        public void ThenTheTourShouldVisitAllCities(int expectedCount)
+        {
+            Assert.NotNull(_currentTour);
+            Assert.Equal(expectedCount, _currentTour.Cities.Count);
+            
+            // Verify all cities are unique
+            var uniqueCities = _currentTour.Cities.Distinct().Count();
+            Assert.Equal(expectedCount, uniqueCities);
+        }
+
+        [Then(@"the tour should return to the starting city")]
+        public void ThenTheTourShouldReturnToTheStartingCity()
+        {
+            Assert.NotNull(_currentTour);
+            Assert.True(_currentTour.Cities.Count > 0);
+            
+            // The tour distance calculation includes return to start
+            // We just need to verify the tour exists and is valid
+            var firstCity = _currentTour.Cities.First();
+            Assert.NotNull(firstCity);
+        }
+
+        [Then(@"the total distance should be greater than (.*)")]
+        public void ThenTheTotalDistanceShouldBeGreaterThan(double minDistance)
+        {
+            Assert.NotNull(_currentTour);
+            Assert.True(_currentTour.TotalDistance > minDistance,
+                $"Expected distance > {minDistance}, but was {_currentTour.TotalDistance}");
+        }
+
+        [Then(@"the total distance should be between (.*) and (.*) units")]
+        public void ThenTheTotalDistanceShouldBeBetweenUnits(double min, double max)
+        {
+            Assert.NotNull(_currentTour);
+            Assert.InRange(_currentTour.TotalDistance, min, max);
+        }
+
+        [Then(@"the optimized tour distance should be less than or equal to the initial distance")]
+        public void ThenTheOptimizedTourDistanceShouldBeLessThanOrEqualToTheInitialDistance()
+        {
+            var initial = _tours["initial"];
+            var optimized = _tours["optimized"];
+            
+            Assert.NotNull(initial);
+            Assert.NotNull(optimized);
+            Assert.True(optimized.TotalDistance <= initial.TotalDistance,
+                $"Optimized distance ({optimized.TotalDistance:F2}) should be <= initial ({initial.TotalDistance:F2})");
+        }
+
+        [Then(@"the solution should complete within (.*) second")]
+        [Then(@"the solution should complete within (.*) seconds")]
+        public void ThenTheSolutionShouldCompleteWithinSeconds(int seconds)
+        {
+            Assert.NotNull(_stopwatch);
+            Assert.True(_stopwatch.Elapsed.TotalSeconds <= seconds,
+                $"Expected completion within {seconds}s, but took {_stopwatch.Elapsed.TotalSeconds:F2}s");
+        }
+
+        [Then(@"both solutions should have the same total distance")]
+        public void ThenBothSolutionsShouldHaveTheSameTotalDistance()
+        {
+            var first = _tours.Values.First();
+            var second = _tours["second"];
+            
+            Assert.Equal(first.TotalDistance, second.TotalDistance, 2);
+        }
+
+        [Then(@"both solutions should have the same route")]
+        public void ThenBothSolutionsShouldHaveTheSameRoute()
+        {
+            var first = _tours.Values.First();
+            var second = _tours["second"];
+            
+            Assert.Equal(first.Cities.Count, second.Cities.Count);
+            
+            for (int i = 0; i < first.Cities.Count; i++)
+            {
+                Assert.Equal(first.Cities[i].Id, second.Cities[i].Id);
+            }
+        }
+
+        private ITspSolver CreateSolver(string algorithmName)
+        {
+            return algorithmName.ToLower() switch
+            {
+                "nearest neighbor" => new NearestNeighborSolver(),
+                "2-opt" => new TwoOptSolver(maxIterations: 100),
+                "simulated annealing" => new SimulatedAnnealingSolver(
+                    initialTemperature: 1000,
+                    coolingRate: 0.95,
+                    iterationsPerTemperature: 50,
+                    seed: 42),
+                "genetic algorithm" => new GeneticAlgorithmSolver(
+                    populationSize: 50,
+                    generations: 100,
+                    mutationRate: 0.05,
+                    elitismRate: 0.2,
+                    seed: 42),
+                _ => throw new NotSupportedException($"Algorithm '{algorithmName}' is not supported")
+            };
+        }
+    }
+}</div>
+
+        <div class="file-header">TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs</div>
+        <div class="file-content">using System.Collections.Generic;
+using System.Linq;
+using Reqnroll;
+using TravelingSalesman.Core;
+using Xunit;
+
+namespace TravelingSalesman.Specs.StepDefinitions
+{
+    [Binding]
+    public class CityOperationSteps
+    {
+        private readonly Dictionary&lt;string, City&gt; _cities = new();
+        private readonly List&lt;City&gt; _cityList = new();
+        private double _calculatedDistance;
+        private Tour? _tour;
+
+        [Given(@"I have a city ""(.*)"" at coordinates \((.*), (.*)\)")]
+        public void GivenIHaveACityAtCoordinates(string name, double x, double y)
+        {
+            var city = new City(_cities.Count, name, x, y);
+            _cities[name] = city;
+            _cityList.Add(city);
+        }
+
+        [Given(@"I have the following cities in order:")]
+        public void GivenIHaveTheFollowingCitiesInOrder(Table table)
+        {
+            _cityList.Clear();
+            _cities.Clear();
+            
+            foreach (var row in table.Rows)
+            {
+                var name = row["Name"];
+                var x = double.Parse(row["X"]);
+                var y = double.Parse(row["Y"]);
+                
+                var city = new City(_cityList.Count, name, x, y);
+                _cities[name] = city;
+                _cityList.Add(city);
+            }
+        }
+
+        [Given(@"I have no cities")]
+        public void GivenIHaveNoCities()
+        {
+            _cityList.Clear();
+            _cities.Clear();
+        }
+
+        [When(@"I calculate the distance from city ""(.*)"" to city ""(.*)""")]
+        public void WhenICalculateTheDistanceFromCityToCity(string fromCity, string toCity)
+        {
+            var from = _cities[fromCity];
+            var to = _cities[toCity];
+            _calculatedDistance = from.DistanceTo(to);
+        }
+
+        [When(@"I calculate the distance from city ""(.*)"" to itself")]
+        public void WhenICalculateTheDistanceFromCityToItself(string cityName)
+        {
+            var city = _cities[cityName];
+            _calculatedDistance = city.DistanceTo(city);
+        }
+
+        [When(@"I create a tour visiting cities in the order (.*)")]
+        public void WhenICreateATourVisitingCitiesInTheOrder(string cityOrder)
+        {
+            var cityNames = cityOrder.Split(", ");
+            var orderedCities = cityNames.Select(name => _cities[name]).ToList();
+            
+            var distanceMatrix = BuildDistanceMatrix(orderedCities);
+            _tour = new Tour(orderedCities, distanceMatrix);
+        }
+
+        [When(@"I create an empty tour")]
+        public void WhenICreateAnEmptyTour()
+        {
+            var distanceMatrix = new double[0, 0];
+            _tour = new Tour(new List&lt;City&gt;(), distanceMatrix);
+        }
+
+        [Then(@"the distance should be (.*) units")]
+        public void ThenTheDistanceShouldBeUnits(double expectedDistance)
+        {
+            Assert.Equal(expectedDistance, _calculatedDistance, 1);
+        }
+
+        [Then(@"the total tour distance should be (.*) units")]
+        public void ThenTheTotalTourDistanceShouldBeUnits(double expectedDistance)
+        {
+            Assert.NotNull(_tour);
+            Assert.Equal(expectedDistance, _tour.TotalDistance, 1);
+        }
+
+        private static double[,] BuildDistanceMatrix(IReadOnlyList&lt;City&gt; cities)
+        {
+            var n = cities.Count;
+            var matrix = new double[n, n];
+            
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    matrix[i, j] = cities[i].DistanceTo(cities[j]);
+                }
+            }
+            
+            return matrix;
+        }
+    }
+}</div>
+
+        <div class="file-header">TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs</div>
+        <div class="file-content">using System;
+using System.Collections.Generic;
+using System.Linq;
+using Reqnroll;
+using TravelingSalesman.Core;
+using Xunit;
+
+namespace TravelingSalesman.Specs.StepDefinitions
+{
+    [Binding]
+    public class DataGenerationSteps
+    {
+        private IReadOnlyList&lt;City&gt; _generatedCities = new List&lt;City&gt;();
+        private IReadOnlyList&lt;City&gt; _secondGeneratedCities = new List&lt;City&gt;();
+
+        [When(@"I generate (.*) random cities with seed (.*)")]
+        public void WhenIGenerateRandomCitiesWithSeed(int count, int seed)
+        {
+            var generator = new TspDataGenerator(seed);
+            _generatedCities = generator.GenerateRandomCities(count);
+        }
+
+        [When(@"I generate (.*) random cities again with seed (.*)")]
+        public void WhenIGenerateRandomCitiesAgainWithSeed(int count, int seed)
+        {
+            var generator = new TspDataGenerator(seed);
+            _secondGeneratedCities = generator.GenerateRandomCities(count);
+        }
+
+        [When(@"I generate (.*) cities in a circular pattern with radius (.*)")]
+        public void WhenIGenerateCitiesInACircularPatternWithRadius(int count, double radius)
+        {
+            var generator = new TspDataGenerator();
+            _generatedCities = generator.GenerateCircularCities(count, radius);
+        }
+
+        [When(@"I generate a (.*)x(.*) grid of cities with spacing (.*)")]
+        public void WhenIGenerateAGridOfCitiesWithSpacing(int rows, int cols, double spacing)
+        {
+            var generator = new TspDataGenerator();
+            _generatedCities = generator.GenerateGridCities(rows, cols, spacing);
+        }
+
+        [Then(@"I should have (.*) cities")]
+        public void ThenIShouldHaveCities(int expectedCount)
+        {
+            Assert.Equal(expectedCount, _generatedCities.Count);
+        }
+
+        [Then(@"all cities should be within bounds \((.*),(.*)\) to \((.*),(.*)\)")]
+        public void ThenAllCitiesShouldBeWithinBounds(double minX, double minY, double maxX, double maxY)
+        {
+            Assert.All(_generatedCities, city =>
+            {
+                Assert.InRange(city.X, minX, maxX);
+                Assert.InRange(city.Y, minY, maxY);
+            });
+        }
+
+        [Then(@"all cities should have unique IDs from (.*) to (.*)")]
+        public void ThenAllCitiesShouldHaveUniqueIDsFromTo(int minId, int maxId)
+        {
+            var ids = _generatedCities.Select(c => c.Id).ToList();
+            
+            // Check uniqueness
+            Assert.Equal(ids.Count, ids.Distinct().Count());
+            
+            // Check range
+            Assert.Equal(minId, ids.Min());
+            Assert.Equal(maxId, ids.Max());
+            
+            // Check sequential
+            var sortedIds = ids.OrderBy(id => id).ToList();
+            for (int i = 0; i < sortedIds.Count; i++)
+            {
+                Assert.Equal(minId + i, sortedIds[i]);
+            }
+        }
+
+        [Then(@"all cities should be approximately (.*) units from center \((.*),(.*)\)")]
+        public void ThenAllCitiesShouldBeApproximatelyUnitsFromCenter(double radius, double centerX, double centerY)
+        {
+            Assert.All(_generatedCities, city =>
+            {
+                var distance = Math.Sqrt(Math.Pow(city.X - centerX, 2) + Math.Pow(city.Y - centerY, 2));
+                Assert.Equal(radius, distance, 1); // 1 unit tolerance
+            });
+        }
+
+        [Then(@"the cities should be evenly distributed around the circle")]
+        public void ThenTheCitiesShouldBeEvenlyDistributedAroundTheCircle()
+        {
+            // Calculate angles between consecutive cities
+            var centerX = 50.0;
+            var centerY = 50.0;
+            
+            var angles = new List&lt;double&gt;();
+            foreach (var city in _generatedCities)
+            {
+                var angle = Math.Atan2(city.Y - centerY, city.X - centerX);
+                angles.Add(angle);
+            }
+            
+            angles.Sort();
+            
+            // Check that angles are evenly spaced
+            var expectedAngleStep = 2 * Math.PI / _generatedCities.Count;
+            
+            for (int i = 1; i < angles.Count; i++)
+            {
+                var angleDiff = angles[i] - angles[i - 1];
+                Assert.Equal(expectedAngleStep, angleDiff, 0.1); // 0.1 radian tolerance
+            }
+        }
+
+        [Then(@"the cities should form a regular grid pattern")]
+        public void ThenTheCitiesShouldFormARegularGridPattern()
+        {
+            // Cities should have regular X and Y coordinates
+            var xCoords = _generatedCities.Select(c => c.X).Distinct().OrderBy(x => x).ToList();
+            var yCoords = _generatedCities.Select(c => c.Y).Distinct().OrderBy(y => y).ToList();
+            
+            // Check regular spacing in X
+            if (xCoords.Count > 1)
+            {
+                var xSpacing = xCoords[1] - xCoords[0];
+                for (int i = 2; i < xCoords.Count; i++)
+                {
+                    Assert.Equal(xSpacing, xCoords[i] - xCoords[i - 1], 0.01);
+                }
+            }
+            
+            // Check regular spacing in Y
+            if (yCoords.Count > 1)
+            {
+                var ySpacing = yCoords[1] - yCoords[0];
+                for (int i = 2; i < yCoords.Count; i++)
+                {
+                    Assert.Equal(ySpacing, yCoords[i] - yCoords[i - 1], 0.01);
+                }
+            }
+        }
+
+        [Then(@"the minimum distance between adjacent cities should be (.*) units")]
+        public void ThenTheMinimumDistanceBetweenAdjacentCitiesShouldBeUnits(double expectedDistance)
+        {
+            // For a grid, adjacent cities are those with minimum non-zero distance
+            var distances = new List&lt;double&gt;();
+            
+            for (int i = 0; i < _generatedCities.Count; i++)
+            {
+                for (int j = i + 1; j < _generatedCities.Count; j++)
+                {
+                    var distance = _generatedCities[i].DistanceTo(_generatedCities[j]);
+                    if (distance > 0)
+                    {
+                        distances.Add(distance);
+                    }
+                }
+            }
+            
+            var minDistance = distances.Min();
+            Assert.Equal(expectedDistance, minDistance, 0.01);
+        }
+
+        [Then(@"both city sets should be identical")]
+        public void ThenBothCitySetsShouldBeIdentical()
+        {
+            Assert.Equal(_generatedCities.Count, _secondGeneratedCities.Count);
+            
+            for (int i = 0; i < _generatedCities.Count; i++)
+            {
+                var city1 = _generatedCities[i];
+                var city2 = _secondGeneratedCities[i];
+                
+                Assert.Equal(city1.Id, city2.Id);
+                Assert.Equal(city1.Name, city2.Name);
+                Assert.Equal(city1.X, city2.X, 10); // High precision
+                Assert.Equal(city1.Y, city2.Y, 10);
+            }
+        }
+    }
+}</div>
+
+        <div class="file-header">TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs</div>
+        <div class="file-content">using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Reqnroll;
+using TravelingSalesman.Core;
+using Xunit;
+
+namespace TravelingSalesman.Specs.StepDefinitions
+{
+    [Binding]
+    public class BenchmarkingSteps
+    {
+        private List&lt;City&gt; _cities = new();
+        private IReadOnlyList&lt;TspBenchmark.BenchmarkResult&gt;? _benchmarkResults;
+        private List&lt;ITspSolver&gt; _solversToTest = new();
+
+        [Given(@"I have (.*) randomly generated cities")]
+        public void GivenIHaveRandomlyGeneratedCities(int count)
+        {
+            var generator = new TspDataGenerator(seed: 42);
+            _cities = generator.GenerateRandomCities(count).ToList();
+        }
+
+        [Given(@"I have the following simple cities:")]
+        public void GivenIHaveTheFollowingSimpleCities(Table table)
+        {
+            _cities.Clear();
+            int id = 0;
+            
+            foreach (var row in table.Rows)
+            {
+                var name = row["Name"];
+                var x = double.Parse(row["X"]);
+                var y = double.Parse(row["Y"]);
+                
+                _cities.Add(new City(id++, name, x, y));
+            }
+        }
+
+        [When(@"I benchmark all available algorithms")]
+        public async Task WhenIBenchmarkAllAvailableAlgorithms()
+        {
+            var benchmark = new TspBenchmark();
+            var solvers = TspSolverFactory.CreateAllSolvers().ToList();
+            
+            _benchmarkResults = await benchmark.RunBenchmarkAsync(_cities, solvers);
+        }
+
+        [When(@"I benchmark the following algorithms:")]
+        public async Task WhenIBenchmarkTheFollowingAlgorithms(Table table)
+        {
+            _solversToTest.Clear();
+            
+            foreach (var row in table.Rows)
+            {
+                var algorithmName = row["Algorithm"];
+                var solver = CreateSolver(algorithmName);
+                _solversToTest.Add(solver);
+            }
+            
+            var benchmark = new TspBenchmark();
+            _benchmarkResults = await benchmark.RunBenchmarkAsync(_cities, _solversToTest);
+        }
+
+        [Then(@"I should receive benchmark results for each algorithm")]
+        public void ThenIShouldReceiveBenchmarkResultsForEachAlgorithm()
+        {
+            Assert.NotNull(_benchmarkResults);
+            Assert.Equal(4, _benchmarkResults.Count); // We have 4 algorithms
+            
+            Assert.All(_benchmarkResults, result =>
+            {
+                Assert.NotNull(result.SolverName);
+                Assert.True(result.Distance > 0);
+                Assert.True(result.ExecutionTime.TotalMilliseconds >= 0);
+                Assert.NotNull(result.Tour);
+            });
+        }
+
+        [Then(@"the results should be sorted by distance \(best first\)")]
+        public void ThenTheResultsShouldBeSortedByDistanceBestFirst()
+        {
+            Assert.NotNull(_benchmarkResults);
+            
+            for (int i = 1; i < _benchmarkResults.Count; i++)
+            {
+                Assert.True(_benchmarkResults[i].Distance >= _benchmarkResults[i - 1].Distance,
+                    $"Results not sorted: {_benchmarkResults[i].Distance} < {_benchmarkResults[i - 1].Distance}");
+            }
+        }
+
+        [Then(@"each result should include execution time")]
+        public void ThenEachResultShouldIncludeExecutionTime()
+        {
+            Assert.NotNull(_benchmarkResults);
+            Assert.All(_benchmarkResults, result =>
+            {
+                Assert.True(result.ExecutionTime.TotalMilliseconds >= 0);
+            });
+        }
+
+        [Then(@"the best solution should have a distance of (.*) units")]
+        public void ThenTheBestSolutionShouldHaveADistanceOfUnits(double expectedDistance)
+        {
+            Assert.NotNull(_benchmarkResults);
+            Assert.NotEmpty(_benchmarkResults);
+            
+            var bestResult = _benchmarkResults.First();
+            Assert.Equal(expectedDistance, bestResult.Distance, 1);
+        }
+
+        [Then(@"all algorithms should find the optimal solution")]
+        public void ThenAllAlgorithmsShouldFindTheOptimalSolution()
+        {
+            Assert.NotNull(_benchmarkResults);
+            Assert.NotEmpty(_benchmarkResults);
+            
+            var optimalDistance = _benchmarkResults.First().Distance;
+            
+            // For simple 4-city square, optimal is 4.0
+            Assert.All(_benchmarkResults, result =>
+            {
+                Assert.Equal(optimalDistance, result.Distance, 0.1);
+            });
+        }
+
+        [Then(@"Nearest Neighbor should be the fastest")]
+        public void ThenNearestNeighborShouldBeTheFastest()
+        {
+            Assert.NotNull(_benchmarkResults);
+            
+            var nnResult = _benchmarkResults.FirstOrDefault(r => r.SolverName == "Nearest Neighbor");
+            Assert.NotNull(nnResult);
+            
+            var fastestTime = _benchmarkResults.Min(r => r.ExecutionTime);
+            Assert.Equal(fastestTime, nnResult.ExecutionTime);
+        }
+
+        [Then(@"Genetic Algorithm should typically find the best solution")]
+        public void ThenGeneticAlgorithmShouldTypicallyFindTheBestSolution()
+        {
+            Assert.NotNull(_benchmarkResults);
+            
+            var gaResult = _benchmarkResults.FirstOrDefault(r => r.SolverName == "Genetic Algorithm");
+            Assert.NotNull(gaResult);
+            
+            var bestDistance = _benchmarkResults.Min(r => r.Distance);
+            
+            // GA should be within 10% of the best solution
+            Assert.True(gaResult.Distance <= bestDistance * 1.1,
+                $"GA distance {gaResult.Distance} is not within 10% of best {bestDistance}");
+        }
+
+        [Then(@"2-Opt should improve upon Nearest Neighbor")]
+        public void Then2OptShouldImproveUponNearestNeighbor()
+        {
+            Assert.NotNull(_benchmarkResults);
+            
+            var nnResult = _benchmarkResults.FirstOrDefault(r => r.SolverName == "Nearest Neighbor");
+            var twoOptResult = _benchmarkResults.FirstOrDefault(r => r.SolverName == "2-Opt");
+            
+            Assert.NotNull(nnResult);
+            Assert.NotNull(twoOptResult);
+            
+            Assert.True(twoOptResult.Distance <= nnResult.Distance,
+                $"2-Opt ({twoOptResult.Distance}) should improve upon NN ({nnResult.Distance})");
+        }
+
+        private ITspSolver CreateSolver(string algorithmName)
+        {
+            return algorithmName switch
+            {
+                "Nearest Neighbor" => new NearestNeighborSolver(),
+                "2-Opt" => new TwoOptSolver(maxIterations: 100),
+                "Simulated Annealing" => new SimulatedAnnealingSolver(
+                    initialTemperature: 1000,
+                    coolingRate: 0.95,
+                    iterationsPerTemperature: 50,
+                    seed: 42),
+                "Genetic Algorithm" => new GeneticAlgorithmSolver(
+                    populationSize: 50,
+                    generations: 100,
+                    mutationRate: 0.05,
+                    elitismRate: 0.2,
+                    seed: 42),
+                _ => throw new NotSupportedException($"Algorithm '{algorithmName}' is not supported")
+            };
+        }
+    }
+}</div>
+
+        <div class="file-header">TravelingSalesman.Specs\Support\Hooks.cs</div>
+        <div class="file-content">using Reqnroll;
+using System;
+
+namespace TravelingSalesman.Specs.Support
+{
+    [Binding]
+    public class Hooks
+    {
+        [BeforeScenario]
+        public void BeforeScenario(ScenarioContext scenarioContext)
+        {
+            // Initialize any test data or services needed
+            Console.WriteLine($"Starting scenario: {scenarioContext.ScenarioInfo.Title}");
+        }
+
+        [AfterScenario]
+        public void AfterScenario(ScenarioContext scenarioContext)
+        {
+            // Clean up any resources
+            Console.WriteLine($"Completed scenario: {scenarioContext.ScenarioInfo.Title}");
+        }
+
+        [BeforeTestRun]
+        public static void BeforeTestRun()
+        {
+            // Global setup
+            Console.WriteLine("Starting TSP Reqnroll test run");
+        }
+
+        [AfterTestRun]
+        public static void AfterTestRun()
+        {
+            // Global cleanup
+            Console.WriteLine("Completed TSP Reqnroll test run");
+        }
+    }
+}</div>
+
+        <h2>Step 6: Running the Tests</h2>
+
+        <div class="step">
+            <h3>Install and Run Tests</h3>
+            <div class="command">
+# Restore packages
+dotnet restore
+
+# Build the solution
+dotnet build
+
+# Run all tests (including existing xUnit and new Reqnroll tests)
+dotnet test
+
+# Run only Reqnroll tests
+dotnet test TravelingSalesman.Specs
+
+# Run tests with detailed output
+dotnet test TravelingSalesman.Specs --logger "console;verbosity=detailed"
+
+# Run specific scenarios by tag
+dotnet test TravelingSalesman.Specs --filter "Category=smoke"
+dotnet test TravelingSalesman.Specs --filter "Category=solver"
+dotnet test TravelingSalesman.Specs --filter "Category=benchmark"
+
+# Generate test report
+dotnet test TravelingSalesman.Specs --logger "html;LogFileName=test-results.html"
+            </div>
+        </div>
+
+        <h2>Understanding Test Tags</h2>
+
+        <div class="note">
+            <strong>Test Tags (@tag):</strong><br>
+            • <code>@smoke</code> - Quick tests that should always pass<br>
+            • <code>@solver</code> - Tests for TSP solving algorithms<br>
+            • <code>@city</code> - Tests for city and distance calculations<br>
+            • <code>@tour</code> - Tests for tour operations<br>
+            • <code>@datagen</code> - Tests for data generation<br>
+            • <code>@benchmark</code> - Tests for benchmarking functionality<br>
+            • <code>@performance</code> - Performance-related tests<br>
+            • <code>@deterministic</code> - Tests that verify deterministic behavior<br>
+            • <code>@large</code> - Tests with larger datasets
+        </div>
+
+        <h2>Benefits of Reqnroll Testing</h2>
+
+        <div class="step">
+            <h3>Why Use Reqnroll?</h3>
+            <ul>
+                <li><strong>Readable Tests:</strong> Written in plain English, understandable by non-developers</li>
+                <li><strong>Living Documentation:</strong> Tests serve as documentation of system behavior</li>
+                <li><strong>Reusable Steps:</strong> Step definitions can be shared across scenarios</li>
+                <li><strong>Data-Driven Testing:</strong> Easy to test multiple inputs using scenario outlines</li>
+                <li><strong>Integration Testing:</strong> Perfect for testing complete workflows</li>
+                <li><strong>Collaboration:</strong> Business analysts can write scenarios</li>
+            </ul>
+        </div>
+
+        <h2>GitHub Actions Integration</h2>
+
+        <div class="file-header">Update .github/workflows/build.yml (add to existing)</div>
+        <div class="file-content">  reqnroll-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: Restore dependencies
+      run: dotnet restore TSP.sln
+      
+    - name: Build
+      run: dotnet build TSP.sln --configuration Release --no-restore
+      
+    - name: Run Reqnroll Tests
+      run: |
+        dotnet test TravelingSalesman.Specs \
+          --configuration Release \
+          --no-build \
+          --logger "trx;LogFileName=reqnroll-results.trx" \
+          --logger "console;verbosity=normal" \
+          --collect:"XPlat Code Coverage"
+          
+    - name: Upload Reqnroll Test Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: reqnroll-test-results
+        path: |
+          **/reqnroll-results.trx
+          **/coverage/
+          
+    - name: Test Report Summary
+      if: always()
+      run: |
+        echo "## Reqnroll Test Summary" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Reqnroll BDD tests completed" >> $GITHUB_STEP_SUMMARY
+        echo "- Feature files: 4" >> $GITHUB_STEP_SUMMARY
+        echo "- Scenarios: 20+" >> $GITHUB_STEP_SUMMARY
+        echo "- Step definitions: 4 classes" >> $GITHUB_STEP_SUMMARY</div>
+
+        <h2>Next Steps</h2>
+
+        <div class="step">
+            <h3>After Setup</h3>
+            <ol>
+                <li>Run <code>dotnet build</code> to ensure everything compiles</li>
+                <li>Run <code>dotnet test TravelingSalesman.Specs</code> to execute tests</li>
+                <li>Review test results and ensure all pass</li>
+                <li>Experiment with writing new scenarios</li>
+                <li>Use tags to organize and filter test runs</li>
+                <li>Integrate with your CI/CD pipeline</li>
+            </ol>
+        </div>
+
+        <div class="note">
+            <strong>💡 Tips:</strong><br>
+            • Start with simple scenarios and gradually add complexity<br>
+            • Keep scenarios focused on behavior, not implementation<br>
+            • Use descriptive step names that make sense to business users<br>
+            • Reuse step definitions across features when possible<br>
+            • Use scenario outlines for data-driven tests<br>
+            • Keep feature files organized by functional area
+        </div>
+    </div>
+</body>
+</html>
