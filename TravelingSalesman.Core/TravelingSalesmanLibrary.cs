@@ -779,8 +779,16 @@ namespace TravelingSalesman.Core
             }
 
             var sortedResults = results.OrderBy(r => r.Distance).ToList();
-            _logger.LogInformation("Benchmark completed. Winner: {Winner} with distance {Distance:F2}", 
-                sortedResults.FirstOrDefault()?.SolverName, sortedResults.FirstOrDefault()?.Distance);
+
+            if (sortedResults.Any())
+            {
+                _logger.LogInformation("Benchmark completed. Winner: {Winner} with distance {Distance:F2}",
+                    sortedResults.First().SolverName, sortedResults.First().Distance);
+            }
+            else
+            {
+                _logger.LogInformation("Benchmark completed with no solvers");
+            }
 
             return sortedResults;
         }
