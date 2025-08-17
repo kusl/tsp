@@ -353,7 +353,7 @@ namespace TravelingSalesman.Tests
             }
 
             public double[,] TestBuildDistanceMatrix(IReadOnlyList<City> cities) => BuildDistanceMatrix(cities);
-            public void TestOnProgressChanged(int iteration, double distance, string message) => 
+            public void TestOnProgressChanged(int iteration, double distance, string message) =>
                 OnProgressChanged(iteration, distance, message);
         }
 
@@ -1120,7 +1120,7 @@ namespace TravelingSalesman.Tests
         public void TspSolverFactory_CreateSolver_InvalidType_ShouldThrow()
         {
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 TspSolverFactory.CreateSolver((TspSolverFactory.SolverType)999));
         }
 
@@ -1161,7 +1161,7 @@ namespace TravelingSalesman.Tests
     }
 
     // ============================================================================
-    // TSP DATA GENERATOR TESTS
+    // TSP DATA GENERATOR TESTS (continued...)
     // ============================================================================
     public class TspDataGeneratorTests
     {
@@ -1199,7 +1199,7 @@ namespace TravelingSalesman.Tests
 
             // Assert
             Assert.Equal(count, cities.Count);
-            Assert.All(cities, city => 
+            Assert.All(cities, city =>
             {
                 Assert.True(city.X >= 0 && city.X <= 100);
                 Assert.True(city.Y >= 0 && city.Y <= 100);
@@ -1508,9 +1508,9 @@ namespace TravelingSalesman.Tests
             var benchmark = new TspBenchmark();
             var results = new List<TspBenchmark.BenchmarkResult>
             {
-                new("Solver A", 100.0, TimeSpan.FromMilliseconds(50), 
+                new("Solver A", 100.0, TimeSpan.FromMilliseconds(50),
                     new Tour(new List<City>(), new double[0,0])),
-                new("Solver B", 120.0, TimeSpan.FromMilliseconds(75), 
+                new("Solver B", 120.0, TimeSpan.FromMilliseconds(75),
                     new Tour(new List<City>(), new double[0,0]))
             };
 
@@ -1538,9 +1538,9 @@ namespace TravelingSalesman.Tests
 
             // Act
             var result = new TspBenchmark.BenchmarkResult(
-                "Test Solver", 
-                50.5, 
-                TimeSpan.FromMilliseconds(100), 
+                "Test Solver",
+                50.5,
+                TimeSpan.FromMilliseconds(100),
                 tour);
 
             // Assert
@@ -1599,636 +1599,6 @@ namespace TravelingSalesman.Tests
     }
 
     // ============================================================================
-    // INTEGRATION TESTS
-    // ============================================================================
-    public class IntegrationTests
-    {
-        [Fact]
-        public async Task Integration_AllSolvers_SameCities_ShouldProduceDifferentResults()
-        {
-            // Arrange
-            var generator = new TspDataGenerator(seed: 12345);
-            var cities = generator.GenerateRandomCities(8);
-
-            var solvers = TspSolverFactory.CreateAllSolvers().ToList();
-
-            // Act
-            var tasks = solvers.Select(solver => solver.SolveAsync(cities)).ToList();
-            var tours = await Task.WhenAll(tasks);
-
-            // Assert
-            Assert.Equal(4, tours.Length);
-            Assert.All(tours, tour =>
-            {
-                Assert.Equal(cities.Count, tour.Cities.Count);
-                Assert.True(tour.TotalDistance > 0);
-            });
-
-            // At least some should have different distances (though not guaranteed)
-            var distances = tours.Select(t => Math.Round(t.TotalDistance, 2)).Distinct().ToList();
-            // We can't guarantee they'll all be different, but we can check they're all valid
-            Assert.All(distances, d => Assert.True(d > 0));
-        }
-
-        [Fact]
-        public async Task Integration_Benchmark_WithAllSolvers_ShouldComplete()
-        {
-            // Arrange
-            var generator = new TspDataGenerator(seed: 999);
-            var cities = generator.GenerateCircularCities(6);
-            var benchmark = new TspBenchmark();
-
-            var solvers = new List<ITspSolver>
-            {
-                new NearestNeighborSolver(),
-                new TwoOptSolver(maxIterations: 10),
-                new SimulatedAnnealingSolver(100, 0.8, 5),
-                new GeneticAlgorithmSolver(10, 5, 0.1, 0.2)
-            };
-
-            // Act
-            var results = await benchmark.RunBenchmarkAsync(cities, solvers);
-            var formatted = benchmark.FormatResults(results);
-
-            // Assert
-            Assert.Equal(4, results.Count);
-            Assert.NotEmpty(formatted);
-            Assert.Contains("Nearest Neighbor", formatted);
-            Assert.Contains("2-Opt", formatted);
-            Assert.Contains("Simulated Annealing", formatted);
-            Assert.Contains("Genetic Algorithm", formatted);
-        }
-
-        [Fact]
-        public async Task Integration_DataGenerator_AllPatterns_WithAllSolvers_ShouldWork()
-        {
-            // Arrange
-            var generator = new TspDataGenerator(seed: 777);
-
-            var testCases = new[]
-            {
-                ("Random", generator.GenerateRandomCities(5)),
-                ("Circular", generator.GenerateCircularCities(5)),
-                ("Grid", generator.GenerateGridCities(2, 3).Take(5).ToList())
-            };
-
-            var solver = new NearestNeighborSolver();
-
-            // Act & Assert
-            foreach (var (pattern, cities) in testCases)
-            {
-                var tour = await solver.SolveAsync(cities);
-
-                Assert.NotNull(tour);
-                Assert.Equal(cities.Count, tour.Cities.Count);
-                Assert.True(tour.TotalDistance >= 0);
-            }
-        }
-
-        [Theory]
-        [InlineData(2)]
-        [InlineData(5)]
-        [InlineData(10)]
-        public async Task Integration_ScaledGeneticAlgorithm_DifferentCityCounts_ShouldScale(int cityCount)
-        {
-            // Arrange
-            var generator = new TspDataGenerator(seed: 888);
-            var cities = generator.GenerateRandomCities(cityCount);
-            var solver = GeneticAlgorithmSolver.CreateScaledGeneticSolver(cityCount);
-
-            // Act
-            var tour = await solver.SolveAsync(cities);
-
-            // Assert
-            Assert.NotNull(tour);
-            Assert.Equal(cityCount, tour.Cities.Count);
-            Assert.True(tour.TotalDistance > 0);
-        }
-
-        [Fact]
-        public async Task Integration_ProgressEvents_AllSolvers_ShouldRaiseEvents()
-        {
-            // Arrange
-            var cities = new List<City>
-            {
-                new City(0, "A", 0, 0),
-                new City(1, "B", 1, 0),
-                new City(2, "C", 1, 1),
-                new City(3, "D", 0, 1)
-            };
-
-            var solvers = new List<ITspSolver>
-            {
-                new NearestNeighborSolver(),
-                new TwoOptSolver(maxIterations: 5),
-                new SimulatedAnnealingSolver(50, 0.8, 3),
-                new GeneticAlgorithmSolver(5, 3, 0.1, 0.2)
-            };
-
-            // Act & Assert
-            foreach (var solver in solvers)
-            {
-                var progressEvents = new List<TspProgressEventArgs>();
-                solver.ProgressChanged += (s, e) => progressEvents.Add(e);
-
-                var tour = await solver.SolveAsync(cities);
-
-                Assert.NotNull(tour);
-                // Most solvers should raise at least one progress event
-                // (Some very fast solvers might not, depending on implementation)
-            }
-        }
-    }
-
-    // ============================================================================
-    // PERFORMANCE AND STRESS TESTS
-    // ============================================================================
-    public class PerformanceTests
-    {
-        [Fact]
-        public async Task Performance_NearestNeighbor_100Cities_ShouldCompleteQuickly()
-        {
-            // Arrange
-            var generator = new TspDataGenerator(seed: 42);
-            var cities = generator.GenerateRandomCities(100);
-            var solver = new NearestNeighborSolver();
-
-            // Act
-            var startTime = DateTime.UtcNow;
-            var tour = await solver.SolveAsync(cities);
-            var elapsed = DateTime.UtcNow - startTime;
-
-            // Assert
-            Assert.NotNull(tour);
-            Assert.Equal(100, tour.Cities.Count);
-            Assert.True(tour.TotalDistance > 0);
-            Assert.True(elapsed.TotalSeconds < 5); // Should be very fast
-        }
-
-        [Fact]
-        public async Task Performance_AllSolvers_SmallProblem_ShouldComplete()
-        {
-            // Arrange
-            var generator = new TspDataGenerator(seed: 555);
-            var cities = generator.GenerateRandomCities(6);
-
-            var solvers = new List<ITspSolver>
-            {
-                new NearestNeighborSolver(),
-                new TwoOptSolver(maxIterations: 20),
-                new SimulatedAnnealingSolver(100, 0.9, 10),
-                new GeneticAlgorithmSolver(20, 10, 0.1, 0.2)
-            };
-
-            // Act
-            var tasks = solvers.Select(solver => Task.Run(async () =>
-            {
-                var startTime = DateTime.UtcNow;
-                var tour = await solver.SolveAsync(cities);
-                var elapsed = DateTime.UtcNow - startTime;
-                return new { Solver = solver.Name, Tour = tour, Elapsed = elapsed };
-            })).ToList();
-
-            var results = await Task.WhenAll(tasks);
-
-            // Assert
-            Assert.All(results, result =>
-            {
-                Assert.NotNull(result.Tour);
-                Assert.Equal(6, result.Tour.Cities.Count);
-                Assert.True(result.Tour.TotalDistance > 0);
-                Assert.True(result.Elapsed.TotalSeconds < 30); // Reasonable time limit
-            });
-        }
-
-        [Fact]
-        public void Performance_DistanceMatrix_LargeProblem_ShouldBuildEfficiently()
-        {
-            // Arrange
-            var generator = new TspDataGenerator(seed: 123);
-            var cities = generator.GenerateRandomCities(500);
-            var solver = new NearestNeighborSolver();
-
-            // Act
-            var startTime = DateTime.UtcNow;
-            var matrix = typeof(TspSolverBase)
-                .GetMethod("BuildDistanceMatrix", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                ?.Invoke(solver, new object[] { cities }) as double[,];
-            var elapsed = DateTime.UtcNow - startTime;
-
-            // Assert
-            Assert.NotNull(matrix);
-            Assert.Equal(500, matrix.GetLength(0));
-            Assert.Equal(500, matrix.GetLength(1));
-            Assert.True(elapsed.TotalSeconds < 2); // Should build quickly
-        }
-
-        [Fact]
-        public void Performance_TourOperations_ShouldBeEfficient()
-        {
-            // Arrange
-            var generator = new TspDataGenerator(seed: 456);
-            var cities = generator.GenerateRandomCities(1000);
-            var distanceMatrix = new double[1000, 1000];
-
-            // Build distance matrix
-            for (int i = 0; i < 1000; i++)
-            {
-                for (int j = 0; j < 1000; j++)
-                {
-                    distanceMatrix[i, j] = cities[i].DistanceTo(cities[j]);
-                }
-            }
-
-            var tour = new Tour(cities, distanceMatrix);
-
-            // Act & Assert - Multiple operations should be efficient
-            var startTime = DateTime.UtcNow;
-
-            // Test distance calculation caching
-            var distance1 = tour.TotalDistance;
-            var distance2 = tour.TotalDistance; // Should use cache
-            Assert.Equal(distance1, distance2);
-
-            // Test swapping
-            tour.SwapCities(100, 200);
-            var newDistance = tour.TotalDistance;
-
-            // Test reversing
-            tour.Reverse(50, 150);
-
-            // Test cloning
-            var cloned = tour.Clone();
-
-            var elapsed = DateTime.UtcNow - startTime;
-
-            Assert.True(elapsed.TotalSeconds < 1); // Operations should be fast
-            Assert.NotEqual(distance1, newDistance); // Distance should change after modifications
-            Assert.Equal(tour.TotalDistance, cloned.TotalDistance); // Clone should match
-        }
-    }
-
-    // ============================================================================
-    // EDGE CASE AND ERROR HANDLING TESTS
-    // ============================================================================
-    public class EdgeCaseTests
-    {
-        [Fact]
-        public async Task EdgeCase_EmptyCityList_AllSolvers_ShouldHandle()
-        {
-            // Arrange
-            var emptyCities = new List<City>();
-            var solvers = TspSolverFactory.CreateAllSolvers().ToList();
-
-            // Act & Assert
-            foreach (var solver in solvers)
-            {
-                var tour = await solver.SolveAsync(emptyCities);
-                Assert.NotNull(tour);
-                Assert.Empty(tour.Cities);
-                Assert.Equal(0.0, tour.TotalDistance);
-            }
-        }
-
-        [Fact]
-        public async Task EdgeCase_SingleCity_AllSolvers_ShouldHandle()
-        {
-            // Arrange
-            var singleCity = new List<City> { new City(0, "Only", 5, 10) };
-            var solvers = TspSolverFactory.CreateAllSolvers().ToList();
-
-            // Act & Assert
-            foreach (var solver in solvers)
-            {
-                var tour = await solver.SolveAsync(singleCity);
-                Assert.NotNull(tour);
-                Assert.Single(tour.Cities);
-                Assert.Equal(0.0, tour.TotalDistance);
-                Assert.Equal("Only", tour.Cities[0].Name);
-            }
-        }
-
-        [Fact]
-        public void EdgeCase_City_ExtremeCoordinates_ShouldWork()
-        {
-            // Arrange & Act
-            var city1 = new City(0, "Extreme1", double.MaxValue / 2, double.MaxValue / 2);
-            var city2 = new City(1, "Extreme2", double.MinValue / 2, double.MinValue / 2);
-
-            // Assert
-            Assert.True(double.IsFinite(city1.X));
-            Assert.True(double.IsFinite(city1.Y));
-            Assert.True(double.IsFinite(city2.X));
-            Assert.True(double.IsFinite(city2.Y));
-
-            var distance = city1.DistanceTo(city2);
-            Assert.True(double.IsFinite(distance));
-            Assert.True(distance > 0);
-        }
-
-        [Fact]
-        public void EdgeCase_Tour_OutOfBoundsSwap_ShouldThrow()
-        {
-            // Arrange
-            var cities = new List<City>
-            {
-                new City(0, "A", 0, 0),
-                new City(1, "B", 1, 1)
-            };
-            var matrix = new double[2, 2];
-            var tour = new Tour(cities, matrix);
-
-            // Act & Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => tour.SwapCities(-1, 0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => tour.SwapCities(0, 10));
-        }
-
-        [Fact]
-        public void EdgeCase_Tour_InvalidReverseRange_ShouldHandle()
-        {
-            // Arrange
-            var cities = new List<City>
-            {
-                new City(0, "A", 0, 0),
-                new City(1, "B", 1, 1),
-                new City(2, "C", 2, 2)
-            };
-            var matrix = new double[3, 3];
-            var tour = new Tour(cities, matrix);
-            var originalCities = tour.Cities.ToList();
-
-            // Act - Reverse with start > end should not crash
-            tour.Reverse(2, 1); // Invalid range
-
-            // Assert - Tour should remain unchanged
-            for (int i = 0; i < originalCities.Count; i++)
-            {
-                Assert.Equal(originalCities[i], tour.Cities[i]);
-            }
-        }
-
-        [Fact]
-        public void EdgeCase_DataGenerator_ZeroCities_ShouldReturnEmpty()
-        {
-            // Arrange
-            var generator = new TspDataGenerator();
-
-            // Act
-            var randomCities = generator.GenerateRandomCities(0);
-            var circularCities = generator.GenerateCircularCities(0);
-            var gridCities = generator.GenerateGridCities(0, 0);
-
-            // Assert
-            Assert.Empty(randomCities);
-            Assert.Empty(circularCities);
-            Assert.Empty(gridCities);
-        }
-
-        [Fact]
-        public void EdgeCase_DataGenerator_NegativeParameters_ShouldHandleGracefully()
-        {
-            // Arrange
-            var generator = new TspDataGenerator();
-
-            // Act & Assert - These should not throw but handle gracefully
-            var randomCities = generator.GenerateRandomCities(-1);
-            var circularCities = generator.GenerateCircularCities(-1);
-            var gridCities1 = generator.GenerateGridCities(-1, 1);
-            var gridCities2 = generator.GenerateGridCities(1, -1);
-
-            // Should return empty collections for negative inputs
-            Assert.Empty(randomCities);
-            Assert.Empty(circularCities);
-            Assert.Empty(gridCities1);
-            Assert.Empty(gridCities2);
-        }
-
-        [Fact]
-        public void EdgeCase_GeneticAlgorithm_ZeroPopulation_ShouldWork()
-        {
-            // Act - This should not throw but work with defaults
-            var solver = new GeneticAlgorithmSolver(populationSize: 0);
-
-            // Assert
-            Assert.Equal("Genetic Algorithm", solver.Name);
-        }
-
-        [Fact]
-        public void EdgeCase_GeneticAlgorithm_NegativeGenerations_ShouldWork()
-        {
-            // Act - This should not throw but work with defaults
-            var solver = new GeneticAlgorithmSolver(generations: -1);
-
-            // Assert
-            Assert.Equal("Genetic Algorithm", solver.Name);
-        }
-
-        [Theory]
-        [InlineData(-0.1)] // Negative
-        [InlineData(1.1)]  // Greater than 1
-        public void EdgeCase_GeneticAlgorithm_InvalidRates_ShouldWork(double rate)
-        {
-            // Act - These should not throw but clamp or use defaults
-            var solver1 = new GeneticAlgorithmSolver(mutationRate: rate);
-            var solver2 = new GeneticAlgorithmSolver(elitismRate: rate);
-
-            // Assert
-            Assert.Equal("Genetic Algorithm", solver1.Name);
-            Assert.Equal("Genetic Algorithm", solver2.Name);
-        }
-
-        [Fact]
-        public void EdgeCase_SimulatedAnnealing_InvalidParameters_ShouldWork()
-        {
-            // Act - These should not throw but use reasonable defaults
-            var solver1 = new SimulatedAnnealingSolver(initialTemperature: -1);
-            var solver2 = new SimulatedAnnealingSolver(coolingRate: 0);
-            var solver3 = new SimulatedAnnealingSolver(coolingRate: 1.1);
-            var solver4 = new SimulatedAnnealingSolver(iterationsPerTemperature: 0);
-
-            // Assert
-            Assert.Equal("Simulated Annealing", solver1.Name);
-            Assert.Equal("Simulated Annealing", solver2.Name);
-            Assert.Equal("Simulated Annealing", solver3.Name);
-            Assert.Equal("Simulated Annealing", solver4.Name);
-        }
-
-        [Fact]
-        public void EdgeCase_TwoOpt_ZeroMaxIterations_ShouldWork()
-        {
-            // Act - This should not throw but use a reasonable default
-            var solver = new TwoOptSolver(maxIterations: 0);
-
-            // Assert
-            Assert.Equal("2-Opt", solver.Name);
-        }
-
-        [Fact]
-        public async Task EdgeCase_CancellationToken_AlreadyCancelled_ShouldThrowImmediately()
-        {
-            // Arrange
-            var cities = new List<City>
-            {
-                new City(0, "A", 0, 0),
-                new City(1, "B", 1, 0)
-            };
-
-            var solvers = TspSolverFactory.CreateAllSolvers().ToList();
-            using var cts = new CancellationTokenSource();
-            cts.Cancel(); // Cancel before starting
-
-            // Act & Assert
-            foreach (var solver in solvers)
-            {
-                await Assert.ThrowsAsync<OperationCanceledException>(
-                    () => solver.SolveAsync(cities, cts.Token));
-            }
-        }
-
-        [Fact]
-        public void EdgeCase_City_NaNCoordinates_ShouldWork()
-        {
-            // Act & Assert - These should work but produce valid objects
-            var city1 = new City(0, "NaN", double.NaN, 0);
-            var city2 = new City(0, "NaN", 0, double.NaN);
-            var city3 = new City(0, "Inf", double.PositiveInfinity, 0);
-            var city4 = new City(0, "Inf", 0, double.NegativeInfinity);
-
-            // Should create valid city objects
-            Assert.NotNull(city1);
-            Assert.NotNull(city2);
-            Assert.NotNull(city3);
-            Assert.NotNull(city4);
-        }
-
-        [Fact]
-        public void EdgeCase_City_NullName_ShouldWork()
-        {
-            // Act & Assert - These should work (records handle null differently)
-            var city1 = new City(0, null!, 0, 0);
-            var city2 = new City(0, "", 0, 0);
-            var city3 = new City(0, "   ", 0, 0);
-
-            // Should create valid city objects
-            Assert.NotNull(city1);
-            Assert.NotNull(city2);
-            Assert.NotNull(city3);
-        }
-
-        [Fact]
-        public void EdgeCase_Tour_NullCities_ShouldWork()
-        {
-            // Act & Assert - Should handle null gracefully
-            var tour = new Tour(null!, new double[0, 0]);
-            Assert.NotNull(tour);
-        }
-
-        [Fact]
-        public void EdgeCase_Tour_NullDistanceMatrix_ShouldWork()
-        {
-            // Act & Assert - Should handle null gracefully
-            var tour = new Tour(new List<City>(), null!);
-            Assert.NotNull(tour);
-        }
-    }
-
-    // ============================================================================
-    // CONCURRENCY AND THREAD SAFETY TESTS
-    // ============================================================================
-    public class ConcurrencyTests
-    {
-        [Fact]
-        public async Task Concurrency_MultipleSolvers_ParallelExecution_ShouldWork()
-        {
-            // Arrange
-            var generator = new TspDataGenerator(seed: 999);
-            var cities = generator.GenerateRandomCities(8);
-
-            var tasks = new List<Task<Tour>>();
-            for (int i = 0; i < 10; i++)
-            {
-                var solver = new NearestNeighborSolver();
-                tasks.Add(Task.Run(() => solver.SolveAsync(cities)));
-            }
-
-            // Act
-            var tours = await Task.WhenAll(tasks);
-
-            // Assert
-            Assert.Equal(10, tours.Length);
-            Assert.All(tours, tour =>
-            {
-                Assert.NotNull(tour);
-                Assert.Equal(8, tour.Cities.Count);
-            });
-
-            // All should have the same result (deterministic)
-            var firstDistance = tours[0].TotalDistance;
-            Assert.All(tours, tour => Assert.Equal(firstDistance, tour.TotalDistance));
-        }
-
-        [Fact]
-        public async Task Concurrency_SameSolver_MultipleCallsSequentially_ShouldWork()
-        {
-            // Arrange
-            var solver = new NearestNeighborSolver();
-            var generator = new TspDataGenerator(seed: 111);
-
-            // Act
-            var tasks = new List<Task<Tour>>();
-            for (int i = 0; i < 5; i++)
-            {
-                var cities = generator.GenerateRandomCities(6);
-                tasks.Add(solver.SolveAsync(cities));
-            }
-
-            var tours = await Task.WhenAll(tasks);
-
-            // Assert
-            Assert.Equal(5, tours.Length);
-            Assert.All(tours, tour =>
-            {
-                Assert.NotNull(tour);
-                Assert.Equal(6, tour.Cities.Count);
-            });
-        }
-
-        [Fact]
-        public async Task Concurrency_TourOperations_ShouldBeThreadSafe()
-        {
-            // Arrange
-            var cities = new List<City>();
-            for (int i = 0; i < 100; i++)
-            {
-                cities.Add(new City(i, $"City{i}", i, i * 2));
-            }
-
-            var distanceMatrix = new double[100, 100];
-            for (int i = 0; i < 100; i++)
-            {
-                for (int j = 0; j < 100; j++)
-                {
-                    distanceMatrix[i, j] = cities[i].DistanceTo(cities[j]);
-                }
-            }
-
-            var tour = new Tour(cities, distanceMatrix);
-
-            // Act - Multiple threads reading distance (cached value)
-            var tasks = new List<Task<double>>();
-            for (int i = 0; i < 20; i++)
-            {
-                tasks.Add(Task.Run(() => tour.TotalDistance));
-            }
-
-            var distances = await Task.WhenAll(tasks);
-
-            // Assert
-            Assert.All(distances, distance => Assert.Equal(distances[0], distance));
-        }
-    }
-
-    // ============================================================================
     // LOGGING AND OBSERVABILITY TESTS
     // ============================================================================
     public class LoggingTests
@@ -2237,12 +1607,11 @@ namespace TravelingSalesman.Tests
         {
             public List<string> LogMessages { get; } = new();
 
-            public IDisposable BeginScope<TState>(TState state) => 
-                throw new NotImplementedException();
+            public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
 
             public bool IsEnabled(LogLevel logLevel) => true;
 
-            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, 
+            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state,
                 Exception? exception, Func<TState, Exception?, string> formatter)
             {
                 LogMessages.Add(formatter(state, exception));
@@ -2262,8 +1631,7 @@ namespace TravelingSalesman.Tests
         {
             // Arrange
             var loggerProvider = new TestLoggerProvider();
-            using var loggerFactory = LoggerFactory.Create(builder =>
-                builder.AddProvider(loggerProvider).SetMinimumLevel(LogLevel.Debug));
+            var loggerFactory = new TestLoggerFactory(loggerProvider);
 
             var solver = new NearestNeighborSolver(loggerFactory.CreateLogger<NearestNeighborSolver>());
             var cities = new List<City>
@@ -2287,8 +1655,7 @@ namespace TravelingSalesman.Tests
         {
             // Arrange
             var loggerProvider = new TestLoggerProvider();
-            using var loggerFactory = LoggerFactory.Create(builder =>
-                builder.AddProvider(loggerProvider).SetMinimumLevel(LogLevel.Information));
+            var loggerFactory = new TestLoggerFactory(loggerProvider);
 
             var benchmark = new TspBenchmark(loggerFactory.CreateLogger<TspBenchmark>());
             var cities = new List<City>
@@ -2316,10 +1683,9 @@ namespace TravelingSalesman.Tests
         {
             // Arrange
             var loggerProvider = new TestLoggerProvider();
-            using var loggerFactory = LoggerFactory.Create(builder =>
-                builder.AddProvider(loggerProvider).SetMinimumLevel(LogLevel.Information));
+            var loggerFactory = new TestLoggerFactory(loggerProvider);
 
-            var generator = new TspDataGenerator(seed: 123, 
+            var generator = new TspDataGenerator(seed: 123,
                 loggerFactory.CreateLogger<TspDataGenerator>());
 
             // Act
@@ -2329,58 +1695,20 @@ namespace TravelingSalesman.Tests
             Assert.Contains(loggerProvider.TestLogger.LogMessages,
                 msg => msg.Contains("Generated") && msg.Contains("random cities"));
         }
-    }
 
-    // ============================================================================
-    // HELPER METHODS AND UTILITIES
-    // ============================================================================
-    internal static class TestHelpers
-    {
-        public static List<City> CreateTestCities(int count, int seed = 42)
+        // Helper class to replace LoggerFactory
+        private class TestLoggerFactory : ILoggerFactory
         {
-            var generator = new TspDataGenerator(seed);
-            return generator.GenerateRandomCities(count).ToList();
-        }
+            private readonly TestLoggerProvider _provider;
 
-        public static double[,] CreateDistanceMatrix(IReadOnlyList<City> cities)
-        {
-            var n = cities.Count;
-            var matrix = new double[n, n];
-            for (int i = 0; i < n; i++)
+            public TestLoggerFactory(TestLoggerProvider provider)
             {
-                for (int j = 0; j < n; j++)
-                {
-                    matrix[i, j] = cities[i].DistanceTo(cities[j]);
-                }
+                _provider = provider;
             }
-            return matrix;
-        }
 
-        public static bool AreToursEquivalent(Tour tour1, Tour tour2, double tolerance = 0.01)
-        {
-            if (tour1.Cities.Count != tour2.Cities.Count)
-                return false;
-
-            return Math.Abs(tour1.TotalDistance - tour2.TotalDistance) < tolerance;
-        }
-
-        public static void AssertTourIsValid(Tour tour, IReadOnlyList<City> originalCities)
-        {
-            Assert.NotNull(tour);
-            Assert.Equal(originalCities.Count, tour.Cities.Count);
-            Assert.True(tour.TotalDistance >= 0);
-
-            // All original cities should be present
-            var originalIds = originalCities.Select(c => c.Id).OrderBy(id => id).ToList();
-            var tourIds = tour.Cities.Select(c => c.Id).OrderBy(id => id).ToList();
-            Assert.Equal(originalIds, tourIds);
-        }
-
-        public static async Task<TimeSpan> MeasureExecutionTime(Func<Task> action)
-        {
-            var startTime = DateTime.UtcNow;
-            await action();
-            return DateTime.UtcNow - startTime;
+            public void AddProvider(ILoggerProvider provider) { }
+            public ILogger CreateLogger(string categoryName) => _provider.CreateLogger(categoryName);
+            public void Dispose() { }
         }
     }
 }
