@@ -780,7 +780,7 @@ namespace TravelingSalesman.Core
 
             var sortedResults = results.OrderBy(r => r.Distance).ToList();
 
-            if (sortedResults.Any())
+            if (sortedResults.Count != 0)
             {
                 _logger.LogInformation("Benchmark completed. Winner: {Winner} with distance {Distance:F2}",
                     sortedResults.First().SolverName, sortedResults.First().Distance);
