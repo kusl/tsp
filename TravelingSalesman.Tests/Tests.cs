@@ -552,7 +552,7 @@ namespace TravelingSalesman.Tests
             cts.Cancel();
 
             // Act & Assert - Use ThrowsAny instead of Throws
-            await Assert.ThrowsAny<OperationCanceledException>(
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(
                 () => solver.SolveAsync(cities, cts.Token));
         }
 
@@ -688,7 +688,7 @@ namespace TravelingSalesman.Tests
             cts.Cancel();
 
             // Act & Assert
-            await Assert.ThrowsAny<OperationCanceledException>(
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(
                 () => solver.SolveAsync(cities, cts.Token));
         }
 
@@ -881,7 +881,7 @@ namespace TravelingSalesman.Tests
             cts.Cancel();
 
             // Act & Assert
-            await Assert.ThrowsAny<OperationCanceledException>(
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(
                 () => solver.SolveAsync(cities, cts.Token));
         }
     }
@@ -1063,7 +1063,7 @@ namespace TravelingSalesman.Tests
             cts.Cancel();
 
             // Act & Assert
-            await Assert.ThrowsAny<OperationCanceledException>(
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(
                 () => solver.SolveAsync(cities, cts.Token));
         }
 
@@ -1498,7 +1498,7 @@ namespace TravelingSalesman.Tests
             cts.Cancel();
 
             // Act & Assert
-            await Assert.ThrowsAny<OperationCanceledException>(
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(
                 () => benchmark.RunBenchmarkAsync(cities, solvers, cts.Token));
         }
 
