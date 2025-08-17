@@ -1,7 +1,8 @@
 PowerShell 7.6.0-preview.4
+PS C:\Users\kushal>
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is ahead of 'origin/master' by 5 commits.
+Your branch is ahead of 'origin/master' by 1 commit.
   (use "git push" to publish your local commits)
 
 nothing to commit, working tree clean
@@ -15,8 +16,6 @@ nothing to commit, working tree clean
     master merges with remote master
   Local ref configured for 'git push':
     master pushes to master (fast-forwardable)
-Removing .vs/
-Removing TravelingSalesman.ConsoleApp/bin/
 Removing TravelingSalesman.ConsoleApp/obj/
 Removing TravelingSalesman.Core/bin/
 Removing TravelingSalesman.Core/obj/
@@ -1940,7 +1939,10 @@ namespace TravelingSalesman.Core
                     }
 
                     iteration++;
-                    if (iteration % 1000 == 0)
+
+                    // Report progress more frequently for better test coverage
+                    // Report every 100 iterations OR at the start of each temperature level
+                    if (iteration % 100 == 0 || i == 0)
                     {
                         OnProgressChanged(iteration, bestTour.TotalDistance,
                             $"Temperature: {temperature:F2}, Best: {bestTour.TotalDistance:F2}");
@@ -1954,9 +1956,9 @@ namespace TravelingSalesman.Core
             var acceptanceRate = (double)acceptedMoves / (acceptedMoves + rejectedMoves) * 100;
 
             _logger.LogInformation("Simulated Annealing completed after {Iterations} iterations. " +
-                                 "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%). " +
-                                 "Acceptance rate: {AcceptanceRate:F1}%",
-                                 iteration, bestTour.TotalDistance, finalImprovement, acceptanceRate);
+                                "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%). " +
+                                "Acceptance rate: {AcceptanceRate:F1}%",
+                                iteration, bestTour.TotalDistance, finalImprovement, acceptanceRate);
 
             return bestTour;
         }
@@ -4072,129 +4074,4 @@ namespace TravelingSalesman.Tests
         }
     }
 }
-PS C:\code\TSP> dotnet test --logger "console;verbosity=detailed"
-Restore complete (3.0s)
-You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
-  TravelingSalesman.Core succeeded (6.7s) → TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
-  TravelingSalesman.Tests succeeded (3.0s) → TravelingSalesman.Tests\bin\Debug\net9.0\TravelingSalesman.Tests.dll
-A total of 1 test files matched the specified pattern.
-C:\code\TSP\TravelingSalesman.Tests\bin\Debug\net9.0\TravelingSalesman.Tests.dll
-[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 9.0.8)
-[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 9.0.8)
-[xUnit.net 00:00:00.89]   Discovering: TravelingSalesman.Tests
-[xUnit.net 00:00:00.89]   Discovering: TravelingSalesman.Tests
-[xUnit.net 00:00:01.07]   Discovered:  TravelingSalesman.Tests
-[xUnit.net 00:00:01.07]   Discovered:  TravelingSalesman.Tests
-[xUnit.net 00:00:01.18]   Starting:    TravelingSalesman.Tests
-[xUnit.net 00:00:01.18]   Starting:    TravelingSalesman.Tests
-  Passed TravelingSalesman.Tests.CityTests.City_DistanceTo_VariousCoordinates_ShouldCalculateCorrectly(x1: 1, y1: 1, x2: 4, y2: 5, expected: 5) [257 ms]
-  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_Constructor_CustomParameters_ShouldWork [257 ms]
-  Passed TravelingSalesman.Tests.CityTests.City_DistanceTo_VariousCoordinates_ShouldCalculateCorrectly(x1: 0, y1: 0, x2: 0, y2: 1, expected: 1) [1 ms]
-  Passed TravelingSalesman.Tests.CityTests.City_DistanceTo_VariousCoordinates_ShouldCalculateCorrectly(x1: -1, y1: -1, x2: 2, y2: 3, expected: 5) [< 1 ms]
-  Passed TravelingSalesman.Tests.CityTests.City_DistanceTo_VariousCoordinates_ShouldCalculateCorrectly(x1: 0, y1: 0, x2: 1, y2: 0, expected: 1) [< 1 ms]
-  Passed TravelingSalesman.Tests.CityTests.City_DistanceTo_ShouldCalculateCorrectEuclideanDistance [< 1 ms]
-  Passed TravelingSalesman.Tests.TourTests.Tour_Reverse_WholeRange_ShouldReverseAll [270 ms]
-  Passed TravelingSalesman.Tests.TspBenchmarkTests.TspBenchmark_RunBenchmarkAsync_Cancellation_ShouldThrow [269 ms]
-  Passed TravelingSalesman.Tests.CityTests.City_Constructor_ShouldCreateValidCity [9 ms]
-  Passed TravelingSalesman.Tests.TspBenchmarkTests.TspBenchmark_BenchmarkResult_Record_ShouldWorkCorrectly [8 ms]
-  Passed TravelingSalesman.Tests.TourTests.Tour_SwapCities_ShouldUpdateTour [8 ms]
-  Passed TravelingSalesman.Tests.TspSolverBaseTests.TspSolverBase_BuildDistanceMatrix_ShouldCreateCorrectMatrix [277 ms]
-  Passed TravelingSalesman.Tests.TspSolverBaseTests.TspSolverBase_SolveAsync_ShouldReturnValidTour [2 ms]
-  Passed TravelingSalesman.Tests.CityTests.City_Record_Equality_ShouldWorkCorrectly [4 ms]
-  Passed TravelingSalesman.Tests.CityTests.City_DistanceTo_NegativeCoordinates_ShouldWork [< 1 ms]
-  Passed TravelingSalesman.Tests.TspSolverBaseTests.TspSolverBase_ProgressChanged_ShouldRaiseEvent [2 ms]
-  Passed TravelingSalesman.Tests.CityTests.City_DistanceTo_SameCity_ShouldReturnZero [< 1 ms]
-  Passed TravelingSalesman.Tests.TspBenchmarkTests.TspBenchmark_RunBenchmarkAsync_EmptySolvers_ShouldReturnEmpty [6 ms]
-  Passed TravelingSalesman.Tests.TspBenchmarkTests.TspBenchmark_Constructor_ShouldWork [< 1 ms]
-  Passed TravelingSalesman.Tests.TspProgressEventArgsTests.TspProgressEventArgs_Properties_ShouldSetCorrectly [< 1 ms]
-  Passed TravelingSalesman.Tests.TspProgressEventArgsTests.TspProgressEventArgs_InheritsFromEventArgs [< 1 ms]
-  Passed TravelingSalesman.Tests.TspProgressEventArgsTests.TspProgressEventArgs_DefaultMessage_ShouldBeEmpty [< 1 ms]
-  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateAllSolvers_ShouldReturnAllTypes [4 ms]
-  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateSolver_ShouldReturnCorrectSolverType(solverType: SimulatedAnnealing, expectedName: "Simulated Annealing") [< 1 ms]
-  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateSolver_ShouldReturnCorrectSolverType(solverType: TwoOpt, expectedName: "2-Opt") [< 1 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GeneratedCities_ShouldHaveValidNames [6 ms]
-  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateSolver_ShouldReturnCorrectSolverType(solverType: GeneticAlgorithm, expectedName: "Genetic Algorithm") [< 1 ms]
-  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateSolver_ShouldReturnCorrectSolverType(solverType: NearestNeighbor, expectedName: "Nearest Neighbor") [< 1 ms]
-  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateAllSolvers_WithNullLoggerFactory_ShouldWork [< 1 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateRandomCities_ShouldGenerateCorrectCount(count: 50) [< 1 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateRandomCities_ShouldGenerateCorrectCount(count: 1) [< 1 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateRandomCities_ShouldGenerateCorrectCount(count: 5) [< 1 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateCircularCities_CustomParameters_ShouldWork [1 ms]
-  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateSolver_InvalidType_ShouldThrow [4 ms]
-  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateSolver_WithNullLoggerFactory_ShouldWork [< 1 ms]
-  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_SolveAsync_Cancellation_ShouldThrow [301 ms]
-  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_SolveAsync_WithSeed_ShouldBeDeterministic [11 ms]
-  Passed TravelingSalesman.Tests.TspBenchmarkTests.TspBenchmark_RunBenchmarkAsync_ShouldSortResultsByDistance [23 ms]
-  Passed TravelingSalesman.Tests.LoggingTests.Logging_TspBenchmark_ShouldLogResults [300 ms]
-  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_ShouldReturnValidTour [41 ms]
-  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_SolveAsync_DifferentMaxIterations_ShouldWork(maxIterations: 1) [301 ms]
-  Passed TravelingSalesman.Tests.TourTests.Tour_ToString_ShouldReturnFormattedString [34 ms]
-  Passed TravelingSalesman.Tests.TourTests.Tour_Constructor_ShouldCreateValidTour [< 1 ms]
-  Passed TravelingSalesman.Tests.TourTests.Tour_TotalDistance_ShouldCalculateCorrectly [< 1 ms]
-  Passed TravelingSalesman.Tests.TourTests.Tour_TotalDistance_SingleCity_ShouldReturnZero [< 1 ms]
-  Passed TravelingSalesman.Tests.TourTests.Tour_TotalDistance_ShouldCacheResult [< 1 ms]
-  Passed TravelingSalesman.Tests.TourTests.Tour_SwapCities_SameIndex_ShouldNotChange [< 1 ms]
-  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_Name_ShouldReturnCorrectName [< 1 ms]
-  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_SolveAsync_DifferentMaxIterations_ShouldWork(maxIterations: 10) [2 ms]
-  Passed TravelingSalesman.Tests.TourTests.Tour_Clone_ShouldCreateIndependentCopy [< 1 ms]
-  Passed TravelingSalesman.Tests.TourTests.Tour_Reverse_ShouldReverseSegment [< 1 ms]
-  Passed TravelingSalesman.Tests.TourTests.Tour_SwapCities_ShouldInvalidateCache [< 1 ms]
-  Passed TravelingSalesman.Tests.TourTests.Tour_TotalDistance_EmptyTour_ShouldReturnZero [< 1 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_AllMethods_ShouldGenerateUniqueIds [14 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateGridCities_ShouldGenerateGridPattern(rows: 2, cols: 3) [< 1 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateGridCities_ShouldGenerateGridPattern(rows: 1, cols: 5) [< 1 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateGridCities_ShouldGenerateGridPattern(rows: 4, cols: 4) [< 1 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateGridCities_CustomSpacing_ShouldWork [< 1 ms]
-  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_SolveAsync_DifferentMaxIterations_ShouldWork(maxIterations: 100) [4 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_Constructor_WithSeed_ShouldWork [< 1 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_Constructor_ShouldWork [< 1 ms]
-  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_Constructor_ShouldAcceptMaxIterations [< 1 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateCircularCities_ShouldGenerateCircularPattern(count: 8) [< 1 ms]
-  Passed TravelingSalesman.Tests.TspBenchmarkTests.TspBenchmark_RunBenchmarkAsync_ShouldReturnResults [5 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateCircularCities_ShouldGenerateCircularPattern(count: 16) [< 1 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateCircularCities_ShouldGenerateCircularPattern(count: 3) [< 1 ms]
-  Passed TravelingSalesman.Tests.LoggingTests.Logging_NearestNeighborSolver_ShouldLogProgress [6 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateRandomCities_WithSeed_ShouldBeDeterministic [< 1 ms]
-  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_ShouldRaiseProgressEvents [5 ms]
-  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateRandomCities_CustomBounds_ShouldRespectBounds [< 1 ms]
-  Passed TravelingSalesman.Tests.LoggingTests.Logging_TspDataGenerator_ShouldLogGeneration [1 ms]
-  Passed TravelingSalesman.Tests.TspBenchmarkTests.TspBenchmark_FormatResults_ShouldReturnFormattedString [2 ms]
-  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_SolveAsync_ShouldRaiseProgressEvents [7 ms]
-  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_SolveAsync_TwoCities_ShouldWork [9 ms]
-  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_DifferentRates_ShouldWork(mutationRate: 0, elitismRate: 0.10000000000000001) [3 ms]
-  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_SolveAsync_Cancellation_ShouldThrow [5 ms]
-  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_SolveAsync_TwoCities_ShouldReturnValidTour [3 ms]
-  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_DifferentRates_ShouldWork(mutationRate: 0.20000000000000001, elitismRate: 0.29999999999999999) [2 ms]
-  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_SolveAsync_SmallTour_ShouldComplete [3 ms]
-  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_Name_ShouldReturnCorrectName [< 1 ms]
-  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_SolveAsync_ShouldReturnValidTour [7 ms]
-  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_Constructor_CustomParameters_ShouldWork [< 1 ms]
-  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_DifferentRates_ShouldWork(mutationRate: 0.10000000000000001, elitismRate: 0) [2 ms]
-  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_Constructor_DefaultParameters_ShouldWork [< 1 ms]
-  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_SolveAsync_SingleCity_ShouldReturnSingleCityTour [5 ms]
-  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_SolveAsync_ShouldImproveInitialSolution [3 ms]
-  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_SolveAsync_MultipleCities_ShouldStartFromFirstCity [3 ms]
-  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_SolveAsync_ShouldRaiseProgressEvents [4 ms]
-  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_Cancellation_ShouldThrow [5 ms]
-  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_SolveAsync_ShouldRaiseProgressEvents [5 ms]
-  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_SolveAsync_EmptyList_ShouldReturnEmptyTour [3 ms]
-  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_Name_ShouldReturnCorrectName [10 ms]
-[xUnit.net 00:00:01.77]   Finished:    TravelingSalesman.Tests
-[xUnit.net 00:00:01.77]   Finished:    TravelingSalesman.Tests
-  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_WithSeed_ShouldBeDeterministic [14 ms]
-  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_SolveAsync_Cancellation_ShouldThrow [16 ms]
-  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_Name_ShouldReturnCorrectName [< 1 ms]
-  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_Constructor_DefaultParameters_ShouldWork [< 1 ms]
-  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_CreateScaledGeneticSolver_ShouldCreateWithScaledParameters [< 1 ms]
-  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_SolveAsync_DeterministicResults [3 ms]
-  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_TwoCities_ShouldWork [2 ms]
-
-Test Run Successful.
-Total tests: 99
-     Passed: 99
- Total time: 3.4243 Seconds
-  TravelingSalesman.Tests test succeeded (4.3s)
-
-Test summary: total: 99, failed: 0, succeeded: 99, skipped: 0, duration: 4.3s
-Build succeeded in 17.6s
-PS C:\code\TSP>
+PS C:\code\TSP> C:\code\TSP\scripts\cat.ps1
