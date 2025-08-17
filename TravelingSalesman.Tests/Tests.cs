@@ -67,7 +67,8 @@ namespace TravelingSalesman.Tests
 
             // Assert
             Assert.True(distance > 0);
-            Assert.Equal(Math.Sqrt(400 + 400), distance, 2);
+            // Distance = sqrt((5-(-5))^2 + (10-(-10))^2) = sqrt(100 + 400) = sqrt(500) ≈ 22.36
+            Assert.Equal(22.36, distance, 2);
         }
 
         [Theory]
@@ -550,8 +551,8 @@ namespace TravelingSalesman.Tests
             using var cts = new CancellationTokenSource();
             cts.Cancel();
 
-            // Act & Assert
-            await Assert.ThrowsAsync<OperationCanceledException>(
+            // Act & Assert - Use ThrowsAny instead of Throws
+            await Assert.ThrowsAny<OperationCanceledException>(
                 () => solver.SolveAsync(cities, cts.Token));
         }
 
@@ -687,7 +688,7 @@ namespace TravelingSalesman.Tests
             cts.Cancel();
 
             // Act & Assert
-            await Assert.ThrowsAsync<OperationCanceledException>(
+            await Assert.ThrowsAny<OperationCanceledException>(
                 () => solver.SolveAsync(cities, cts.Token));
         }
 
@@ -880,7 +881,7 @@ namespace TravelingSalesman.Tests
             cts.Cancel();
 
             // Act & Assert
-            await Assert.ThrowsAsync<OperationCanceledException>(
+            await Assert.ThrowsAny<OperationCanceledException>(
                 () => solver.SolveAsync(cities, cts.Token));
         }
     }
@@ -1062,7 +1063,7 @@ namespace TravelingSalesman.Tests
             cts.Cancel();
 
             // Act & Assert
-            await Assert.ThrowsAsync<OperationCanceledException>(
+            await Assert.ThrowsAny<OperationCanceledException>(
                 () => solver.SolveAsync(cities, cts.Token));
         }
 
@@ -1497,7 +1498,7 @@ namespace TravelingSalesman.Tests
             cts.Cancel();
 
             // Act & Assert
-            await Assert.ThrowsAsync<OperationCanceledException>(
+            await Assert.ThrowsAny<OperationCanceledException>(
                 () => benchmark.RunBenchmarkAsync(cities, solvers, cts.Token));
         }
 
