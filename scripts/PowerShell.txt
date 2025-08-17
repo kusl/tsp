@@ -1,19 +1,15 @@
-I have a new xunit project here. 
-I would like exhaustive tests for the core project 
-the catch are as follows: 
-1. No mocking of any kind 
-2. No importing any other nuget package than is already included. 
-3. All tests should be in a single physical file but should be logically separated into multiple classes as necessary. 
-4. All unit tests should be independent of each other. Reuse of helper functions is ok but do NOT rely on tests being run on a certain order. 
-5. Follow all industry best practices, including solid principle and so on. 
-
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is ahead of 'origin/master' by 6 commits.
+Your branch is ahead of 'origin/master' by 10 commits.
   (use "git push" to publish your local commits)
 
-nothing to commit, working tree clean
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   scripts/PowerShell.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
 * remote origin
   Fetch URL: git@github.com:kusl/tsp.git
   Push  URL: git@github.com:kusl/tsp.git
@@ -24,8 +20,6 @@ nothing to commit, working tree clean
     master merges with remote master
   Local ref configured for 'git push':
     master pushes to master (fast-forwardable)
-Removing .vs/
-Removing TravelingSalesman.ConsoleApp/bin/
 Removing TravelingSalesman.ConsoleApp/obj/
 Removing TravelingSalesman.Core/bin/
 Removing TravelingSalesman.Core/obj/
@@ -65,8 +59,8 @@ C:.
 │       TravelingSalesmanLibrary.cs
 │
 └───TravelingSalesman.Tests
+        Tests.cs
         TravelingSalesman.Tests.csproj
-        UnitTest1.cs
 
 
 === SLN FILE ===
@@ -419,6 +413,15 @@ jobs:
 
     - name: Build
       run: dotnet build TSP.sln --configuration Release --no-restore
+
+    - name: Run Tests
+      run: dotnet test TSP.sln --configuration Release --no-build --verbosity normal
+
+    - name: Test Coverage
+      run: |
+        dotnet test TSP.sln --configuration Release --no-build \
+          --collect:"XPlat Code Coverage" \
+          --results-directory ./coverage
 
     - name: Test Version Information
       run: |
@@ -2348,156 +2351,7 @@ namespace TravelingSalesman.Core
     }
 }
 
---- C:\code\TSP\TravelingSalesman.Tests\UnitTest1.cs ---
-namespace TravelingSalesman.Tests
-{
-    public class UnitTest1
-    {
-        [Fact]
-        public void Test1()
-        {
-
-        }
-    }
-}
-PS C:\code\TSP> C:\code\TSP\scripts\cat.ps1
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Looking at your TSP project, I'll create comprehensive tests for the TravelingSalesman.Core library. Let me analyze the structure and create exhaustive test coverage.
-
-I've created a comprehensive test suite for your TSP project that meets all your requirements:
-
-## Key Features of the Test Suite:
-
-### 1. **Complete Coverage** - Tests every public class and method:
-- **City Tests**: Constructor, distance calculations, edge cases, equality
-- **Tour Tests**: Distance calculation, caching, city swapping, reversing, cloning
-- **All Solver Tests**: Each algorithm (Nearest Neighbor, 2-Opt, Simulated Annealing, Genetic Algorithm)
-- **Factory Tests**: TSP solver factory functionality
-- **Data Generator Tests**: Random, circular, and grid city generation
-- **Benchmark Tests**: Algorithm comparison and result formatting
-
-### 2. **No Mocking** - All tests use real implementations and dependency injection where needed
-
-### 3. **No External Dependencies** - Only uses built-in xUnit and .NET libraries
-
-### 4. **Logically Organized** - Single file with multiple test classes:
-- `CityTests`
-- `TourTests` 
-- `TspSolverBaseTests`
-- Individual solver test classes
-- `TspSolverFactoryTests`
-- `TspDataGeneratorTests`
-- `TspBenchmarkTests`
-- `IntegrationTests`
-- `PerformanceTests`
-- `EdgeCaseTests`
-- `ConcurrencyTests`
-- `LoggingTests`
-
-### 5. **Independent Tests** - Each test method is self-contained with proper setup and cleanup
-
-### 6. **SOLID Principles**:
-- **Single Responsibility**: Each test class focuses on one component
-- **Open/Closed**: Tests are extensible for new algorithms
-- **Liskov Substitution**: Tests validate interface implementations
-- **Interface Segregation**: Tests specific interfaces appropriately
-- **Dependency Inversion**: Uses dependency injection where applicable
-
-### 7. **Comprehensive Test Types**:
-- **Unit Tests**: Individual component testing
-- **Integration Tests**: Multiple components working together
-- **Performance Tests**: Execution time and efficiency
-- **Edge Case Tests**: Boundary conditions and error scenarios
-- **Concurrency Tests**: Thread safety validation
-- **Logging Tests**: Verification of proper logging
-
-### 8. **Best Practices**:
-- Descriptive test names following Given_When_Then pattern
-- Theory tests for parameterized testing
-- Proper exception testing
-- Cancellation token testing
-- Deterministic tests with seeds
-- Helper methods for common operations
-
-The test suite provides exhaustive coverage while being maintainable and following industry best practices. Each test is independent and can run in any order, ensuring reliable CI/CD execution.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+--- C:\code\TSP\TravelingSalesman.Tests\Tests.cs ---
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -2853,7 +2707,7 @@ namespace TravelingSalesman.Tests
             }
 
             public double[,] TestBuildDistanceMatrix(IReadOnlyList<City> cities) => BuildDistanceMatrix(cities);
-            public void TestOnProgressChanged(int iteration, double distance, string message) => 
+            public void TestOnProgressChanged(int iteration, double distance, string message) =>
                 OnProgressChanged(iteration, distance, message);
         }
 
@@ -3620,7 +3474,7 @@ namespace TravelingSalesman.Tests
         public void TspSolverFactory_CreateSolver_InvalidType_ShouldThrow()
         {
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 TspSolverFactory.CreateSolver((TspSolverFactory.SolverType)999));
         }
 
@@ -3705,7 +3559,7 @@ namespace TravelingSalesman.Tests
 
             // Assert
             Assert.Equal(count, cities.Count);
-            Assert.All(cities, city => 
+            Assert.All(cities, city =>
             {
                 Assert.True(city.X >= 0 && city.X <= 100);
                 Assert.True(city.Y >= 0 && city.Y <= 100);
@@ -4014,9 +3868,9 @@ namespace TravelingSalesman.Tests
             var benchmark = new TspBenchmark();
             var results = new List<TspBenchmark.BenchmarkResult>
             {
-                new("Solver A", 100.0, TimeSpan.FromMilliseconds(50), 
+                new("Solver A", 100.0, TimeSpan.FromMilliseconds(50),
                     new Tour(new List<City>(), new double[0,0])),
-                new("Solver B", 120.0, TimeSpan.FromMilliseconds(75), 
+                new("Solver B", 120.0, TimeSpan.FromMilliseconds(75),
                     new Tour(new List<City>(), new double[0,0]))
             };
 
@@ -4044,9 +3898,9 @@ namespace TravelingSalesman.Tests
 
             // Act
             var result = new TspBenchmark.BenchmarkResult(
-                "Test Solver", 
-                50.5, 
-                TimeSpan.FromMilliseconds(100), 
+                "Test Solver",
+                50.5,
+                TimeSpan.FromMilliseconds(100),
                 tour);
 
             // Assert
@@ -4507,7 +4361,7 @@ namespace TravelingSalesman.Tests
         public void EdgeCase_GeneticAlgorithm_ZeroPopulation_ShouldThrow()
         {
             // Act & Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => 
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
                 new GeneticAlgorithmSolver(populationSize: 0));
         }
 
@@ -4515,7 +4369,7 @@ namespace TravelingSalesman.Tests
         public void EdgeCase_GeneticAlgorithm_NegativeGenerations_ShouldThrow()
         {
             // Act & Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => 
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
                 new GeneticAlgorithmSolver(generations: -1));
         }
 
@@ -4525,10 +4379,10 @@ namespace TravelingSalesman.Tests
         public void EdgeCase_GeneticAlgorithm_InvalidRates_ShouldThrow(double invalidRate)
         {
             // Act & Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => 
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
                 new GeneticAlgorithmSolver(mutationRate: invalidRate));
-            
-            Assert.Throws<ArgumentOutOfRangeException>(() => 
+
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
                 new GeneticAlgorithmSolver(elitismRate: invalidRate));
         }
 
@@ -4536,16 +4390,16 @@ namespace TravelingSalesman.Tests
         public void EdgeCase_SimulatedAnnealing_InvalidParameters_ShouldThrow()
         {
             // Act & Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => 
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
                 new SimulatedAnnealingSolver(initialTemperature: -1));
-            
-            Assert.Throws<ArgumentOutOfRangeException>(() => 
+
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
                 new SimulatedAnnealingSolver(coolingRate: 0)); // Should be > 0 and < 1
-            
-            Assert.Throws<ArgumentOutOfRangeException>(() => 
+
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
                 new SimulatedAnnealingSolver(coolingRate: 1.1));
-            
-            Assert.Throws<ArgumentOutOfRangeException>(() => 
+
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
                 new SimulatedAnnealingSolver(iterationsPerTemperature: 0));
         }
 
@@ -4553,7 +4407,7 @@ namespace TravelingSalesman.Tests
         public void EdgeCase_TwoOpt_ZeroMaxIterations_ShouldThrow()
         {
             // Act & Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => 
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
                 new TwoOptSolver(maxIterations: 0));
         }
 
@@ -4602,7 +4456,7 @@ namespace TravelingSalesman.Tests
         public void EdgeCase_Tour_NullCities_ShouldThrow()
         {
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => 
+            Assert.Throws<ArgumentNullException>(() =>
                 new Tour(null!, new double[0, 0]));
         }
 
@@ -4610,7 +4464,7 @@ namespace TravelingSalesman.Tests
         public void EdgeCase_Tour_NullDistanceMatrix_ShouldThrow()
         {
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => 
+            Assert.Throws<ArgumentNullException>(() =>
                 new Tour(new List<City>(), null!));
         }
     }
@@ -4720,12 +4574,12 @@ namespace TravelingSalesman.Tests
         {
             public List<string> LogMessages { get; } = new();
 
-            public IDisposable BeginScope<TState>(TState state) => 
+            public IDisposable BeginScope<TState>(TState state) =>
                 throw new NotImplementedException();
 
             public bool IsEnabled(LogLevel logLevel) => true;
 
-            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, 
+            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state,
                 Exception? exception, Func<TState, Exception?, string> formatter)
             {
                 LogMessages.Add(formatter(state, exception));
@@ -4802,7 +4656,7 @@ namespace TravelingSalesman.Tests
             using var loggerFactory = LoggerFactory.Create(builder =>
                 builder.AddProvider(loggerProvider).SetMinimumLevel(LogLevel.Information));
 
-            var generator = new TspDataGenerator(seed: 123, 
+            var generator = new TspDataGenerator(seed: 123,
                 loggerFactory.CreateLogger<TspDataGenerator>());
 
             // Act
@@ -4867,33 +4721,4 @@ namespace TravelingSalesman.Tests
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+PS C:\code\TSP> C:\code\TSP\scripts\cat.ps1
