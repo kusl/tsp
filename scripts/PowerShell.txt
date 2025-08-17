@@ -1,10 +1,14 @@
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is ahead of 'origin/master' by 12 commits.
-  (use "git push" to publish your local commits)
+Your branch is up to date with 'origin/master'.
 
-nothing to commit, working tree clean
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   scripts/PowerShell.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
 * remote origin
   Fetch URL: git@github.com:kusl/tsp.git
   Push  URL: git@github.com:kusl/tsp.git
@@ -14,7 +18,12 @@ nothing to commit, working tree clean
   Local branch configured for 'git pull':
     master merges with remote master
   Local ref configured for 'git push':
-    master pushes to master (fast-forwardable)
+    master pushes to master (up to date)
+Removing TravelingSalesman.ConsoleApp/obj/
+Removing TravelingSalesman.Core/bin/
+Removing TravelingSalesman.Core/obj/
+Removing TravelingSalesman.Tests/bin/
+Removing TravelingSalesman.Tests/obj/
 Folder PATH listing
 Volume serial number is BE05-6605
 C:.
@@ -4734,4 +4743,17 @@ namespace TravelingSalesman.Tests
         }
     }
 }
-PS C:\code\TSP> C:\code\TSP\scripts\cat.ps1
+PS C:\code\TSP> dotnet test
+Restore complete (2.2s)
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+  TravelingSalesman.Core succeeded (1.8s) → TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
+  TravelingSalesman.Tests failed with 6 error(s) (1.4s)
+    C:\code\TSP\TravelingSalesman.Tests\Tests.cs(2246,32): error CS8633: Nullability in constraints for type parameter 'TState' of method 'LoggingTests.TestLogger.BeginScope<TState>(TState)' doesn't match theconstraints for type parameter 'TState' of interface method 'ILogger.BeginScope<TState>(TState)'. Consider using an explicit interface implementation instead.
+    C:\code\TSP\TravelingSalesman.Tests\Tests.cs(1145,39): error CS0234: The type or namespace name 'LoggerFactory' does not exist in the namespace 'Microsoft.Extensions.Logging' (are you missing an assembly reference?)
+    C:\code\TSP\TravelingSalesman.Tests\Tests.cs(1159,39): error CS0234: The type or namespace name 'LoggerFactory' does not exist in the namespace 'Microsoft.Extensions.Logging' (are you missing an assembly reference?)
+    C:\code\TSP\TravelingSalesman.Tests\Tests.cs(2271,39): error CS0103: The name 'LoggerFactory' does not exist in the current context
+    C:\code\TSP\TravelingSalesman.Tests\Tests.cs(2296,39): error CS0103: The name 'LoggerFactory' does not exist in the current context
+    C:\code\TSP\TravelingSalesman.Tests\Tests.cs(2325,39): error CS0103: The name 'LoggerFactory' does not exist in the current context
+
+Build failed with 6 error(s) in 6.1s
+PS C:\code\TSP>
