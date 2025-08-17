@@ -2,7 +2,7 @@ PowerShell 7.6.0-preview.4
 PS C:\Users\kushal>
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is ahead of 'origin/master' by 8 commits.
+Your branch is ahead of 'origin/master' by 10 commits.
   (use "git push" to publish your local commits)
 
 nothing to commit, working tree clean
@@ -2493,9 +2493,9 @@ namespace TravelingSalesman.Specs.StepDefinitions
     [Binding]
     public class BenchmarkingSteps
     {
-        private List&lt;City&gt; _cities = new();
-        private IReadOnlyList&lt;TspBenchmark.BenchmarkResult&gt;? _benchmarkResults;
-        private List&lt;ITspSolver&gt; _solversToTest = new();
+        private List<City> _cities = new();
+        private IReadOnlyList<TspBenchmark.BenchmarkResult>? _benchmarkResults;
+        private List<ITspSolver> _solversToTest = new();
 
         [Given(@"I have (.*) randomly generated cities")]
         public void GivenIHaveRandomlyGeneratedCities(int count)
@@ -2684,8 +2684,8 @@ namespace TravelingSalesman.Specs.StepDefinitions
     [Binding]
     public class CityOperationSteps
     {
-        private readonly Dictionary&lt;string, City&gt; _cities = new();
-        private readonly List&lt;City&gt; _cityList = new();
+        private readonly Dictionary<string, City> _cities = new();
+        private readonly List<City> _cityList = new();
         private double _calculatedDistance;
         private Tour? _tour;
 
@@ -2751,7 +2751,7 @@ namespace TravelingSalesman.Specs.StepDefinitions
         public void WhenICreateAnEmptyTour()
         {
             var distanceMatrix = new double[0, 0];
-            _tour = new Tour(new List&lt;City&gt;(), distanceMatrix);
+            _tour = new Tour(new List<City>(), distanceMatrix);
         }
 
         [Then(@"the distance should be (.*) units")]
@@ -2767,7 +2767,7 @@ namespace TravelingSalesman.Specs.StepDefinitions
             Assert.Equal(expectedDistance, _tour.TotalDistance, 1);
         }
 
-        private static double[,] BuildDistanceMatrix(IReadOnlyList&lt;City&gt; cities)
+        private static double[,] BuildDistanceMatrix(IReadOnlyList<City> cities)
         {
             var n = cities.Count;
             var matrix = new double[n, n];
@@ -2798,8 +2798,8 @@ namespace TravelingSalesman.Specs.StepDefinitions
     [Binding]
     public class DataGenerationSteps
     {
-        private IReadOnlyList&lt;City&gt; _generatedCities = new List&lt;City&gt;();
-        private IReadOnlyList&lt;City&gt; _secondGeneratedCities = new List&lt;City&gt;();
+        private IReadOnlyList<City> _generatedCities = new List<City>();
+        private IReadOnlyList<City> _secondGeneratedCities = new List<City>();
 
         [When(@"I generate (.*) random cities with seed (.*)")]
         public void WhenIGenerateRandomCitiesWithSeed(int count, int seed)
@@ -2882,7 +2882,7 @@ namespace TravelingSalesman.Specs.StepDefinitions
             var centerX = 50.0;
             var centerY = 50.0;
 
-            var angles = new List&lt;double&gt;();
+            var angles = new List<double>();
             foreach (var city in _generatedCities)
             {
                 var angle = Math.Atan2(city.Y - centerY, city.X - centerX);
@@ -2933,7 +2933,7 @@ namespace TravelingSalesman.Specs.StepDefinitions
         public void ThenTheMinimumDistanceBetweenAdjacentCitiesShouldBeUnits(double expectedDistance)
         {
             // For a grid, adjacent cities are those with minimum non-zero distance
-            var distances = new List&lt;double&gt;();
+            var distances = new List<double>();
 
             for (int i = 0; i < _generatedCities.Count; i++)
             {
@@ -2987,12 +2987,12 @@ namespace TravelingSalesman.Specs.StepDefinitions
     public class TspSolverSteps
     {
         private readonly ScenarioContext _scenarioContext;
-        private List&lt;City&gt; _cities = new();
+        private List<City> _cities = new();
         private Tour? _currentTour;
         private Tour? _previousTour;
         private ITspSolver? _currentSolver;
         private Stopwatch? _stopwatch;
-        private readonly Dictionary&lt;string, Tour&gt; _tours = new();
+        private readonly Dictionary<string, Tour> _tours = new();
 
         public TspSolverSteps(ScenarioContext scenarioContext)
         {
@@ -5055,7 +5055,7 @@ Scenario: Nearest Neighbor solver finds a valid tour
 
 @solver
 Scenario Outline: Different algorithms produce valid tours
-    When I solve the TSP using &lt;Algorithm&gt; algorithm
+    When I solve the TSP using <Algorithm> algorithm
     Then the tour should visit all 4 cities
     And the tour should return to the starting city
     And the total distance should be between 10 and 20 units
