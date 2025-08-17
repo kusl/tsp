@@ -1,7 +1,7 @@
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is ahead of 'origin/master' by 4 commits.
+Your branch is ahead of 'origin/master' by 6 commits.
   (use "git push" to publish your local commits)
 
 nothing to commit, working tree clean
@@ -902,6 +902,10 @@ jobs:
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TravelingSalesman.Core\TravelingSalesman.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
