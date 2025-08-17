@@ -1,3 +1,5 @@
+are you familiar with reqnroll? can you please use reqnroll to add comprehensive testing to this project? please assume I have no knowledge of reqnroll or gerkin and walk me through each step. please do not hallucinate 
+
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal>
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
