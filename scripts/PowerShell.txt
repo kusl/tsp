@@ -4757,3 +4757,26 @@ You are using a preview version of .NET. See: https://aka.ms/dotnet-support-poli
 
 Build failed with 6 error(s) in 6.1s
 PS C:\code\TSP>
+Run dotnet build TSP.sln --configuration Release --no-restore
+  TravelingSalesman.Core -> /home/runner/work/tsp/tsp/TravelingSalesman.Core/bin/Release/net9.0/TravelingSalesman.Core.dll
+  TravelingSalesman.ConsoleApp -> /home/runner/work/tsp/tsp/TravelingSalesman.ConsoleApp/bin/Release/net9.0/TravelingSalesman.ConsoleApp.dll
+Error: /home/runner/work/tsp/tsp/TravelingSalesman.Tests/Tests.cs(2246,32): error CS8633: Nullability in constraints for type parameter 'TState' of method 'LoggingTests.TestLogger.BeginScope<TState>(TState)' doesn't match the constraints for type parameter 'TState' of interface method 'ILogger.BeginScope<TState>(TState)'. Consider using an explicit interface implementation instead. [/home/runner/work/tsp/tsp/TravelingSalesman.Tests/TravelingSalesman.Tests.csproj]
+Error: /home/runner/work/tsp/tsp/TravelingSalesman.Tests/Tests.cs(2271,39): error CS0103: The name 'LoggerFactory' does not exist in the current context [/home/runner/work/tsp/tsp/TravelingSalesman.Tests/TravelingSalesman.Tests.csproj]
+Error: /home/runner/work/tsp/tsp/TravelingSalesman.Tests/Tests.cs(2296,39): error CS0103: The name 'LoggerFactory' does not exist in the current context [/home/runner/work/tsp/tsp/TravelingSalesman.Tests/TravelingSalesman.Tests.csproj]
+Error: /home/runner/work/tsp/tsp/TravelingSalesman.Tests/Tests.cs(2325,39): error CS0103: The name 'LoggerFactory' does not exist in the current context [/home/runner/work/tsp/tsp/TravelingSalesman.Tests/TravelingSalesman.Tests.csproj]
+Error: /home/runner/work/tsp/tsp/TravelingSalesman.Tests/Tests.cs(1145,39): error CS0234: The type or namespace name 'LoggerFactory' does not exist in the namespace 'Microsoft.Extensions.Logging' (are you missing an assembly reference?) [/home/runner/work/tsp/tsp/TravelingSalesman.Tests/TravelingSalesman.Tests.csproj]
+Error: /home/runner/work/tsp/tsp/TravelingSalesman.Tests/Tests.cs(1159,39): error CS0234: The type or namespace name 'LoggerFactory' does not exist in the namespace 'Microsoft.Extensions.Logging' (are you missing an assembly reference?) [/home/runner/work/tsp/tsp/TravelingSalesman.Tests/TravelingSalesman.Tests.csproj]
+
+Build FAILED.
+
+Error: /home/runner/work/tsp/tsp/TravelingSalesman.Tests/Tests.cs(2246,32): error CS8633: Nullability in constraints for type parameter 'TState' of method 'LoggingTests.TestLogger.BeginScope<TState>(TState)' doesn't match the constraints for type parameter 'TState' of interface method 'ILogger.BeginScope<TState>(TState)'. Consider using an explicit interface implementation instead. [/home/runner/work/tsp/tsp/TravelingSalesman.Tests/TravelingSalesman.Tests.csproj]
+Error: /home/runner/work/tsp/tsp/TravelingSalesman.Tests/Tests.cs(2271,39): error CS0103: The name 'LoggerFactory' does not exist in the current context [/home/runner/work/tsp/tsp/TravelingSalesman.Tests/TravelingSalesman.Tests.csproj]
+Error: /home/runner/work/tsp/tsp/TravelingSalesman.Tests/Tests.cs(2296,39): error CS0103: The name 'LoggerFactory' does not exist in the current context [/home/runner/work/tsp/tsp/TravelingSalesman.Tests/TravelingSalesman.Tests.csproj]
+Error: /home/runner/work/tsp/tsp/TravelingSalesman.Tests/Tests.cs(2325,39): error CS0103: The name 'LoggerFactory' does not exist in the current context [/home/runner/work/tsp/tsp/TravelingSalesman.Tests/TravelingSalesman.Tests.csproj]
+Error: /home/runner/work/tsp/tsp/TravelingSalesman.Tests/Tests.cs(1145,39): error CS0234: The type or namespace name 'LoggerFactory' does not exist in the namespace 'Microsoft.Extensions.Logging' (are you missing an assembly reference?) [/home/runner/work/tsp/tsp/TravelingSalesman.Tests/TravelingSalesman.Tests.csproj]
+Error: /home/runner/work/tsp/tsp/TravelingSalesman.Tests/Tests.cs(1159,39): error CS0234: The type or namespace name 'LoggerFactory' does not exist in the namespace 'Microsoft.Extensions.Logging' (are you missing an assembly reference?) [/home/runner/work/tsp/tsp/TravelingSalesman.Tests/TravelingSalesman.Tests.csproj]
+    0 Warning(s)
+    6 Error(s)
+
+Time Elapsed 00:00:04.60
+Error: Process completed with exit code 1.
