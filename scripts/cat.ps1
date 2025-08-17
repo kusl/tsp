@@ -20,4 +20,9 @@ Write-Host "`n=== CS FILES ===" -ForegroundColor Cyan; `
 Get-ChildItem -Recurse -Filter *.cs | ForEach-Object { `
     Write-Host "`n--- $($_.FullName) ---" -ForegroundColor Yellow; `
     Get-Content $_.FullName `
-}
+}; `
+Write-Host "`n=== feature FILES ===" -ForegroundColor Cyan; `
+Get-ChildItem -Recurse -Filter *.feature | ForEach-Object { `
+    Write-Host "`n--- $($_.FullName) ---" -ForegroundColor Yellow; `
+    Get-Content $_.FullName `
+};
