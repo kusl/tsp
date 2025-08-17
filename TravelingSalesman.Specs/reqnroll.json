@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schemas.reqnroll.net/reqnroll-config.json",
+    "bindingCulture": {
+        "language": "en-US"
+    },
+    "runtime": {
+        "missingOrPendingStepsOutcome": "Error",
+        "stopAtFirstError": false,
+        "generateBindingsForUsedSteps": false
+    },
+    "trace": {
+        "stepDefinitionSkeletonStyle": "RegexAttribute",
+        "minTracedDuration": "0:0:0.1"
+    }
+}

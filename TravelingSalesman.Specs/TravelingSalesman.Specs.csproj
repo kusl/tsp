@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject> 
+    <!-- TargetFramework inherited from Directory.Build.props -->
+  </PropertyGroup>
+  <ItemGroup> <!-- Reqnroll packages -->
+    <PackageReference Include="Reqnroll" Version="2.2.1" />
+    <PackageReference Include="Reqnroll.xUnit" Version="2.2.1" />
+    <PackageReference Include="Reqnroll.Verify" Version="2.2.1" /> 
+    <!-- Test framework packages
+    (versions from Directory.Packages.props) -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference> 
+    <!-- Logging for tests -->
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TravelingSalesman.Core\TravelingSalesman.Core.csproj" />
+    <ProjectReference Include="..\TravelingSalesman.ConsoleApp\TravelingSalesman.ConsoleApp.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+    <Using Include="Reqnroll" />
+  </ItemGroup>
+</Project>
