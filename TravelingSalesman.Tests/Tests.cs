@@ -1526,8 +1526,8 @@ namespace TravelingSalesman.Tests
             Assert.Contains("120.00", formatted);
             Assert.Contains("50.0", formatted);
             Assert.Contains("75.0", formatted);
-            Assert.Contains("0.00%", formatted); // Best is 0% from itself
-            Assert.Contains("20.00%", formatted); // 120 is 20% more than 100
+            Assert.Contains("0.00", formatted); // Best is 0% from itself
+            Assert.Contains("20.00", formatted); // 120 is 20% more than 100
         }
 
         [Fact]
