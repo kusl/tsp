@@ -389,7 +389,7 @@ namespace TravelingSalesman.Core
                             if (currentTour.TotalDistance < bestTour.TotalDistance)
                             {
                                 bestTour = currentTour.Clone();
-                                _logger.LogTrace("New best solution found: {Distance:F2} at temperature {Temperature:F2}", 
+                                _logger.LogTrace("New best solution found: {Distance:F2} at temperature {Temperature:F2}",
                                     bestTour.TotalDistance, temperature);
                             }
                         }
@@ -400,7 +400,10 @@ namespace TravelingSalesman.Core
                     }
 
                     iteration++;
-                    if (iteration % 1000 == 0)
+                    
+                    // Report progress more frequently for better test coverage
+                    // Report every 100 iterations OR at the start of each temperature level
+                    if (iteration % 100 == 0 || i == 0)
                     {
                         OnProgressChanged(iteration, bestTour.TotalDistance,
                             $"Temperature: {temperature:F2}, Best: {bestTour.TotalDistance:F2}");
@@ -414,9 +417,9 @@ namespace TravelingSalesman.Core
             var acceptanceRate = (double)acceptedMoves / (acceptedMoves + rejectedMoves) * 100;
 
             _logger.LogInformation("Simulated Annealing completed after {Iterations} iterations. " +
-                                 "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%). " +
-                                 "Acceptance rate: {AcceptanceRate:F1}%", 
-                                 iteration, bestTour.TotalDistance, finalImprovement, acceptanceRate);
+                                "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%). " +
+                                "Acceptance rate: {AcceptanceRate:F1}%",
+                                iteration, bestTour.TotalDistance, finalImprovement, acceptanceRate);
 
             return bestTour;
         }
