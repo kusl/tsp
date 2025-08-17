@@ -191,4 +191,701 @@ Restore failed with 1 error(s) in 2.4s
     C:\code\TSP\TravelingSalesman.Specs\TravelingSalesman.Specs.csproj : error NU1008: The following PackageReference items cannot define a value for Version: Reqnroll, Reqnroll.xUnit, Reqnroll.Verify. Projects using Central Package Management must define a Version value on a PackageVersion item. For more information, visit https://aka.ms/nuget/cpm/gettingstarted
 
 Restore failed with 1 error(s) in 2.4s
-PS C:\code\TSP>
+PS C:\code\TSP> Set-Location "C:\code\tsp"; git status; git remote show origin; git clean -dfx; tree /F; dotnet restore; dotnet build; dotnet test; dotnet test TravelingSalesman.Specs; dotnet test TravelingSalesman.Specs --logger "console;verbosity=detailed"; dotnet test TravelingSalesman.Specs --logger "html;LogFileName=docs\test-results.html";
+On branch master
+Your branch is ahead of 'origin/master' by 5 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+* remote origin
+  Fetch URL: git@github.com:kusl/tsp.git
+  Push  URL: git@github.com:kusl/tsp.git
+  HEAD branch: master
+  Remote branch:
+    master tracked
+  Local branch configured for 'git pull':
+    master merges with remote master
+  Local ref configured for 'git push':
+    master pushes to master (fast-forwardable)
+Removing TravelingSalesman.ConsoleApp/obj/
+Removing TravelingSalesman.Core/obj/
+Removing TravelingSalesman.Specs/obj/
+Removing TravelingSalesman.Tests/obj/
+Folder PATH listing
+Volume serial number is BE05-6605
+C:.
+│   .dockerignore
+│   .gitattributes
+│   .gitignore
+│   Directory.Build.props
+│   Directory.Packages.props
+│   Dockerfile
+│   LICENSE.txt
+│   README.md
+│   TSP.sln
+│
+├───.github
+│   └───workflows
+│           build.yml
+│           release.yml
+│
+├───docs
+│       index.html
+│
+├───scripts
+│       cat.ps1
+│       PowerShell.txt
+│
+├───TravelingSalesman.ConsoleApp
+│   │   Program.cs
+│   │   TravelingSalesman.ConsoleApp.csproj
+│   │
+│   └───Properties
+│           launchSettings.json
+│
+├───TravelingSalesman.Core
+│       TravelingSalesman.Core.csproj
+│       TravelingSalesmanLibrary.cs
+│
+├───TravelingSalesman.Specs
+│   │   Class1.cs
+│   │   reqnroll.json
+│   │   TravelingSalesman.Specs.csproj
+│   │
+│   ├───Features
+│   │       Benchmarking.feature
+│   │       CityOperations.feature
+│   │       DataGeneration.feature
+│   │       TspSolvers.feature
+│   │
+│   ├───StepDefinitions
+│   │       BenchmarkingSteps.cs
+│   │       CityOperationSteps.cs
+│   │       DataGenerationSteps.cs
+│   │       TspSolverSteps.cs
+│   │
+│   └───Support
+│           Hooks.cs
+│
+└───TravelingSalesman.Tests
+        Tests.cs
+        TravelingSalesman.Tests.csproj
+
+Restore complete (4.6s)
+
+Build succeeded in 4.9s
+Restore complete (1.6s)
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+  TravelingSalesman.Core succeeded (6.7s) → TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
+  TravelingSalesman.Tests succeeded (3.0s) → TravelingSalesman.Tests\bin\Debug\net9.0\TravelingSalesman.Tests.dll
+  TravelingSalesman.ConsoleApp succeeded (3.3s) → TravelingSalesman.ConsoleApp\bin\Debug\net9.0\TravelingSalesman.ConsoleApp.dll
+  TravelingSalesman.Specs failed with 114 error(s) (2.7s)
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,21): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,21): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,36): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,24): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,24): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,29): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,29): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,32): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,39): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,32): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,42): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,38): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,46): error CS1519: Invalid token ',' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,42): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,41): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,48): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,52): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,48): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,49): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,49): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,36): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,55): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,60): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,39): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,46): error CS1519: Invalid token ',' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,62): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,65): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,70): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,52): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,65): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,73): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,55): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,85): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,71): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,64): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,78): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,21): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,72): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,70): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,24): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,71): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,81): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,35): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,83): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,38): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,84): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,41): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,38): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,53): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,55): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,38): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,61): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,59): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,62): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,41): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,60): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,66): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,76): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,79): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,84): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,87): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,38): error CS1526: A new expression requires an argument list or (), [], or {} after type
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,89): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,90): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,41): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,51): error CS1525: Invalid expression term ')'
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,52): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,52): error CS1513: } expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,68): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,34): error CS1526: A new expression requires an argument list or (), [], or {} after type
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,68): error CS1513: } expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,44): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,44): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,67): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,49): error CS1525: Invalid expression term ')'
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,67): error CS1003: Syntax error, ',' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,68): error CS1003: Syntax error, ',' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,70): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,70): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,75): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,78): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,86): error CS1519: Invalid token ')' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,13): error CS1519: Invalid token 'for' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,37): error CS1526: A new expression requires an argument list or (), [], or {} after type
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,24): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,24): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,24): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,47): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,47): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,52): error CS1525: Invalid expression term ')'
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,34): error CS1003: Syntax error, '>' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,34): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,37): error CS1519: Invalid token '++' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,28): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,28): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,28): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,38): error CS1003: Syntax error, '>' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,38): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,41): error CS1519: Invalid token '++' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(104,34): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(104,45): error CS1519: Invalid token '.' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(104,66): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(108,13): error CS8803: Top-level statements must precede namespace and type declarations.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(109,9): error CS1022: Type or namespace definition, or end-of-file expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(110,5): error CS1022: Type or namespace definition, or end-of-file expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(111,1): error CS1022: Type or namespace definition, or end-of-file expected
+
+Build failed with 114 error(s) in 13.5s
+Restore complete (1.7s)
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+  TravelingSalesman.Core succeeded (0.7s) → TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
+  TravelingSalesman.Tests succeeded (0.3s) → TravelingSalesman.Tests\bin\Debug\net9.0\TravelingSalesman.Tests.dll
+  TravelingSalesman.ConsoleApp succeeded (0.3s) → TravelingSalesman.ConsoleApp\bin\Debug\net9.0\TravelingSalesman.ConsoleApp.dll
+  TravelingSalesman.Specs failed with 114 error(s) (1.9s)
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,21): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,24): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,29): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,32): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,42): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,48): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,49): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,62): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,65): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,85): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,21): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,24): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,35): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,38): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,55): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,61): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,36): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,62): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,39): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,46): error CS1519: Invalid token ',' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,52): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,38): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,55): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,65): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,41): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,71): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,72): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,60): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,38): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,41): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,53): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,70): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,59): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,73): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,60): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,78): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,38): error CS1526: A new expression requires an argument list or (), [], or {} after type
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,41): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,51): error CS1525: Invalid expression term ')'
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,52): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,52): error CS1513: } expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,68): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,68): error CS1513: } expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,81): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,67): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,67): error CS1003: Syntax error, ',' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,68): error CS1003: Syntax error, ',' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,70): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,70): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,75): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,83): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,78): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,84): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,86): error CS1519: Invalid token ')' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,21): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,13): error CS1519: Invalid token 'for' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,24): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,24): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,38): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,24): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,24): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,34): error CS1003: Syntax error, '>' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,34): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,41): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,37): error CS1519: Invalid token '++' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,29): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,28): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,66): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,28): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,32): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,28): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,76): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,38): error CS1003: Syntax error, '>' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,38): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,42): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,79): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,41): error CS1519: Invalid token '++' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(104,34): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,84): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,48): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(104,45): error CS1519: Invalid token '.' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,49): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,87): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(104,66): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,36): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(108,13): error CS8803: Top-level statements must precede namespace and type declarations.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,89): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,39): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(109,9): error CS1022: Type or namespace definition, or end-of-file expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,90): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(110,5): error CS1022: Type or namespace definition, or end-of-file expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(111,1): error CS1022: Type or namespace definition, or end-of-file expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,46): error CS1519: Invalid token ',' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,52): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,55): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,34): error CS1526: A new expression requires an argument list or (), [], or {} after type
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,64): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,44): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,70): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,71): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,44): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,49): error CS1525: Invalid expression term ')'
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,37): error CS1526: A new expression requires an argument list or (), [], or {} after type
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,47): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,47): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,52): error CS1525: Invalid expression term ')'
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 9.0.8)
+[xUnit.net 00:00:00.93]   Discovering: TravelingSalesman.Tests
+[xUnit.net 00:00:01.10]   Discovered:  TravelingSalesman.Tests
+[xUnit.net 00:00:01.21]   Starting:    TravelingSalesman.Tests
+[xUnit.net 00:00:01.81]   Finished:    TravelingSalesman.Tests
+  TravelingSalesman.Tests test succeeded (4.6s)
+
+Test summary: total: 99, failed: 0, succeeded: 99, skipped: 0, duration: 4.6s
+Build failed with 114 error(s) in 8.2s
+Restore complete (1.3s)
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+  TravelingSalesman.Core succeeded (0.9s) → TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
+  TravelingSalesman.ConsoleApp succeeded (1.8s) → TravelingSalesman.ConsoleApp\bin\Debug\net9.0\TravelingSalesman.ConsoleApp.dll
+  TravelingSalesman.Specs failed with 114 error(s) (1.8s)
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,21): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,24): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,29): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,32): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,42): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,36): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,39): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,46): error CS1519: Invalid token ',' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,48): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,49): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,52): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,55): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,65): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,62): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,71): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,65): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,72): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,85): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,21): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,24): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,35): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,38): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,55): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,61): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,62): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,38): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,41): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,53): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,38): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,41): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,59): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,60): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,60): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,70): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,73): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,78): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,38): error CS1526: A new expression requires an argument list or (), [], or {} after type
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,41): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,81): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,51): error CS1525: Invalid expression term ')'
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,52): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,52): error CS1513: } expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,68): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,68): error CS1513: } expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,83): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,84): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,67): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,67): error CS1003: Syntax error, ',' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,68): error CS1003: Syntax error, ',' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,70): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,70): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,75): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,78): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,38): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,86): error CS1519: Invalid token ')' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,41): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,13): error CS1519: Invalid token 'for' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,24): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,66): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,24): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,24): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,21): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,34): error CS1003: Syntax error, '>' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,76): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,34): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,37): error CS1519: Invalid token '++' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,79): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,24): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,28): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,28): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,28): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,84): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,29): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,38): error CS1003: Syntax error, '>' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,38): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,41): error CS1519: Invalid token '++' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,87): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(104,34): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,32): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(104,45): error CS1519: Invalid token '.' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(104,66): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(108,13): error CS8803: Top-level statements must precede namespace and type declarations.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,89): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,42): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,90): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(109,9): error CS1022: Type or namespace definition, or end-of-file expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(110,5): error CS1022: Type or namespace definition, or end-of-file expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(111,1): error CS1022: Type or namespace definition, or end-of-file expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,48): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,49): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,36): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,34): error CS1526: A new expression requires an argument list or (), [], or {} after type
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,39): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,44): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,44): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,49): error CS1525: Invalid expression term ')'
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,46): error CS1519: Invalid token ',' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,37): error CS1526: A new expression requires an argument list or (), [], or {} after type
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,47): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,47): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,52): error CS1525: Invalid expression term ')'
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,52): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,55): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,64): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,70): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,71): error CS1519: Invalid token ';' in a member declaration
+
+Build failed with 114 error(s) in 7.1s
+Restore complete (1.3s)
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+  TravelingSalesman.Core succeeded (0.2s) → TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
+  TravelingSalesman.ConsoleApp succeeded (0.7s) → TravelingSalesman.ConsoleApp\bin\Debug\net9.0\TravelingSalesman.ConsoleApp.dll
+  TravelingSalesman.Specs failed with 114 error(s) (1.6s)
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,21): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,24): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,29): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,32): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,42): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,48): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,49): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,62): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,65): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,85): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,21): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,24): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,35): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,38): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,55): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,61): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,62): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,36): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,39): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,46): error CS1519: Invalid token ',' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,52): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,55): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,65): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,38): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,71): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,41): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,72): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,60): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,38): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,70): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,41): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,73): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,78): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,53): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,81): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,59): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,60): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,83): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,84): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,38): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,41): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,66): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,38): error CS1526: A new expression requires an argument list or (), [], or {} after type
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,76): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,41): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,79): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,51): error CS1525: Invalid expression term ')'
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,84): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,52): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,52): error CS1513: } expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,87): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,68): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,68): error CS1513: } expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,89): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,90): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,67): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,67): error CS1003: Syntax error, ',' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,68): error CS1003: Syntax error, ',' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,70): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,70): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,75): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,34): error CS1526: A new expression requires an argument list or (), [], or {} after type
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,21): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,78): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,44): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,44): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,24): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,86): error CS1519: Invalid token ')' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,49): error CS1525: Invalid expression term ')'
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,29): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,32): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,13): error CS1519: Invalid token 'for' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,37): error CS1526: A new expression requires an argument list or (), [], or {} after type
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,24): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,42): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,47): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,24): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,47): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,24): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,52): error CS1525: Invalid expression term ')'
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,48): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,34): error CS1003: Syntax error, '>' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,49): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,34): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,36): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,37): error CS1519: Invalid token '++' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,39): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,46): error CS1519: Invalid token ',' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,28): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,28): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,52): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,28): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,55): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,38): error CS1003: Syntax error, '>' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,38): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,41): error CS1519: Invalid token '++' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,64): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(104,34): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,70): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,71): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(104,45): error CS1519: Invalid token '.' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(104,66): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(108,13): error CS8803: Top-level statements must precede namespace and type declarations.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(109,9): error CS1022: Type or namespace definition, or end-of-file expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(110,5): error CS1022: Type or namespace definition, or end-of-file expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(111,1): error CS1022: Type or namespace definition, or end-of-file expected
+
+Build failed with 114 error(s) in 5.1s
+Restore complete (1.3s)
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+  TravelingSalesman.Core succeeded (0.2s) → TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
+  TravelingSalesman.ConsoleApp succeeded (0.8s) → TravelingSalesman.ConsoleApp\bin\Debug\net9.0\TravelingSalesman.ConsoleApp.dll
+  TravelingSalesman.Specs failed with 114 error(s) (1.5s)
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,21): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,24): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,29): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,32): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,42): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,48): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(13,49): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,62): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,65): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(14,85): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,21): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,24): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,35): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,38): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,55): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,61): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(15,62): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,36): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,38): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,41): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,39): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,60): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,46): error CS1519: Invalid token ',' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,70): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,52): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,73): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,78): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,55): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,81): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,65): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,83): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,71): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(13,84): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(12,72): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,30): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,33): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,38): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,38): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,41): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,41): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,53): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,66): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,76): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,59): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(13,60): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,79): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,84): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,87): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,89): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,38): error CS1526: A new expression requires an argument list or (), [], or {} after type
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,21): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(14,90): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,41): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,24): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,51): error CS1525: Invalid expression term ')'
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,52): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,52): error CS1513: } expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,29): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,68): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(79,68): error CS1513: } expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,34): error CS1526: A new expression requires an argument list or (), [], or {} after type
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,32): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,44): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,44): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,42): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,67): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,67): error CS1003: Syntax error, ',' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(97,49): error CS1525: Invalid expression term ')'
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,68): error CS1003: Syntax error, ',' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,70): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,70): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,48): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(17,49): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,37): error CS1526: A new expression requires an argument list or (), [], or {} after type
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,75): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,36): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,47): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,47): error CS1002: ; expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,78): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,39): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\DataGenerationSteps.cs(148,52): error CS1525: Invalid expression term ')'
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(95,86): error CS1519: Invalid token ')' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,46): error CS1519: Invalid token ',' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,52): error CS1519: Invalid token '&' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,13): error CS1519: Invalid token 'for' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,55): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,24): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,64): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,24): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,24): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,34): error CS1003: Syntax error, '>' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,70): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,34): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\TspSolverSteps.cs(22,71): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(100,37): error CS1519: Invalid token '++' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,28): error CS8124: Tuple must contain at least two elements.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,28): error CS1026: ) expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,28): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,38): error CS1003: Syntax error, '>' expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,38): error CS1519: Invalid token ';' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(102,41): error CS1519: Invalid token '++' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(104,34): error CS1519: Invalid token '=' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(104,45): error CS1519: Invalid token '.' in a member declaration
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(104,66): error CS1001: Identifier expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(108,13): error CS8803: Top-level statements must precede namespace and type declarations.
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(109,9): error CS1022: Type or namespace definition, or end-of-file expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(110,5): error CS1022: Type or namespace definition, or end-of-file expected
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\CityOperationSteps.cs(111,1): error CS1022: Type or namespace definition, or end-of-file expected
+
+Build failed with 114 error(s) in 5.1s
+PS C:\code\TSP> Set-Location "C:\code\tsp"; git status; git remote show origin; git clean -dfx; tree /F; dotnet restore; dotnet build; dotnet test; dotnet test TravelingSalesman.Specs; dotnet test TravelingSalesman.Specs --logger "console;verbosity=detailed"; dotnet test TravelingSalesman.Specs --logger "html;LogFileName=docs\test-results.html";
