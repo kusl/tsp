@@ -1,3 +1,12 @@
+I have a new xunit project here. 
+I would like exhaustive tests for the core project 
+the catch are as follows: 
+1. No mocking of any kind 
+2. No importing any other nuget package than is already included. 
+3. All tests should be in a single physical file but should be logically separated into multiple classes as necessary. 
+4. All unit tests should be independent of each other. Reuse of helper functions is ok but do NOT rely on tests being run on a certain order. 
+5. Follow all industry best practices, including solid principle and so on. 
+
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
