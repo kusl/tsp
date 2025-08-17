@@ -14,12 +14,12 @@ namespace TravelingSalesman.Specs.StepDefinitions
     public class TspSolverSteps
     {
         private readonly ScenarioContext _scenarioContext;
-        private List&lt;City&gt; _cities = new();
+        private List<City> _cities = new();
         private Tour? _currentTour;
         private Tour? _previousTour;
         private ITspSolver? _currentSolver;
         private Stopwatch? _stopwatch;
-        private readonly Dictionary&lt;string, Tour&gt; _tours = new();
+        private readonly Dictionary<string, Tour> _tours = new();
 
         public TspSolverSteps(ScenarioContext scenarioContext)
         {

@@ -9,8 +9,8 @@ namespace TravelingSalesman.Specs.StepDefinitions
     [Binding]
     public class CityOperationSteps
     {
-        private readonly Dictionary&lt;string, City&gt; _cities = new();
-        private readonly List&lt;City&gt; _cityList = new();
+        private readonly Dictionary<string, City> _cities = new();
+        private readonly List<City> _cityList = new();
         private double _calculatedDistance;
         private Tour? _tour;
 
@@ -76,7 +76,7 @@ namespace TravelingSalesman.Specs.StepDefinitions
         public void WhenICreateAnEmptyTour()
         {
             var distanceMatrix = new double[0, 0];
-            _tour = new Tour(new List&lt;City&gt;(), distanceMatrix);
+            _tour = new Tour(new List<City>(), distanceMatrix);
         }
 
         [Then(@"the distance should be (.*) units")]
@@ -92,7 +92,7 @@ namespace TravelingSalesman.Specs.StepDefinitions
             Assert.Equal(expectedDistance, _tour.TotalDistance, 1);
         }
 
-        private static double[,] BuildDistanceMatrix(IReadOnlyList&lt;City&gt; cities)
+        private static double[,] BuildDistanceMatrix(IReadOnlyList<City> cities)
         {
             var n = cities.Count;
             var matrix = new double[n, n];

@@ -20,7 +20,7 @@ Scenario: Nearest Neighbor solver finds a valid tour
 
 @solver
 Scenario Outline: Different algorithms produce valid tours
-    When I solve the TSP using &lt;Algorithm&gt; algorithm
+    When I solve the TSP using <Algorithm> algorithm
     Then the tour should visit all 4 cities
     And the tour should return to the starting city
     And the total distance should be between 10 and 20 units

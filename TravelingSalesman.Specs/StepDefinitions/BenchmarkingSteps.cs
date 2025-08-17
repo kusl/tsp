@@ -10,9 +10,9 @@ namespace TravelingSalesman.Specs.StepDefinitions
     [Binding]
     public class BenchmarkingSteps
     {
-        private List&lt;City&gt; _cities = new();
-        private IReadOnlyList&lt;TspBenchmark.BenchmarkResult&gt;? _benchmarkResults;
-        private List&lt;ITspSolver&gt; _solversToTest = new();
+        private List<City> _cities = new();
+        private IReadOnlyList<TspBenchmark.BenchmarkResult>? _benchmarkResults;
+        private List<ITspSolver> _solversToTest = new();
 
         [Given(@"I have (.*) randomly generated cities")]
         public void GivenIHaveRandomlyGeneratedCities(int count)

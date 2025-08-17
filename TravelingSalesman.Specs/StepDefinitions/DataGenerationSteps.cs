@@ -10,8 +10,8 @@ namespace TravelingSalesman.Specs.StepDefinitions
     [Binding]
     public class DataGenerationSteps
     {
-        private IReadOnlyList&lt;City&gt; _generatedCities = new List&lt;City&gt;();
-        private IReadOnlyList&lt;City&gt; _secondGeneratedCities = new List&lt;City&gt;();
+        private IReadOnlyList<City> _generatedCities = new List<City>();
+        private IReadOnlyList<City> _secondGeneratedCities = new List<City>();
 
         [When(@"I generate (.*) random cities with seed (.*)")]
         public void WhenIGenerateRandomCitiesWithSeed(int count, int seed)
@@ -94,7 +94,7 @@ namespace TravelingSalesman.Specs.StepDefinitions
             var centerX = 50.0;
             var centerY = 50.0;
             
-            var angles = new List&lt;double&gt;();
+            var angles = new List<double>();
             foreach (var city in _generatedCities)
             {
                 var angle = Math.Atan2(city.Y - centerY, city.X - centerX);
@@ -145,7 +145,7 @@ namespace TravelingSalesman.Specs.StepDefinitions
         public void ThenTheMinimumDistanceBetweenAdjacentCitiesShouldBeUnits(double expectedDistance)
         {
             // For a grid, adjacent cities are those with minimum non-zero distance
-            var distances = new List&lt;double&gt;();
+            var distances = new List<double>();
             
             for (int i = 0; i < _generatedCities.Count; i++)
             {
