@@ -814,7 +814,7 @@ namespace TravelingSalesman.Core
             return new Tour(childCities, distanceMatrix);
         }
 
-        private void Mutate(Tour tour, Random random = null)
+        private void Mutate(Tour tour, Random? random = null)
         {
             random = random ?? _random;
             var index1 = random.Next(1, tour.Cities.Count);
