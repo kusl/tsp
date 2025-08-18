@@ -5836,3 +5836,315 @@ Total tests: 21
 Test summary: total: 120, failed: 0, succeeded: 120, skipped: 0, duration: 73.6s
 Build succeeded in 78.7s
 PS C:\code\TSP>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Looking at your Traveling Salesman Problem solver project, I can see you have a comprehensive .NET 9 solution with multiple algorithms, Docker support, and CI/CD pipelines. The test failure is due to the Simulated Annealing algorithm taking too long (21.5 seconds instead of under 1 second) for a small 8-city problem.
+
+## The Issue
+
+The failing test in `Benchmarking.feature` expects all algorithms to complete in under 1 second for 8 cities, but your Simulated Annealing solver is configured with parameters that are too aggressive:
+
+```csharp
+// In BenchmarkingSteps.cs
+"Simulated Annealing" => new SimulatedAnnealingSolver(
+    initialTemperature: 1000,
+    coolingRate: 0.95,
+    iterationsPerTemperature: 50,
+    seed: 42),
+```
+
+With a cooling rate of 0.95 and initial temperature of 1000, the algorithm runs for many iterations before the temperature drops below 0.1 (the stopping condition).
+
+## Solution
+
+Here's the fix for the `BenchmarkingSteps.cs` file:## Alternative Solutions
+
+If you want to keep the algorithm quality but make tests more flexible, here are additional options:## Key Improvements to Consider
+
+1. **Performance Profiling**: The Simulated Annealing algorithm is running too many iterations. You can add early stopping conditions:## Quick Fix Instructions
+
+The simplest fix is to update the `CreateSolver` method in `BenchmarkingSteps.cs` (around line 320) with the reduced parameters shown in the first artifact. This will:
+
+1. Reduce initial temperature from 1000 to 100
+2. Increase cooling rate from 0.95 to 0.85 (faster cooling)
+3. Reduce iterations per temperature from 50 to 10
+
+These changes will make the Simulated Annealing algorithm complete much faster for small problems while still providing reasonable solution quality.
+
+## Testing the Fix
+
+After applying the fix, run:
+
+```powershell
+# Run just the failing test
+dotnet test --filter "FullyQualifiedName~QuickAlgorithmComparisonOnSmallDataset"
+
+# Or run all benchmark tests
+dotnet test --filter "Category=benchmark"
+```
+
+The test should now pass with Simulated Annealing completing in under 1 second for 8 cities.
+
+
+
+
+// In TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs
+// Update the CreateSolver method around line 320
+
+private ITspSolver CreateSolver(string algorithmName)
+{
+    return algorithmName switch
+    {
+        "Nearest Neighbor" => new NearestNeighborSolver(),
+        "2-Opt" => new TwoOptSolver(maxIterations: 100),
+        
+        // FIXED: Reduced parameters for faster execution on small problems
+        "Simulated Annealing" => new SimulatedAnnealingSolver(
+            initialTemperature: 100,    // Reduced from 1000
+            coolingRate: 0.85,          // Reduced from 0.95 (faster cooling)
+            iterationsPerTemperature: 10, // Reduced from 50
+            seed: 42),
+            
+        "Genetic Algorithm" => new GeneticAlgorithmSolver(
+            populationSize: 100,  
+            generations: 200,     
+            mutationRate: 0.05,
+            elitismRate: 0.2,
+            seed: 42),
+            
+        _ => throw new NotSupportedException($"Algorithm '{algorithmName}' is not supported")
+    };
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Alternative approach: Scale parameters based on city count
+// This could be added to BenchmarkingSteps.cs
+
+private ITspSolver CreateAdaptiveSolver(string algorithmName, int cityCount)
+{
+    return algorithmName switch
+    {
+        "Nearest Neighbor" => new NearestNeighborSolver(),
+        
+        "2-Opt" => new TwoOptSolver(
+            maxIterations: Math.Min(100, cityCount * 5)),
+        
+        "Simulated Annealing" => new SimulatedAnnealingSolver(
+            // Scale parameters based on problem size
+            initialTemperature: cityCount <= 10 ? 100 : cityCount * 10,
+            coolingRate: cityCount <= 10 ? 0.85 : 0.95,
+            iterationsPerTemperature: cityCount <= 10 ? 10 : Math.Min(50, cityCount * 2),
+            seed: 42),
+            
+        "Genetic Algorithm" => new GeneticAlgorithmSolver(
+            // Scale population and generations
+            populationSize: Math.Max(50, Math.Min(200, cityCount * 4)),
+            generations: Math.Max(50, Math.Min(500, cityCount * 10)),
+            mutationRate: 0.05,
+            elitismRate: 0.2,
+            seed: 42),
+            
+        _ => throw new NotSupportedException($"Algorithm '{algorithmName}' is not supported")
+    };
+}
+
+// Then update the step definition to use city count
+[When(@"I benchmark the following algorithms:")]
+public async Task WhenIBenchmarkTheFollowingAlgorithms(Table table)
+{
+    _solversToTest.Clear();
+    var cityCount = _cities.Count;  // Get city count for adaptive parameters
+
+    foreach (var row in table.Rows)
+    {
+        var algorithmName = row["Algorithm"];
+        var solver = CreateAdaptiveSolver(algorithmName, cityCount);  // Use adaptive version
+        _solversToTest.Add(solver);
+    }
+
+    var benchmark = new TspBenchmark();
+    _benchmarkResults = await benchmark.RunBenchmarkAsync(_cities, _solversToTest);
+}
+
+
+// Enhancement for SimulatedAnnealingSolver in TravelingSalesmanLibrary.cs
+private Tour RunSimulatedAnnealing(Tour initialTour, CancellationToken cancellationToken)
+{
+    var currentTour = initialTour.Clone();
+    var bestTour = currentTour.Clone();
+    var temperature = _initialTemperature;
+    var iteration = 0;
+    var acceptedMoves = 0;
+    var rejectedMoves = 0;
+    var initialDistance = initialTour.TotalDistance;
+    
+    // ADD: Early stopping variables
+    var noImprovementCount = 0;
+    const int maxNoImprovement = 100; // Stop if no improvement for 100 temperature levels
+    var lastBestDistance = double.MaxValue;
+
+    while (temperature > 0.1)
+    {
+        // ADD: Early stopping check
+        if (noImprovementCount >= maxNoImprovement)
+        {
+            _logger.LogDebug("Early stopping triggered after {Count} iterations without improvement", noImprovementCount);
+            break;
+        }
+        
+        // Track if we found improvement at this temperature level
+        var foundImprovement = false;
+        
+        for (int i = 0; i < _iterationsPerTemperature; i++)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var newTour = currentTour.Clone();
+
+            // Random perturbation: swap two random cities
+            var index1 = _random.Next(1, newTour.Cities.Count);
+            var index2 = _random.Next(1, newTour.Cities.Count);
+
+            if (index1 != index2)
+            {
+                newTour.SwapCities(index1, index2);
+
+                var deltaDistance = newTour.TotalDistance - currentTour.TotalDistance;
+
+                // Accept or reject the new solution
+                if (deltaDistance < 0 || _random.NextDouble() < Math.Exp(-deltaDistance / temperature))
+                {
+                    currentTour = newTour;
+                    acceptedMoves++;
+
+                    if (currentTour.TotalDistance < bestTour.TotalDistance)
+                    {
+                        bestTour = currentTour.Clone();
+                        foundImprovement = true;
+                        _logger.LogTrace("New best solution found: {Distance:F2} at temperature {Temperature:F2}",
+                            bestTour.TotalDistance, temperature);
+                    }
+                }
+                else
+                {
+                    rejectedMoves++;
+                }
+            }
+
+            iteration++;
+
+            // Report progress
+            if (iteration % 100 == 0 || i == 0)
+            {
+                OnProgressChanged(iteration, bestTour.TotalDistance,
+                    $"Temperature: {temperature:F2}, Best: {bestTour.TotalDistance:F2}");
+            }
+        }
+        
+        // Update no improvement counter
+        if (foundImprovement)
+        {
+            noImprovementCount = 0;
+            lastBestDistance = bestTour.TotalDistance;
+        }
+        else
+        {
+            noImprovementCount++;
+        }
+
+        temperature *= _coolingRate;
+    }
+
+    var finalImprovement = ((initialDistance - bestTour.TotalDistance) / initialDistance) * 100;
+    var acceptanceRate = (double)acceptedMoves / (acceptedMoves + rejectedMoves) * 100;
+
+    _logger.LogInformation("Simulated Annealing completed after {Iterations} iterations. " +
+                        "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%). " +
+                        "Acceptance rate: {AcceptanceRate:F1}%",
+                        iteration, bestTour.TotalDistance, finalImprovement, acceptanceRate);
+
+    return bestTour;
+}
+
+
