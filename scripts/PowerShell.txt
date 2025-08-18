@@ -5565,4 +5565,122 @@ Scenario: Nearest Neighbor produces deterministic results
     And I solve the same problem again using Nearest Neighbor algorithm
     Then both solutions should have the same total distance
     And both solutions should have the same route
-PS C:\code\TSP> C:\code\TSP\scripts\cat.ps1
+PS C:\code\TSP> Set-Location "C:\code\tsp"; git status; git remote show origin; git clean -dfx; tree /F; dotnet restore; dotnet build; dotnet test; dotnet test TravelingSalesman.Specs; dotnet test TravelingSalesman.Specs --logger "console;verbosity=detailed"; dotnet test TravelingSalesman.Specs --logger "html;LogFileName=docs\test-results.html";
+On branch master
+Your branch is ahead of 'origin/master' by 2 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+* remote origin
+  Fetch URL: git@github.com:kusl/tsp.git
+  Push  URL: git@github.com:kusl/tsp.git
+  HEAD branch: master
+  Remote branch:
+    master tracked
+  Local branch configured for 'git pull':
+    master merges with remote master
+  Local ref configured for 'git push':
+    master pushes to master (fast-forwardable)
+Folder PATH listing
+Volume serial number is BE05-6605
+C:.
+│   .dockerignore
+│   .gitattributes
+│   .gitignore
+│   Directory.Build.props
+│   Directory.Packages.props
+│   Dockerfile
+│   LICENSE.txt
+│   README.md
+│   TSP.sln
+│
+├───.github
+│   └───workflows
+│           build.yml
+│           release.yml
+│
+├───docs
+│       index.html
+│
+├───scripts
+│       bash.txt
+│       cat.ps1
+│       install-kusl-tsp-simple.sh
+│       install-linux.sh
+│       linux-installation-command.txt
+│       PowerShell.txt
+│
+├───TravelingSalesman.ConsoleApp
+│   │   Program.cs
+│   │   TravelingSalesman.ConsoleApp.csproj
+│   │
+│   └───Properties
+│           launchSettings.json
+│
+├───TravelingSalesman.Core
+│       TravelingSalesman.Core.csproj
+│       TravelingSalesmanLibrary.cs
+│
+├───TravelingSalesman.Specs
+│   │   Class1.cs
+│   │   reqnroll.json
+│   │   TravelingSalesman.Specs.csproj
+│   │
+│   ├───Features
+│   │       Benchmarking.feature
+│   │       CityOperations.feature
+│   │       DataGeneration.feature
+│   │       TspSolvers.feature
+│   │
+│   ├───StepDefinitions
+│   │       BenchmarkingSteps.cs
+│   │       CityOperationSteps.cs
+│   │       DataGenerationSteps.cs
+│   │       TspSolverSteps.cs
+│   │
+│   └───Support
+│           Hooks.cs
+│
+└───TravelingSalesman.Tests
+        Tests.cs
+        TravelingSalesman.Tests.csproj
+
+Restore complete (4.4s)
+
+Build succeeded in 4.7s
+Restore complete (2.3s)
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+  TravelingSalesman.Core failed with 2 error(s) (9.4s)
+    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(817,56): error CS8625: Cannot convert null literal to non-nullable reference type.
+    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(66,13): error CS0227: Unsafe code may only appear if compiling with /unsafe
+
+Build failed with 2 error(s) in 12.4s
+Restore complete (2.4s)
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+  TravelingSalesman.Core failed with 2 error(s) (1.7s)
+    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(817,56): error CS8625: Cannot convert null literal to non-nullable reference type.
+    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(66,13): error CS0227: Unsafe code may only appear if compiling with /unsafe
+
+Build failed with 2 error(s) in 5.5s
+Restore complete (1.8s)
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+  TravelingSalesman.Core failed with 2 error(s) (0.9s)
+    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(817,56): error CS8625: Cannot convert null literal to non-nullable reference type.
+    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(66,13): error CS0227: Unsafe code may only appear if compiling with /unsafe
+
+Build failed with 2 error(s) in 6.4s
+Restore complete (1.6s)
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+  TravelingSalesman.Core failed with 2 error(s) (0.7s)
+    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(817,56): error CS8625: Cannot convert null literal to non-nullable reference type.
+    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(66,13): error CS0227: Unsafe code may only appear if compiling with /unsafe
+
+Build failed with 2 error(s) in 5.5s
+Restore complete (1.5s)
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+  TravelingSalesman.Core failed with 2 error(s) (0.6s)
+    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(817,56): error CS8625: Cannot convert null literal to non-nullable reference type.
+    C:\code\TSP\TravelingSalesman.Core\TravelingSalesmanLibrary.cs(66,13): error CS0227: Unsafe code may only appear if compiling with /unsafe
+
+Build failed with 2 error(s) in 5.3s
+PS C:\code\TSP> Set-Location "C:\code\tsp"; git status; git remote show origin; git clean -dfx; tree /F; dotnet restore; dotnet build; dotnet test; dotnet test TravelingSalesman.Specs; dotnet test TravelingSalesman.Specs --logger "console;verbosity=detailed"; dotnet test TravelingSalesman.Specs --logger "html;LogFileName=docs\test-results.html";

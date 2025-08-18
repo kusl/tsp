@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <!-- Everything inherited from Directory.Build.props -->
   
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  
   <ItemGroup>
     <!-- Package version managed by Directory.Packages.props -->
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
