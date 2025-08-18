@@ -192,19 +192,36 @@ namespace TravelingSalesman.Core
             var n = cities.Count;
             var matrix = new double[n, n];
 
-            // Parallel distance matrix construction for large datasets
+            // REMOVED PLINQ: Use regular parallel for AOT compatibility
             if (n > 100)
             {
-                Parallel.For(0, n, i =>
+                // Use Task-based parallelism instead of Parallel.For for better AOT support
+                var tasks = new Task[Environment.ProcessorCount];
+                var itemsPerTask = n / tasks.Length;
+
+                for (int t = 0; t < tasks.Length; t++)
                 {
-                    for (int j = 0; j < n; j++)
+                    var taskIndex = t;
+                    var startIndex = taskIndex * itemsPerTask;
+                    var endIndex = (taskIndex == tasks.Length - 1) ? n : (taskIndex + 1) * itemsPerTask;
+
+                    tasks[t] = Task.Run(() =>
                     {
-                        matrix[i, j] = cities[i].DistanceTo(cities[j]);
-                    }
-                });
+                        for (int i = startIndex; i < endIndex; i++)
+                        {
+                            for (int j = 0; j < n; j++)
+                            {
+                                matrix[i, j] = cities[i].DistanceTo(cities[j]);
+                            }
+                        }
+                    });
+                }
+
+                Task.WaitAll(tasks);
             }
             else
             {
+                // Sequential for small datasets
                 for (int i = 0; i < n; i++)
                 {
                     for (int j = 0; j < n; j++)
@@ -238,7 +255,7 @@ namespace TravelingSalesman.Core
     }
 
     /// <summary>
-    /// Nearest Neighbor heuristic solver - FIXED VERSION
+    /// Nearest Neighbor heuristic solver - AOT Compatible
     /// </summary>
     public sealed class NearestNeighborSolver : TspSolverBase
     {
@@ -312,7 +329,7 @@ namespace TravelingSalesman.Core
     }
 
     /// <summary>
-    /// 2-Opt local search improvement solver - FIXED VERSION
+    /// 2-Opt local search improvement solver - AOT Compatible
     /// </summary>
     public sealed class TwoOptSolver : TspSolverBase
     {
@@ -419,7 +436,7 @@ namespace TravelingSalesman.Core
     }
 
     /// <summary>
-    /// Simulated Annealing solver for TSP - FIXED VERSION
+    /// Simulated Annealing solver for TSP - AOT Compatible
     /// </summary>
     public sealed class SimulatedAnnealingSolver : TspSolverBase
     {
@@ -545,7 +562,7 @@ namespace TravelingSalesman.Core
     }
 
     /// <summary>
-    /// Genetic Algorithm solver for TSP
+    /// Genetic Algorithm solver for TSP - AOT Compatible (No PLINQ)
     /// </summary>
     public sealed class GeneticAlgorithmSolver : TspSolverBase
     {
@@ -595,13 +612,14 @@ namespace TravelingSalesman.Core
                                  "mutation rate: {MutationRate:F3}, elitism rate: {ElitismRate:F3})",
                                  cities.Count, _populationSize, _generations, _mutationRate, _elitismRate);
 
-            return Task.Run(() => RunGeneticAlgorithmParallel(cities, cancellationToken), cancellationToken);
+            return Task.Run(() => RunGeneticAlgorithm(cities, cancellationToken), cancellationToken);
         }
 
-        private Tour RunGeneticAlgorithmParallel(IReadOnlyList<City> cities, CancellationToken cancellationToken)
+        // REMOVED AsParallel() calls for AOT compatibility
+        private Tour RunGeneticAlgorithm(IReadOnlyList<City> cities, CancellationToken cancellationToken)
         {
             var distanceMatrix = BuildDistanceMatrix(cities);
-            var population = InitializePopulationParallel(cities, distanceMatrix);
+            var population = InitializePopulation(cities, distanceMatrix);
             var bestTour = population.OrderBy(t => t.TotalDistance).First();
             var initialBest = bestTour.TotalDistance;
             var generationsWithoutImprovement = 0;
@@ -612,7 +630,7 @@ namespace TravelingSalesman.Core
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                population = EvolvePopulationParallel(population, distanceMatrix, cancellationToken);
+                population = EvolvePopulation(population, distanceMatrix, cancellationToken);
 
                 var generationBest = population.OrderBy(t => t.TotalDistance).First();
                 if (generationBest.TotalDistance < bestTour.TotalDistance)
@@ -649,30 +667,61 @@ namespace TravelingSalesman.Core
             return bestTour;
         }
 
-        private List<Tour> InitializePopulationParallel(IReadOnlyList<City> cities, double[,] distanceMatrix)
+        private List<Tour> InitializePopulation(IReadOnlyList<City> cities, double[,] distanceMatrix)
         {
-            var population = new ConcurrentBag<Tour>();
+            var population = new List<Tour>(_populationSize);
 
             _logger.LogDebug("Initializing population of {PopulationSize} individuals", _populationSize);
 
-            Parallel.For(0, _populationSize, i =>
+            // Use Tasks instead of Parallel.For for AOT compatibility
+            if (_populationSize > 20)
             {
-                var threadRandom = new Random(_random.Next());
-                var shuffled = cities.Skip(1).OrderBy(_ => threadRandom.Next()).ToList();
-                shuffled.Insert(0, cities[0]); // Keep first city fixed
-                population.Add(new Tour(shuffled, distanceMatrix));
-            });
+                var tasks = new Task[Math.Min(Environment.ProcessorCount, _populationSize)];
+                var itemsPerTask = _populationSize / tasks.Length;
+                var populationBag = new ConcurrentBag<Tour>();
 
-            return population.ToList();
+                for (int t = 0; t < tasks.Length; t++)
+                {
+                    var taskIndex = t;
+                    var startIndex = taskIndex * itemsPerTask;
+                    var endIndex = (taskIndex == tasks.Length - 1) ? _populationSize : (taskIndex + 1) * itemsPerTask;
+
+                    tasks[t] = Task.Run(() =>
+                    {
+                        var threadRandom = new Random(_random.Next());
+                        for (int i = startIndex; i < endIndex; i++)
+                        {
+                            var shuffled = cities.Skip(1).OrderBy(_ => threadRandom.Next()).ToList();
+                            shuffled.Insert(0, cities[0]); // Keep first city fixed
+                            populationBag.Add(new Tour(shuffled, distanceMatrix));
+                        }
+                    });
+                }
+
+                Task.WaitAll(tasks);
+                population.AddRange(populationBag);
+            }
+            else
+            {
+                // Sequential for small populations
+                for (int i = 0; i < _populationSize; i++)
+                {
+                    var shuffled = cities.Skip(1).OrderBy(_ => _random.Next()).ToList();
+                    shuffled.Insert(0, cities[0]); // Keep first city fixed
+                    population.Add(new Tour(shuffled, distanceMatrix));
+                }
+            }
+
+            return population;
         }
 
-        private List<Tour> EvolvePopulationParallel(List<Tour> population, double[,] distanceMatrix, CancellationToken cancellationToken)
+        private List<Tour> EvolvePopulation(List<Tour> population, double[,] distanceMatrix, CancellationToken cancellationToken)
         {
-            var newPopulation = new ConcurrentBag<Tour>();
+            var newPopulation = new List<Tour>();
 
-            // Keep elite individuals
+            // Keep elite individuals - REMOVED AsParallel() for AOT
             var eliteCount = (int)(_populationSize * _elitismRate);
-            var elite = population.AsParallel()
+            var elite = population
                 .OrderBy(t => t.TotalDistance)
                 .Take(eliteCount)
                 .ToList();
@@ -682,24 +731,63 @@ namespace TravelingSalesman.Core
                 newPopulation.Add(t.Clone());
             }
 
-            // Fill rest with offspring in parallel
+            // Fill rest with offspring - Use Task-based approach instead of Parallel.For
             var remainingCount = _populationSize - eliteCount;
-            Parallel.For(0, remainingCount, new ParallelOptions { CancellationToken = cancellationToken }, _ =>
+            if (remainingCount > 10)
             {
-                var threadRandom = new Random(_random.Next());
-                var parent1 = TournamentSelection(population, threadRandom);
-                var parent2 = TournamentSelection(population, threadRandom);
-                var child = CrossoverOX(parent1, parent2, distanceMatrix, threadRandom);
+                var tasks = new Task[Math.Min(Environment.ProcessorCount, remainingCount)];
+                var itemsPerTask = remainingCount / tasks.Length;
+                var offspringBag = new ConcurrentBag<Tour>();
 
-                if (threadRandom.NextDouble() < _mutationRate)
+                for (int t = 0; t < tasks.Length; t++)
                 {
-                    Mutate(child, threadRandom);
+                    var taskIndex = t;
+                    var startIndex = taskIndex * itemsPerTask;
+                    var endIndex = (taskIndex == tasks.Length - 1) ? remainingCount : (taskIndex + 1) * itemsPerTask;
+
+                    tasks[t] = Task.Run(() =>
+                    {
+                        var threadRandom = new Random(_random.Next());
+                        for (int i = startIndex; i < endIndex; i++)
+                        {
+                            cancellationToken.ThrowIfCancellationRequested();
+                            var parent1 = TournamentSelection(population, threadRandom);
+                            var parent2 = TournamentSelection(population, threadRandom);
+                            var child = CrossoverOX(parent1, parent2, distanceMatrix, threadRandom);
+
+                            if (threadRandom.NextDouble() < _mutationRate)
+                            {
+                                Mutate(child, threadRandom);
+                            }
+
+                            offspringBag.Add(child);
+                        }
+                    });
                 }
 
-                newPopulation.Add(child);
-            });
+                Task.WaitAll(tasks);
+                newPopulation.AddRange(offspringBag);
+            }
+            else
+            {
+                // Sequential for small populations
+                for (int i = 0; i < remainingCount; i++)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    var parent1 = TournamentSelection(population, _random);
+                    var parent2 = TournamentSelection(population, _random);
+                    var child = CrossoverOX(parent1, parent2, distanceMatrix, _random);
 
-            return newPopulation.ToList();
+                    if (_random.NextDouble() < _mutationRate)
+                    {
+                        Mutate(child, _random);
+                    }
+
+                    newPopulation.Add(child);
+                }
+            }
+
+            return newPopulation;
         }
 
         private Tour TournamentSelection(List<Tour> population, Random random, int tournamentSize = 5)
@@ -891,7 +979,7 @@ namespace TravelingSalesman.Core
     }
 
     /// <summary>
-    /// Service for comparing different TSP solvers
+    /// Service for comparing different TSP solvers - AOT Compatible
     /// </summary>
     public sealed class TspBenchmark
     {
@@ -909,6 +997,7 @@ namespace TravelingSalesman.Core
             Tour Tour
         );
 
+        // REMOVED AsParallel() for AOT compatibility
         public async Task<IReadOnlyList<BenchmarkResult>> RunBenchmarkAsync(
             IReadOnlyList<City> cities,
             IEnumerable<ITspSolver> solvers,
@@ -920,12 +1009,12 @@ namespace TravelingSalesman.Core
 
             var results = new ConcurrentBag<BenchmarkResult>();
 
-            // Run solvers in parallel for better performance
-            await Parallel.ForEachAsync(solverList, cancellationToken, async (solver, ct) =>
+            // Use Task.WhenAll instead of Parallel.ForEachAsync for better AOT support
+            var tasks = solverList.Select(async solver =>
             {
                 _logger.LogDebug("Running benchmark for {SolverName}", solver.Name);
                 var startTime = DateTime.UtcNow;
-                var tour = await solver.SolveAsync(cities, ct);
+                var tour = await solver.SolveAsync(cities, cancellationToken);
                 var executionTime = DateTime.UtcNow - startTime;
 
                 var result = new BenchmarkResult(solver.Name, tour.TotalDistance, executionTime, tour);
@@ -933,7 +1022,9 @@ namespace TravelingSalesman.Core
 
                 _logger.LogInformation("Benchmark completed for {SolverName}: Distance {Distance:F2}, Time {TimeMs}ms",
                     solver.Name, tour.TotalDistance, executionTime.TotalMilliseconds);
-            });
+            }).ToArray();
+
+            await Task.WhenAll(tasks);
 
             var sortedResults = results.OrderBy(r => r.Distance).ToList();
 
