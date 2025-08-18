@@ -1,3 +1,32 @@
+all tests are failing 
+ Run benchmark on small problem
+   Source: Benchmarking.feature line 7
+   Duration: 1 ms
+
+  Message: 
+System.IO.FileNotFoundException : Could not load file or assembly 'Verify.Xunit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c7a34512ecd69090'. The system cannot find the file specified.
+
+  Stack Trace: 
+ModuleHandle.ResolveType(QCallModule module, Int32 typeToken, IntPtr* typeInstArgs, Int32 typeInstCount, IntPtr* methodInstArgs, Int32 methodInstCount, ObjectHandleOnStack type)
+ModuleHandle.ResolveTypeHandle(Int32 typeToken, RuntimeTypeHandle[] typeInstantiationContext, RuntimeTypeHandle[] methodInstantiationContext)
+RuntimeModule.ResolveType(Int32 metadataToken, Type[] genericTypeArguments, Type[] genericMethodArguments)
+CustomAttribute.FilterCustomAttributeRecord(MetadataToken caCtorToken, MetadataImport& scope, RuntimeModule decoratedModule, MetadataToken decoratedToken, RuntimeType attributeFilterType, Boolean mustBeInheritable, ListBuilder`1& derivedAttributes, RuntimeType& attributeType, IRuntimeMethodInfo& ctorWithParameters, Boolean& isVarArg)
+CustomAttribute.AddCustomAttributes(ListBuilder`1& attributes, RuntimeModule decoratedModule, Int32 decoratedMetadataToken, RuntimeType attributeFilterType, Boolean mustBeInheritable, ListBuilder`1 derivedAttributes)
+CustomAttribute.GetCustomAttributes(RuntimeModule decoratedModule, Int32 decoratedMetadataToken, Int32 pcaCount, RuntimeType attributeFilterType)
+Attribute.GetCustomAttributes(Assembly element, Type attributeType, Boolean inherit)
+Attribute.GetCustomAttribute(Assembly element, Type attributeType, Boolean inherit)
+RuntimePluginLoader.LoadPlugin(String pluginAssemblyName, ITraceListener traceListener, Boolean traceMissingPluginAttribute)
+ContainerBuilder.LoadPlugin(String pluginPath, IRuntimePluginLoader pluginLoader, RuntimePluginEvents runtimePluginEvents, UnitTestProviderConfiguration unitTestProviderConfigration, ITraceListener traceListener, Boolean traceMissingPluginAttribute)
+ContainerBuilder.LoadPlugins(IRuntimeConfigurationProvider configurationProvider, ObjectContainer container, RuntimePluginEvents runtimePluginEvents, ReqnrollConfiguration reqnrollConfiguration, UnitTestProviderConfiguration unitTestProviderConfigration, Assembly testAssembly)
+ContainerBuilder.CreateGlobalContainer(Assembly testAssembly, IRuntimeConfigurationProvider configurationProvider)
+TestRunnerManager.CreateTestRunnerManager(Assembly testAssembly, IContainerBuilder containerBuilder)
+<>c__DisplayClass44_0.<GetTestRunnerManager>b__0(Assembly assembly)
+ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)
+TestRunnerManager.GetTestRunnerManager(Assembly testAssembly, IContainerBuilder containerBuilder, Boolean createIfMissing)
+TestRunnerManager.OnTestRunStartAsync(Assembly testAssembly, IContainerBuilder containerBuilder)
+TravelingSalesman_Specs_XUnitAssemblyFixture.InitializeAsync() line 18
+XunitTestAssemblyRunnerWithAssemblyFixture.<AfterTestAssemblyStartingAsync>b__2_0()
+
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal>
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
