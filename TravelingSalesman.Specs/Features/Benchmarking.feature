@@ -5,7 +5,7 @@ Feature: Algorithm Benchmarking
 
 @benchmark
 Scenario: Run benchmark on small problem
-    Given I have 10 randomly generated cities
+    Given I have 10 randomly generated cities for benchmarking
     When I benchmark all available algorithms
     Then I should receive benchmark results for each algorithm
     And the results should be sorted by distance (best first)
@@ -25,7 +25,7 @@ Scenario: Benchmark identifies best solution
 
 @benchmark @performance
 Scenario: Algorithm performance ranking
-    Given I have 15 randomly generated cities
+    Given I have 15 randomly generated cities for benchmarking
     When I benchmark the following algorithms:
         | Algorithm           |
         | Nearest Neighbor    |

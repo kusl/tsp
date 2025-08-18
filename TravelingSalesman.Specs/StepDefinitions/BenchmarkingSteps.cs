@@ -14,7 +14,7 @@ namespace TravelingSalesman.Specs.StepDefinitions
         private IReadOnlyList<TspBenchmark.BenchmarkResult>? _benchmarkResults;
         private List<ITspSolver> _solversToTest = new();
 
-        [Given(@"I have (.*) randomly generated cities")]
+        [Given(@"I have (.*) randomly generated cities for benchmarking")]
         public void GivenIHaveRandomlyGeneratedCities(int count)
         {
             var generator = new TspDataGenerator(seed: 42);
