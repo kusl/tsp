@@ -1,1 +1,1 @@
-cd ~/; curl -o ~/install-kusl-tsp.sh https://raw.githubusercontent.com/kusl/tsp/refs/heads/master/scripts/install-kusl-tsp-simple.sh; cat ~/install-kusl-tsp.sh; chmod +x ~/mybashscripts/install-kusl-tsp.sh; sudo date; time sudo ./install-kusl-tsp.sh
+cd ~/; curl -o ~/install-kusl-tsp.sh https://raw.githubusercontent.com/kusl/tsp/refs/heads/master/scripts/install-kusl-tsp-simple.sh; cat ~/install-kusl-tsp.sh; chmod +x ~/install-kusl-tsp.sh; sudo date; time sudo ./install-kusl-tsp.sh
