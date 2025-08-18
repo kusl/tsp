@@ -1,3 +1,43 @@
+ Algorithm performance ranking
+   Source: Benchmarking.feature line 27
+   Duration: 219 ms
+
+  Message: 
+GA distance 348.05062978748566 is not within 10% of best 291.7911461264813
+
+  Stack Trace: 
+BenchmarkingSteps.ThenGeneticAlgorithmShouldTypicallyFindTheBestSolution() line 178
+InvokeStub_Action`1.Invoke(Object, Span`1)
+MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+BindingInvoker.InvokeBindingAsync(IBinding binding, IContextManager contextManager, Object[] arguments, ITestTracer testTracer, DurationHolder durationHolder)
+TestExecutionEngine.ExecuteStepMatchAsync(BindingMatch match, Object[] arguments, DurationHolder durationHolder)
+TestExecutionEngine.ExecuteStepAsync(IContextManager contextManager, StepInstance stepInstance)
+TestExecutionEngine.OnAfterLastStepAsync()
+TestRunner.CollectScenarioErrorsAsync()
+AlgorithmBenchmarkingFeature.ScenarioCleanupAsync()
+AlgorithmBenchmarkingFeature.AlgorithmPerformanceRanking() line 37
+--- End of stack trace from previous location ---
+
+  Standard Output: 
+Given I have 15 randomly generated cities for benchmarking
+-> done: BenchmarkingSteps.GivenIHaveRandomlyGeneratedCities(15) (0.0s)
+When I benchmark the following algorithms:
+  --- table step argument ---
+  | Algorithm           |
+  | Nearest Neighbor    |
+  | 2-Opt               |
+  | Simulated Annealing |
+  | Genetic Algorithm   |
+-> done: BenchmarkingSteps.WhenIBenchmarkTheFollowingAlgorithms(<table>) (0.1s)
+Then Nearest Neighbor should be the fastest
+-> done: BenchmarkingSteps.ThenNearestNeighborShouldBeTheFastest() (0.0s)
+And Genetic Algorithm should typically find the best solution
+-> error: GA distance 348.05062978748566 is not within 10% of best 291.7911461264813 (0.0s)
+And 2-Opt should improve upon Nearest Neighbor
+-> skipped because of previous errors
+
+
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal>
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
