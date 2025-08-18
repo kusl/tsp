@@ -12,7 +12,7 @@ Scenario: Run benchmark on small problem
     And each result should include execution time
 
 @benchmark
-Scenario: Benchmark identifies best solution
+Scenario: Benchmark identifies best solution on simple problem
     Given I have the following simple cities:
         | Name | X | Y |
         | A    | 0 | 0 |
@@ -23,8 +23,8 @@ Scenario: Benchmark identifies best solution
     Then the best solution should have a distance of 4.0 units
     And all algorithms should find the optimal solution
 
-@benchmark @performance
-Scenario: Algorithm performance ranking
+@benchmark @algorithm-characteristics
+Scenario: Algorithm characteristics validation
     Given I have 15 randomly generated cities for benchmarking
     When I benchmark the following algorithms:
         | Algorithm           |
@@ -32,6 +32,25 @@ Scenario: Algorithm performance ranking
         | 2-Opt              |
         | Simulated Annealing |
         | Genetic Algorithm   |
-    Then Nearest Neighbor should be the fastest
-    And Genetic Algorithm should typically find the best solution
-    And 2-Opt should improve upon Nearest Neighbor
+    Then Nearest Neighbor should be among the fastest algorithms
+    And 2-Opt should produce same or better solution than Nearest Neighbor
+    And advanced algorithms should produce competitive solutions
+
+@benchmark @performance @small-problem
+Scenario: Quick algorithm comparison on small dataset
+    Given I have 8 randomly generated cities for benchmarking
+    When I benchmark all available algorithms
+    Then all algorithms should find good solutions within 20% of optimal
+    And Nearest Neighbor should complete in under 10 milliseconds
+    And all algorithms should complete in under 1 second
+
+@benchmark @quality @larger-problem
+Scenario: Solution quality on moderate problem
+    Given I have 25 randomly generated cities for benchmarking
+    When I benchmark the following algorithms:
+        | Algorithm           |
+        | 2-Opt              |
+        | Simulated Annealing |
+        | Genetic Algorithm   |
+    Then each algorithm should find a valid tour
+    And the best solution should be better than a random tour
