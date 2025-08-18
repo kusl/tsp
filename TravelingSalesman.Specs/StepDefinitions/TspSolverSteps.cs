@@ -44,7 +44,7 @@ namespace TravelingSalesman.Specs.StepDefinitions
             _scenarioContext["Cities"] = _cities;
         }
 
-        [Given(@"I have (.*) randomly generated cities")]
+        [Given(@"I have (.*) randomly generated cities for the TSP solver")]
         public void GivenIHaveRandomlyGeneratedCities(int count)
         {
             var generator = new TspDataGenerator(seed: 42);

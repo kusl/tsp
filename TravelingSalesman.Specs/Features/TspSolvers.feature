@@ -40,7 +40,7 @@ Scenario: 2-Opt improves upon Nearest Neighbor solution
 
 @solver @large
 Scenario: Solvers handle large problem instances
-    Given I have 50 randomly generated cities
+    Given I have 50 randomly generated cities for the TSP solver
     When I solve the TSP using Nearest Neighbor algorithm
     Then the solution should complete within 1 second
     And the tour should visit all 50 cities
