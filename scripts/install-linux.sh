@@ -63,24 +63,24 @@ check_permissions() {
 check_dependencies() {
     local deps=("curl" "jq" "chmod")
     local missing=()
-    
+
     for cmd in "${deps[@]}"; do
         if ! command -v "$cmd" &> /dev/null; then
             missing+=("$cmd")
         fi
     done
-    
+
     if [[ ${#missing[@]} -gt 0 ]]; then
         print_error "Missing required commands: ${missing[*]}"
         print_info "Install them with:"
-        
+
         # Detect package manager
-        if command -v dnf &> /dev/null; then
-            echo "  sudo dnf install ${missing[*]}"
+        if command -v apt-get &> /dev/null; then
+            echo "  sudo apt-get update && sudo apt-get install -y ${missing[*]}"
+        elif command -v dnf &> /dev/null; then
+            echo "  sudo dnf install -y ${missing[*]}"
         elif command -v yum &> /dev/null; then
-            echo "  sudo yum install ${missing[*]}"
-        elif command -v apt-get &> /dev/null; then
-            echo "  sudo apt-get install ${missing[*]}"
+            echo "  sudo yum install -y ${missing[*]}"
         else
             echo "  Please install: ${missing[*]}"
         fi
@@ -91,73 +91,86 @@ check_dependencies() {
 # Get the latest release information from GitHub
 get_latest_release_info() {
     print_info "Fetching latest release information from GitHub..."
-    
+
     local response
     response=$(curl -s -f "${GITHUB_API}" 2>/dev/null) || {
         print_error "Failed to fetch release information from GitHub"
         print_info "API URL: ${GITHUB_API}"
         return 1
     }
-    
-    # Extract the Linux x64 binary URL
+
+    # Extract the Linux x64 binary URL from assets
     local download_url
     download_url=$(echo "$response" | jq -r '.assets[] | select(.name | contains("linux-x64")) | .browser_download_url' 2>/dev/null | head -n1)
-    
-    if [[ -z "$download_url" ]]; then
-        # Try alternative pattern from release body or tag
+
+    # If no asset found, construct URL from tag
+    if [[ -z "$download_url" ]] || [[ "$download_url" == "null" ]]; then
         local tag_name
         tag_name=$(echo "$response" | jq -r '.tag_name' 2>/dev/null)
-        
-        if [[ -n "$tag_name" ]]; then
+
+        if [[ -n "$tag_name" ]] && [[ "$tag_name" != "null" ]]; then
             # Extract SHA from tag (format: v25.8.18.1138-76e0c299)
             local sha
-            sha=$(echo "$tag_name" | grep -oP '[a-f0-9]{8}$' || true)
-            
+            sha=$(echo "$tag_name" | grep -oE '[a-f0-9]{8}$' || true)
+
             if [[ -n "$sha" ]]; then
                 download_url="https://github.com/${GITHUB_REPO}/releases/download/${tag_name}/TSP-linux-x64-${sha}"
+                print_info "Constructed download URL from tag: ${tag_name}"
             fi
         fi
     fi
-    
-    if [[ -z "$download_url" ]]; then
+
+    if [[ -z "$download_url" ]] || [[ "$download_url" == "null" ]]; then
         print_error "Could not find Linux x64 binary in the latest release"
         print_info "Please check: https://github.com/${GITHUB_REPO}/releases"
         return 1
     fi
-    
+
     local version
     version=$(echo "$response" | jq -r '.tag_name' 2>/dev/null || echo "unknown")
-    
-    echo "$download_url|$version"
+
+    # Return both URL and version
+    echo "${download_url}"
+    echo "${version}"
 }
 
 # Download the binary
 download_binary() {
     local url=$1
     local output_file=$2
-    
+
     print_info "Downloading from: $url"
-    
-    if ! curl -L -f -o "$output_file" "$url" --progress-bar; then
-        print_error "Failed to download binary"
+
+    # Use curl with proper error handling
+    if ! curl -L -f -o "$output_file" "$url" --progress-bar 2>/dev/null; then
+        print_error "Failed to download binary from $url"
         return 1
     fi
-    
+
     # Verify the download
     if [[ ! -f "$output_file" ]]; then
         print_error "Downloaded file not found"
         return 1
     fi
-    
+
     local file_size
     file_size=$(stat -c%s "$output_file" 2>/dev/null || stat -f%z "$output_file" 2>/dev/null || echo 0)
-    
+
     if [[ "$file_size" -lt 1000 ]]; then
         print_error "Downloaded file seems too small (${file_size} bytes)"
+        print_error "This might indicate a 404 or other download error"
         return 1
     fi
+
+    # Use a simpler size display that works on more systems
+    local size_display
+    if command -v numfmt &> /dev/null; then
+        size_display=$(numfmt --to=iec-i --suffix=B "$file_size" 2>/dev/null || echo "${file_size} bytes")
+    else
+        size_display="${file_size} bytes"
+    fi
     
-    print_success "Download complete ($(numfmt --to=iec-i --suffix=B "$file_size" 2>/dev/null || echo "${file_size} bytes"))"
+    print_success "Download complete (${size_display})"
 }
 
 # Check if binary is already installed and get its version
@@ -176,46 +189,46 @@ get_installed_version() {
 install_binary() {
     local temp_binary=$1
     local version=$2
-    
+
     print_info "Installing to ${INSTALL_PATH}..."
-    
+
     # Backup existing binary if it exists
     if [[ -f "${INSTALL_PATH}" ]]; then
         local backup_path="${INSTALL_PATH}.backup.$(date +%Y%m%d-%H%M%S)"
         print_info "Backing up existing binary to ${backup_path}"
         cp "${INSTALL_PATH}" "${backup_path}"
     fi
-    
+
     # Make binary executable
     chmod +x "$temp_binary"
-    
+
     # Move to final location
     if ! mv -f "$temp_binary" "${INSTALL_PATH}"; then
         print_error "Failed to install binary to ${INSTALL_PATH}"
         return 1
     fi
-    
+
     # Verify installation
     if [[ ! -x "${INSTALL_PATH}" ]]; then
         print_error "Installation verification failed"
         return 1
     fi
-    
+
     print_success "Successfully installed ${BINARY_NAME} version ${version}"
 }
 
 # Create convenience symlink
 create_symlink() {
     local symlink_path="/usr/local/bin/${BINARY_NAME}"
-    
+
     print_info "Creating symlink for system-wide access..."
-    
+
     # Check if /usr/local/bin exists
     if [[ ! -d "/usr/local/bin" ]]; then
         print_warning "/usr/local/bin does not exist, skipping symlink creation"
         return 0
     fi
-    
+
     # Create or update symlink
     if ln -sf "${INSTALL_PATH}" "${symlink_path}" 2>/dev/null; then
         print_success "Symlink created: ${symlink_path} -> ${INSTALL_PATH}"
@@ -233,31 +246,41 @@ main() {
     echo " Repository: https://github.com/${GITHUB_REPO}"
     echo "================================================="
     echo
-    
+
     # Check permissions
     check_permissions
-    
+
     # Check dependencies
     check_dependencies
-    
+
     # Get currently installed version
     local installed_version
     installed_version=$(get_installed_version)
-    
+
     if [[ "$installed_version" != "none" ]]; then
         print_info "Currently installed version: ${installed_version}"
     else
         print_info "No existing installation found"
     fi
-    
-    # Get latest release info
+
+    # Get latest release info (now returns two lines)
     local release_info
     release_info=$(get_latest_release_info) || exit 1
-    
-    IFS='|' read -r download_url latest_version <<< "$release_info"
-    
+
+    # Read the two lines
+    local download_url
+    local latest_version
+    download_url=$(echo "$release_info" | head -n1)
+    latest_version=$(echo "$release_info" | tail -n1)
+
+    # Validate URL
+    if [[ ! "$download_url" =~ ^https:// ]]; then
+        print_error "Invalid download URL: $download_url"
+        exit 1
+    fi
+
     print_info "Latest available version: ${latest_version}"
-    
+
     # Ask for confirmation if already installed
     if [[ "$installed_version" != "none" ]]; then
         echo
@@ -268,23 +291,23 @@ main() {
             exit 0
         fi
     fi
-    
+
     # Download binary to temp directory
     local temp_binary="${TEMP_DIR}/tsp-binary"
     download_binary "$download_url" "$temp_binary" || exit 1
-    
+
     # Install the binary
     install_binary "$temp_binary" "$latest_version" || exit 1
-    
+
     # Create symlink for easier access
     create_symlink
-    
+
     echo
     print_success "Installation complete!"
     echo
     echo "You can now run the TSP solver using:"
     echo "  ${INSTALL_PATH}"
-    
+
     if [[ -L "/usr/local/bin/${BINARY_NAME}" ]]; then
         echo "  or simply: ${BINARY_NAME}"
     else
@@ -292,16 +315,17 @@ main() {
         echo "To run from anywhere, add to PATH or create a symlink:"
         echo "  sudo ln -sf ${INSTALL_PATH} /usr/local/bin/${BINARY_NAME}"
     fi
-    
+
     echo
     echo "For help, run:"
     echo "  ${BINARY_NAME} --help"
     echo
-    
+
     # Test the installation
     print_info "Testing installation..."
     if "${INSTALL_PATH}" --version &>/dev/null; then
         print_success "Installation test passed!"
+        echo "Version: $("${INSTALL_PATH}" --version 2>/dev/null | head -n1 || echo "unknown")"
     else
         print_warning "Could not verify installation. Please test manually."
     fi
