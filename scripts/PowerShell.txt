@@ -1,10 +1,14 @@
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is ahead of 'origin/master' by 2 commits.
-  (use "git push" to publish your local commits)
+Your branch is up to date with 'origin/master'.
 
-nothing to commit, working tree clean
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   scripts/bash.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
 * remote origin
   Fetch URL: git@github.com:kusl/tsp.git
   Push  URL: git@github.com:kusl/tsp.git
@@ -14,7 +18,7 @@ nothing to commit, working tree clean
   Local branch configured for 'git pull':
     master merges with remote master
   Local ref configured for 'git push':
-    master pushes to master (fast-forwardable)
+    master pushes to master (up to date)
 Folder PATH listing
 Volume serial number is BE05-6605
 C:.
@@ -5251,4 +5255,4 @@ Scenario: Nearest Neighbor produces deterministic results
     And I solve the same problem again using Nearest Neighbor algorithm
     Then both solutions should have the same total distance
     And both solutions should have the same route
-PS C:\code\TSP> C:\code\TSP\scripts\cat.ps1
+PS C:\code\TSP>

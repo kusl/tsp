@@ -1,8 +1,6 @@
 PowerShell 7.6.0-preview.4
 PS C:\Users\kushal> ssh kushal@192.168.0.120
 kushal@192.168.0.120's password:
-Permission denied, please try again.
-kushal@192.168.0.120's password:
 Linux texas 6.12.38+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.38-1 (2025-07-16) x86_64
 
 The programs included with the Debian GNU/Linux system are free software;
@@ -11,11 +9,11 @@ individual files in /usr/share/doc/*/copyright.
 
 Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
 permitted by applicable law.
-Last login: Sun Aug 17 22:08:03 2025 from 192.168.0.213
+Last login: Mon Aug 18 09:00:00 2025 from 192.168.0.213
 kushal@texas:~$ cd ~/; curl -o ~/install-kusl-tsp.sh https://raw.githubusercontent.com/kusl/tsp/refs/heads/master/scripts/install-kusl-tsp-simple.sh; cat ~/install-kusl-tsp.sh; chmod +x ~/install-kusl-tsp.sh;sudo date; time sudo ./install-kusl-tsp.sh
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-100  3778  100  3778    0     0  27390      0 --:--:-- --:--:-- --:--:-- 27576
+100  3778  100  3778    0     0  61526      0 --:--:-- --:--:-- --:--:-- 61934
 #!/bin/bash
 
 # TSP Solver Installation Script for Linux (Simple Version)
@@ -140,17 +138,580 @@ if [[ -L "$SYMLINK_PATH" ]]; then
 fi
 echo
 echo "For help, run: ${BINARY_NAME} --help"[sudo] password for kushal:
-Sorry, try again.
-[sudo] password for kushal:
-Sorry, try again.
-[sudo] password for kushal:
-sudo: 2 incorrect password attempts
-[sudo] password for kushal:
-sudo: a password is required
+Mon Aug 18 09:09:24 AM EDT 2025
+=================================================
+ TSP Solver Installation Script
+ Repository: https://github.com/kusl/tsp
+=================================================
 
-real    0m1.105s
-user    0m0.046s
-sys     0m0.014s
+[INFO] Fetching latest release from GitHub...
+[INFO] Latest version: v25.8.18.1153-018cc672
+[INFO] Download URL: https://github.com/kusl/tsp/releases/download/v25.8.18.1153-018cc672/TSP-linux-x64-018cc672
+[INFO] Downloading binary...
+########################################################################################################################################################################################################## 100.0%
+[SUCCESS] Downloaded 4 MB
+[INFO] Backing up existing binary to /opt/kusl-tsp.backup.20250818-090925
+[INFO] Installing to /opt/kusl-tsp...
+[SUCCESS] Symlink created: /usr/local/bin/kusl-tsp
+[INFO] Testing installation...
+[SUCCESS] Installation complete! Version: TSP Solver v25.8.18
+
+You can now run the TSP solver using:
+  /opt/kusl-tsp
+  or simply: kusl-tsp
+
+For help, run: kusl-tsp --help
+
+real    0m1.036s
+user    0m0.009s
+sys     0m0.013s
+kushal@texas:~$ cd ~/; curl -o ~/install-kusl-tsp.sh https://raw.githubusercontent.com/kusl/tsp/refs/heads/master/scripts/install-kusl-tsp-simple.sh; cat ~/install-kusl-tsp.sh; chmod +x ~/install-kusl-tsp.sh;sudo date; time sudo ./install-kusl-tsp.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  3779  100  3779    0     0  34627      0 --:--:-- --:--:-- --:--:-- 34990
+#!/bin/bash
+
+# TSP Solver Installation Script for Linux (Simple Version)
+# Installs the latest kusl/tsp release to /opt/kusl-tsp
+
+set -euo pipefail
+
+# Configuration
+GITHUB_REPO="kusl/tsp"
+INSTALL_DIR="/opt"
+BINARY_NAME="kusl-tsp"
+INSTALL_PATH="${INSTALL_DIR}/${BINARY_NAME}"
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+echo "================================================="
+echo " TSP Solver Installation Script"
+echo " Repository: https://github.com/${GITHUB_REPO}"
+echo "================================================="
+echo
+
+# Check if running as root
+if [[ $EUID -ne 0 ]]; then
+   echo -e "${RED}[ERROR]${NC} This script must be run as root (use sudo)"
+   exit 1
+fi
+
+# Check for required commands
+for cmd in curl jq; do
+    if ! command -v "$cmd" &> /dev/null; then
+        echo -e "${RED}[ERROR]${NC} Missing required command: $cmd"
+        echo "Install with: apt-get update && apt-get install -y $cmd"
+        exit 1
+    fi
+done
+
+# Get the latest release info from GitHub
+echo -e "${BLUE}[INFO]${NC} Fetching latest release from GitHub..."
+RELEASE_JSON=$(curl -s "https://api.github.com/repos/${GITHUB_REPO}/releases/latest")
+
+# Extract tag name
+TAG_NAME=$(echo "$RELEASE_JSON" | jq -r '.tag_name')
+if [[ -z "$TAG_NAME" ]] || [[ "$TAG_NAME" == "null" ]]; then
+    echo -e "${RED}[ERROR]${NC} Could not fetch release information"
+    exit 1
+fi
+
+echo -e "${BLUE}[INFO]${NC} Latest version: $TAG_NAME"
+
+# Extract SHA from tag (format: v25.8.18.1138-76e0c299)
+SHA=$(echo "$TAG_NAME" | grep -oE '[a-f0-9]{8}$' || true)
+if [[ -z "$SHA" ]]; then
+    echo -e "${RED}[ERROR]${NC} Could not extract SHA from tag: $TAG_NAME"
+    exit 1
+fi
+
+# Construct download URL
+DOWNLOAD_URL="https://github.com/${GITHUB_REPO}/releases/download/${TAG_NAME}/TSP-linux-x64-${SHA}"
+echo -e "${BLUE}[INFO]${NC} Download URL: $DOWNLOAD_URL"
+
+# Create temp directory
+TEMP_DIR=$(mktemp -d)
+trap "rm -rf $TEMP_DIR" EXIT
+
+# Download the binary
+echo -e "${BLUE}[INFO]${NC} Downloading binary..."
+TEMP_BINARY="${TEMP_DIR}/tsp-binary"
+
+if ! curl -L -f -o "$TEMP_BINARY" "$DOWNLOAD_URL" --progress-bar; then
+    echo -e "${RED}[ERROR]${NC} Failed to download binary"
+    exit 1
+fi
+
+# Check file size
+FILE_SIZE=$(stat -c%s "$TEMP_BINARY" 2>/dev/null || echo 0)
+if [[ "$FILE_SIZE" -lt 1000 ]]; then
+    echo -e "${RED}[ERROR]${NC} Downloaded file too small (${FILE_SIZE} bytes)"
+    echo "First 100 bytes: $(head -c 100 "$TEMP_BINARY" | tr '\n' ' ')"
+    exit 1
+fi
+
+echo -e "${GREEN}[SUCCESS]${NC} Downloaded $((FILE_SIZE / 1048576)) MB"
+
+# Backup existing installation if present
+if [[ -f "$INSTALL_PATH" ]]; then
+    BACKUP_PATH="${INSTALL_PATH}.backup.$(date +%Y%m%d-%H%M%S)"
+    echo -e "${BLUE}[INFO]${NC} Backing up existing binary to $BACKUP_PATH"
+    cp "$INSTALL_PATH" "$BACKUP_PATH"
+fi
+
+# Install the binary
+echo -e "${BLUE}[INFO]${NC} Installing to $INSTALL_PATH..."
+chmod +x "$TEMP_BINARY"
+mv -f "$TEMP_BINARY" "$INSTALL_PATH"
+
+# Create symlink
+SYMLINK_PATH="/usr/local/bin/${BINARY_NAME}"
+if [[ -d "/usr/local/bin" ]]; then
+    ln -sf "$INSTALL_PATH" "$SYMLINK_PATH"
+    echo -e "${GREEN}[SUCCESS]${NC} Symlink created: $SYMLINK_PATH"
+fi
+
+# Test installation
+echo -e "${BLUE}[INFO]${NC} Testing installation..."
+if "$INSTALL_PATH" --version &>/dev/null; then
+    VERSION=$("$INSTALL_PATH" --version 2>/dev/null | head -n1 || echo "unknown")
+    echo -e "${GREEN}[SUCCESS]${NC} Installation complete! Version: $VERSION"
+else
+    echo -e "${GREEN}[SUCCESS]${NC} Installation complete!"
+    echo "Note: Could not verify version (this is normal for some binaries)"
+fi
+
+echo
+echo "You can now run the TSP solver using:"
+echo "  $INSTALL_PATH"
+if [[ -L "$SYMLINK_PATH" ]]; then
+    echo "  or simply: $BINARY_NAME"
+fi
+echo
+echo "For help, run: ${BINARY_NAME} --help"
+Mon Aug 18 09:11:39 AM EDT 2025
+=================================================
+ TSP Solver Installation Script
+ Repository: https://github.com/kusl/tsp
+=================================================
+
+[INFO] Fetching latest release from GitHub...
+[INFO] Latest version: v25.8.18.1156-0ca2c1ad
+[INFO] Download URL: https://github.com/kusl/tsp/releases/download/v25.8.18.1156-0ca2c1ad/TSP-linux-x64-0ca2c1ad
+[INFO] Downloading binary...
+########################################################################################################################################################################################################## 100.0%
+[SUCCESS] Downloaded 4 MB
+[INFO] Backing up existing binary to /opt/kusl-tsp.backup.20250818-091139
+[INFO] Installing to /opt/kusl-tsp...
+[SUCCESS] Symlink created: /usr/local/bin/kusl-tsp
+[INFO] Testing installation...
+[SUCCESS] Installation complete! Version: TSP Solver v25.8.18
+
+You can now run the TSP solver using:
+  /opt/kusl-tsp
+  or simply: kusl-tsp
+
+For help, run: kusl-tsp --help
+
+real    0m1.005s
+user    0m0.012s
+sys     0m0.009s
+kushal@texas:~$ kusl-tsp --version
+TSP Solver v25.8.18
+Built with .NET 9.0.8
+Runtime: linux-x64
+kushal@texas:~$ kusl-tsp --help
+TSP Solver - Traveling Salesman Problem Solver
+
+Usage: TSP-solver [options]
+
+Options:
+  --version, -v    Show version information
+  --help, -h       Show this help message
+
+Interactive mode will start if no options are provided.
+Logs are written to the 'logs/' directory.
+kushal@texas:~$ kusl-tsp
+[09:12:41 INF] TSP Solver v25.8.18 starting up
+
+[09:12:41 INF] ╔═══════════════════════════════════════════════════════════════╗
+[09:12:41 INF] ║          TRAVELING SALESMAN PROBLEM SOLVER v25.8.18           ║
+[09:12:41 INF] ║                     .NET 9 Implementation                     ║
+[09:12:41 INF] ╚═══════════════════════════════════════════════════════════════╝
+[09:12:41 INF] 📍 Main Menu:
+[09:12:41 INF]
+[09:12:41 INF]   1. Interactive Solver - Solve custom TSP instances
+[09:12:41 INF]   2. Algorithm Benchmark - Compare all algorithms
+[09:12:41 INF]   3. Visual Demonstration - See algorithms in action
+[09:12:41 INF]   4. Algorithm Information - Learn about each algorithm
+[09:12:41 INF]   5. Exit
+[09:12:41 INF] ➤ Select an option (1-5):
+1
+[09:12:44 INF] Starting interactive solver session
+[09:12:44 INF] ════════════════════════════════════════════════════════════
+[09:12:44 INF]   Interactive TSP Solver
+[09:12:44 INF] ════════════════════════════════════════════════════════════
+[09:12:44 INF] How many cities? (minimum 2):
+5
+[09:12:46 INF] Interactive solver configured for 5 cities
+[09:12:46 INF] Select city distribution pattern:
+[09:12:46 INF]   1. Random
+[09:12:46 INF]   2. Circular
+[09:12:46 INF]   3. Grid
+[09:12:46 INF] ➤ Select pattern (1-3):
+1
+[09:12:49 DBG] Generating 5 random cities in area 100x100
+[09:12:49 INF] Generated 5 random cities
+[09:12:49 INF] ✓ Generated 5 random cities
+[09:12:49 INF] Generated 5 cities with random pattern
+[09:12:49 INF] Select algorithm:
+[09:12:49 INF]   1. Nearest Neighbor (Fast, Good)
+[09:12:49 INF]   2. 2-Opt (Medium, Better)
+[09:12:49 INF]   3. Simulated Annealing (Slow, Very Good)
+[09:12:49 INF]   4. Genetic Algorithm (Slowest, Best)
+[09:12:49 INF] ➤ Select algorithm (1-4):
+4
+[09:12:51 INF] Selected algorithm: Genetic Algorithm for 5 cities
+[09:12:51 INF] 🔄 Running Genetic Algorithm algorithm...
+[09:12:51 INF] Starting TSP solution with Genetic Algorithm
+[09:12:51 INF] Starting Genetic Algorithm for 5 cities (population: 200, generations: 1000, mutation rate: 0.100, elitism rate: 0.100)
+[09:12:51 DBG] Building distance matrix for 5 cities
+[09:12:51 DBG] Distance matrix built successfully
+[09:12:51 DBG] Initializing population of 200 individuals
+[09:12:51 DBG] Initial population created. Best distance: 200.17
+.[09:12:52 DBG] Early stopping at generation 250 due to no improvement
+[09:12:52 INF] Genetic Algorithm completed. Distance: 200.17 (improved by 0.0%)
+[09:12:52 INF] TSP solution completed - Algorithm: Genetic Algorithm, Cities: 5, Pattern: random, Distance: 200.17, Time: 102ms
+
+
+[09:12:52 INF] ════════════════════════════════════════════════════════════
+[09:12:52 INF] ✓ Solution Found!
+[09:12:52 INF] ════════════════════════════════════════════════════════════
+[09:12:52 INF] Algorithm: Genetic Algorithm
+[09:12:52 INF] Execution Time: 102 ms
+[09:12:52 INF] Total Distance: 200.17 units
+[09:12:52 INF] Route (5 cities):
+[09:12:52 INF] City_0 → City_3 → City_4 → City_1 → City_2 → City_0
+[09:12:52 INF] Show city coordinates? (y/n):
+y
+[09:12:55 INF] City Coordinates:
+[09:12:55 INF]   City_0: (66.81, 14.09)
+[09:12:55 INF]   City_1: (12.55, 52.28)
+[09:12:55 INF]   City_2: (16.84, 26.26)
+[09:12:55 INF]   City_3: (72.44, 51.29)
+[09:12:55 INF]   City_4: (17.37, 76.13)
+[09:12:55 INF] Interactive solver session completed successfully
+[09:12:55 INF] Press any key to return to main menu...
+
+[09:12:56 INF] 📍 Main Menu:
+[09:12:56 INF]
+[09:12:56 INF]   1. Interactive Solver - Solve custom TSP instances
+[09:12:56 INF]   2. Algorithm Benchmark - Compare all algorithms
+[09:12:56 INF]   3. Visual Demonstration - See algorithms in action
+[09:12:56 INF]   4. Algorithm Information - Learn about each algorithm
+[09:12:56 INF]   5. Exit
+[09:12:56 INF] ➤ Select an option (1-5):
+2
+[09:12:57 INF] Starting benchmark session
+[09:12:57 INF] ════════════════════════════════════════════════════════════
+[09:12:57 INF]   Algorithm Benchmark
+[09:12:57 INF] ════════════════════════════════════════════════════════════
+[09:12:57 INF] Number of cities for benchmark:
+10
+[09:13:00 DBG] Generating 10 random cities in area 100x100
+[09:13:00 INF] Generated 10 random cities
+[09:13:00 INF] Generated 10 random cities for benchmark
+[09:13:00 INF] 🔄 Running benchmark with 10 cities...
+[09:13:00 INF] This may take a moment...
+Processing: [09:13:00 INF] Starting benchmark with 10 cities and 4 algorithms
+[09:13:00 DBG] Running benchmark for Nearest Neighbor
+[09:13:00 INF] Starting Nearest Neighbor algorithm for 10 cities
+[09:13:00 DBG] Building distance matrix for 10 cities
+[09:13:00 DBG] Distance matrix built successfully
+[09:13:00 INF] Nearest Neighbor completed: Distance 361.98
+[09:13:00 INF] Benchmark completed for Nearest Neighbor: Distance 361.98, Time 1.2706ms
+[09:13:00 DBG] Running benchmark for 2-Opt
+[09:13:00 INF] Starting 2-Opt algorithm for 10 cities (max iterations: 100)
+[09:13:00 DBG] Initial tour from Nearest Neighbor: 361.98
+[09:13:00 DBG] Starting 2-Opt improvement from distance 361.98
+[09:13:00 INF] 2-Opt completed after 2 iterations. Distance: 337.60 (improved by 6.7%)
+[09:13:00 INF] Benchmark completed for 2-Opt: Distance 337.60, Time 1.0026ms
+[09:13:00 DBG] Running benchmark for Simulated Annealing
+[09:13:00 INF] Starting Simulated Annealing for 10 cities (temp: 1000, cooling: 0.9995, iterations per temp: 100)
+[09:13:00 DBG] Starting SA from initial distance: 361.98
+[09:13:01 INF] Simulated Annealing completed after 1841700 iterations. Distance: 337.60 (improved by 6.7%). Acceptance rate: 34.1%
+[09:13:01 INF] Benchmark completed for Simulated Annealing: Distance 337.60, Time 855.9116ms
+[09:13:01 DBG] Running benchmark for Genetic Algorithm
+[09:13:01 INF] Starting Genetic Algorithm for 10 cities (population: 200, generations: 200, mutation rate: 0.100, elitism rate: 0.100)
+[09:13:01 DBG] Building distance matrix for 10 cities
+[09:13:01 DBG] Distance matrix built successfully
+[09:13:01 DBG] Initializing population of 200 individuals
+[09:13:01 DBG] Initial population created. Best distance: 405.17
+[09:13:01 DBG] Generation 0: New best solution 373.52
+[09:13:01 DBG] Generation 2: New best solution 368.72
+[09:13:01 DBG] Generation 4: New best solution 337.60
+[09:13:01 DBG] Early stopping at generation 55 due to no improvement
+[09:13:01 INF] Genetic Algorithm completed. Distance: 337.60 (improved by 16.7%)
+[09:13:01 INF] Benchmark completed for Genetic Algorithm: Distance 337.60, Time 64.4738ms
+[09:13:01 INF] Benchmark completed. Winner: 2-Opt with distance 337.60
+ Done!
+[09:13:01 INF] Benchmark completed - Cities: 10, TotalTime: 924ms
+[09:13:01 INF] Benchmark result - Algorithm: 2-Opt, Distance: 337.60, Time: 1.0026ms, Rank: 1
+[09:13:01 INF] Benchmark result - Algorithm: Simulated Annealing, Distance: 337.60, Time: 855.9116ms, Rank: 2
+[09:13:01 INF] Benchmark result - Algorithm: Genetic Algorithm, Distance: 337.60, Time: 64.4738ms, Rank: 3
+[09:13:01 INF] Benchmark result - Algorithm: Nearest Neighbor, Distance: 361.98, Time: 1.2706ms, Rank: 4
+[09:13:01 INF]
+=== TSP Solver Benchmark Results ===
+Rank  Solver               Distance        Time (ms)  % from Best
+---------------------------------------------------------------------------
+1     2-Opt                337.60          1.0        0.00        %
+2     Simulated Annealing  337.60          855.9      0.00        %
+3     Genetic Algorithm    337.60          64.5       0.00        %
+4     Nearest Neighbor     361.98          1.3        7.22        %
+
+[09:13:01 INF] 🏆 Winner: 2-Opt
+[09:13:01 INF]    Distance: 337.60
+[09:13:01 INF]    Time: 1.0 ms
+[09:13:01 INF] Benchmark session completed - Winner: 2-Opt, Distance: 337.60
+[09:13:01 INF] Press any key to return to main menu...
+
+[09:13:05 INF] 📍 Main Menu:
+[09:13:05 INF]
+[09:13:05 INF]   1. Interactive Solver - Solve custom TSP instances
+[09:13:05 INF]   2. Algorithm Benchmark - Compare all algorithms
+[09:13:05 INF]   3. Visual Demonstration - See algorithms in action
+[09:13:05 INF]   4. Algorithm Information - Learn about each algorithm
+[09:13:05 INF]   5. Exit
+[09:13:05 INF] ➤ Select an option (1-5):
+3
+[09:13:14 INF] Starting demonstration session
+[09:13:14 INF] ════════════════════════════════════════════════════════════
+[09:13:14 INF]   Visual Algorithm Demonstration
+[09:13:14 INF] ════════════════════════════════════════════════════════════
+[09:13:14 INF] This demonstration will show how different algorithms
+[09:13:14 INF] approach the TSP problem step by step.
+[09:13:14 DBG] Generating 8 cities in circular pattern (radius: 50)
+[09:13:14 INF] Generated 8 cities in circular pattern
+[09:13:14 INF] Generated 8 cities in a circular pattern.
+[09:13:14 INF] Cities:
+[09:13:14 INF]   City_0: (100.0, 50.0)
+[09:13:14 INF]   City_1: (85.4, 85.4)
+[09:13:14 INF]   City_2: (50.0, 100.0)
+[09:13:14 INF]   City_3: (14.6, 85.4)
+[09:13:14 INF]   City_4: (0.0, 50.0)
+[09:13:14 INF]   City_5: (14.6, 14.6)
+[09:13:14 INF]   City_6: (50.0, 0.0)
+[09:13:14 INF]   City_7: (85.4, 14.6)
+[09:13:14 INF] Press any key to start the demonstration...
+4
+[09:13:42 INF] Running demonstration for Nearest Neighbor
+[09:13:42 INF] ────────────────────────────────────────────────────────────
+[09:13:42 INF] ════════════════════════════════════════════════════════════
+[09:13:42 INF]   Algorithm: Nearest Neighbor
+[09:13:42 INF] ════════════════════════════════════════════════════════════
+[09:13:42 INF] 🔄 Running Nearest Neighbor...
+[09:13:42 INF] Starting Nearest Neighbor algorithm for 8 cities
+[09:13:42 DBG] Building distance matrix for 8 cities
+[09:13:42 DBG] Distance matrix built successfully
+[09:13:42 INF] Nearest Neighbor completed: Distance 306.15
+[09:13:42 INF] Algorithm Progress Summary:
+[09:13:42 INF] --------------------------------------------------
+[09:13:42 INF]   Initial: Distance = 76.54
+[09:13:42 INF]   Best:    Distance = 76.54 (at iteration 1)
+[09:13:42 INF]   Final:   Distance = 306.15
+[09:13:42 INF]   Total iterations: 7
+[09:13:42 INF] --------------------------------------------------
+[09:13:42 INF] ✓ Final Solution:
+[09:13:42 INF]   Distance: 306.15
+[09:13:42 INF]   Route: City_0 → City_1 → City_2 → City_3 → City_4 → City_5 → City_6 → City_7 → City_0
+[09:13:42 INF] Simple ASCII Visualization:
+[09:13:42 INF] ──────────────────────────────────────────────────
+[09:13:42 INF]                      ●
+[09:13:42 INF]
+[09:13:42 INF]        ●                           ●
+[09:13:42 INF]
+[09:13:42 INF]
+[09:13:42 INF]   ●                                      ●
+[09:13:42 INF]
+[09:13:42 INF]
+[09:13:42 INF]        ●                           ●
+[09:13:42 INF]                      ●
+[09:13:42 INF] ──────────────────────────────────────────────────
+[09:13:42 INF] Press any key for next algorithm...
+4
+[09:13:45 INF] Running demonstration for 2-Opt Improvement
+[09:13:45 INF] ────────────────────────────────────────────────────────────
+[09:13:45 INF] ════════════════════════════════════════════════════════════
+[09:13:45 INF]   Algorithm: 2-Opt Improvement
+[09:13:45 INF] ════════════════════════════════════════════════════════════
+[09:13:45 INF] 🔄 Running 2-Opt Improvement...
+[09:13:45 INF] Starting 2-Opt algorithm for 8 cities (max iterations: 100)
+[09:13:45 DBG] Initial tour from Nearest Neighbor: 306.15
+[09:13:45 DBG] Starting 2-Opt improvement from distance 306.15
+[09:13:45 INF] 2-Opt completed after 1 iterations. Distance: 306.15 (improved by 0.0%)
+[09:13:45 INF] Algorithm Progress Summary:
+[09:13:45 INF] --------------------------------------------------
+[09:13:45 INF]   Initial: Distance = 306.15
+[09:13:45 INF]   Final:   Distance = 306.15
+[09:13:45 INF]   Total iterations: 1
+[09:13:45 INF] --------------------------------------------------
+[09:13:45 INF] ✓ Final Solution:
+[09:13:45 INF]   Distance: 306.15
+[09:13:45 INF]   Route: City_0 → City_1 → City_2 → City_3 → City_4 → City_5 → City_6 → City_7 → City_0
+[09:13:45 INF] Simple ASCII Visualization:
+[09:13:45 INF] ──────────────────────────────────────────────────
+[09:13:45 INF]                      ●
+[09:13:45 INF]
+[09:13:45 INF]        ●                           ●
+[09:13:45 INF]
+[09:13:45 INF]
+[09:13:45 INF]   ●                                      ●
+[09:13:45 INF]
+[09:13:45 INF]
+[09:13:45 INF]        ●                           ●
+[09:13:45 INF]                      ●
+[09:13:45 INF] ──────────────────────────────────────────────────
+[09:13:45 INF] Press any key for next algorithm...
+4
+[09:13:46 INF] Running demonstration for Simulated Annealing
+[09:13:46 INF] ────────────────────────────────────────────────────────────
+[09:13:46 INF] ════════════════════════════════════════════════════════════
+[09:13:46 INF]   Algorithm: Simulated Annealing
+[09:13:46 INF] ════════════════════════════════════════════════════════════
+[09:13:46 INF] 🔄 Running Simulated Annealing...
+[09:13:46 INF] Starting Simulated Annealing for 8 cities (temp: 1000, cooling: 0.99, iterations per temp: 50)
+[09:13:46 DBG] Starting SA from initial distance: 306.15
+[09:13:46 INF] Simulated Annealing completed after 45850 iterations. Distance: 306.15 (improved by 0.0%). Acceptance rate: 30.0%
+[09:13:46 INF] Algorithm Progress Summary:
+[09:13:46 INF] --------------------------------------------------
+[09:13:46 INF]   Initial: Distance = 306.15
+[09:13:46 INF]   Best:    Distance = 306.15 (at iteration 1)
+[09:13:46 INF]   Final:   Distance = 306.15
+[09:13:46 INF]   Total iterations: 1375
+[09:13:46 INF] --------------------------------------------------
+[09:13:46 INF] ✓ Final Solution:
+[09:13:46 INF]   Distance: 306.15
+[09:13:46 INF]   Route: City_0 → City_1 → City_2 → City_3 → City_4 → City_5 → City_6 → City_7 → City_0
+[09:13:46 INF] Simple ASCII Visualization:
+[09:13:46 INF] ──────────────────────────────────────────────────
+[09:13:46 INF]                      ●
+[09:13:46 INF]
+[09:13:46 INF]        ●                           ●
+[09:13:46 INF]
+[09:13:46 INF]
+[09:13:46 INF]   ●                                      ●
+[09:13:46 INF]
+[09:13:46 INF]
+[09:13:46 INF]        ●                           ●
+[09:13:46 INF]                      ●
+[09:13:46 INF] ──────────────────────────────────────────────────
+[09:13:46 INF] Press any key for next algorithm...
+4
+[09:13:47 INF] Running demonstration for Genetic Algorithm
+[09:13:47 INF] ────────────────────────────────────────────────────────────
+[09:13:47 INF] ════════════════════════════════════════════════════════════
+[09:13:47 INF]   Algorithm: Genetic Algorithm
+[09:13:47 INF] ════════════════════════════════════════════════════════════
+[09:13:47 INF] 🔄 Running Genetic Algorithm...
+[09:13:47 INF] Starting Genetic Algorithm for 8 cities (population: 20, generations: 50, mutation rate: 0.050, elitism rate: 0.300)
+[09:13:47 DBG] Building distance matrix for 8 cities
+[09:13:47 DBG] Distance matrix built successfully
+[09:13:47 DBG] Initializing population of 20 individuals
+[09:13:47 DBG] Initial population created. Best distance: 425.15
+[09:13:47 DBG] Generation 0: New best solution 414.39
+[09:13:47 DBG] Generation 4: New best solution 371.03
+[09:13:47 DBG] Generation 10: New best solution 306.15
+[09:13:47 DBG] Early stopping at generation 23 due to no improvement
+[09:13:47 INF] Genetic Algorithm completed. Distance: 306.15 (improved by 28.0%)
+[09:13:47 INF] Algorithm Progress Summary:
+[09:13:47 INF] --------------------------------------------------
+[09:13:47 INF]   Initial: Distance = 414.39
+[09:13:47 INF]   Final:   Distance = 414.39
+[09:13:47 INF]   Total iterations: 1
+[09:13:47 INF] --------------------------------------------------
+[09:13:47 INF] ✓ Final Solution:
+[09:13:47 INF]   Distance: 306.15
+[09:13:47 INF]   Route: City_0 → City_1 → City_2 → City_3 → City_4 → City_5 → City_6 → City_7 → City_0
+[09:13:47 INF] Simple ASCII Visualization:
+[09:13:47 INF] ──────────────────────────────────────────────────
+[09:13:47 INF]                      ●
+[09:13:47 INF]
+[09:13:47 INF]        ●                           ●
+[09:13:47 INF]
+[09:13:47 INF]
+[09:13:47 INF]   ●                                      ●
+[09:13:47 INF]
+[09:13:47 INF]
+[09:13:47 INF]        ●                           ●
+[09:13:47 INF]                      ●
+[09:13:47 INF] ──────────────────────────────────────────────────
+[09:13:47 INF] ════════════════════════════════════════════════════════════
+[09:13:47 INF] Demonstration Complete! All algorithms have been demonstrated.
+[09:13:47 INF] Demonstration session completed successfully
+[09:13:47 INF] Press any key to return to main menu...
+4
+[09:13:49 INF] 📍 Main Menu:
+[09:13:49 INF]
+[09:13:49 INF]   1. Interactive Solver - Solve custom TSP instances
+[09:13:49 INF]   2. Algorithm Benchmark - Compare all algorithms
+[09:13:49 INF]   3. Visual Demonstration - See algorithms in action
+[09:13:49 INF]   4. Algorithm Information - Learn about each algorithm
+[09:13:49 INF]   5. Exit
+[09:13:49 INF] ➤ Select an option (1-5):
+4
+[09:13:53 INF] Displaying algorithm information
+[09:13:53 INF] ════════════════════════════════════════════════════════════
+[09:13:53 INF]   Algorithm Information
+[09:13:53 INF] ════════════════════════════════════════════════════════════
+[09:13:53 INF] 📍 Nearest Neighbor
+[09:13:53 INF] ----------------------------------------
+[09:13:53 INF] Description: Builds tour by always visiting the nearest unvisited city.
+[09:13:53 INF] Complexity:  O(n²)
+[09:13:53 INF] Pros:        Fast, simple, deterministic
+[09:13:53 INF] Cons:        Can produce suboptimal solutions
+[09:13:53 INF] 📍 2-Opt
+[09:13:53 INF] ----------------------------------------
+[09:13:53 INF] Description: Improves existing tour by reversing segments to reduce crossings.
+[09:13:53 INF] Complexity:  O(n²) per iteration
+[09:13:53 INF] Pros:        Good improvement over initial solution
+[09:13:53 INF] Cons:        Can get stuck in local optima
+[09:13:53 INF] 📍 Simulated Annealing
+[09:13:53 INF] ----------------------------------------
+[09:13:53 INF] Description: Uses controlled randomness to explore solution space, accepting worse solutions probabilistically.
+[09:13:53 INF] Complexity:  O(n) per iteration × iterations
+[09:13:53 INF] Pros:        Can escape local optima, tunable parameters
+[09:13:53 INF] Cons:        Slower, non-deterministic
+[09:13:53 INF] 📍 Genetic Algorithm
+[09:13:53 INF] ----------------------------------------
+[09:13:53 INF] Description: Evolves population of solutions using selection, crossover, and mutation.
+[09:13:53 INF] Complexity:  O(p×g×n) where p=population, g=generations
+[09:13:53 INF] Pros:        Excellent for large problems, parallelizable
+[09:13:53 INF] Cons:        Slowest, many parameters to tune
+[09:13:53 INF] ════════════════════════════════════════════════════════════
+[09:13:53 INF] 💡 Recommendations:
+[09:13:53 INF]   • Small problems (< 20 cities): Nearest Neighbor + 2-Opt
+[09:13:53 INF]   • Medium problems (20-100 cities): Simulated Annealing
+[09:13:53 INF]   • Large problems (> 100 cities): Genetic Algorithm
+[09:13:53 INF]   • Real-time requirements: Nearest Neighbor
+[09:13:53 INF]   • Best quality: Genetic Algorithm with tuned parameters
+[09:13:53 INF] Press any key to return to main menu...
+
+[09:13:59 INF] 📍 Main Menu:
+[09:13:59 INF]
+[09:13:59 INF]   1. Interactive Solver - Solve custom TSP instances
+[09:13:59 INF]   2. Algorithm Benchmark - Compare all algorithms
+[09:13:59 INF]   3. Visual Demonstration - See algorithms in action
+[09:13:59 INF]   4. Algorithm Information - Learn about each algorithm
+[09:13:59 INF]   5. Exit
+[09:13:59 INF] ➤ Select an option (1-5):
+5
+[09:14:51 INF] User requested application exit
+[09:14:51 INF] Thank you for using TSP Solver! Goodbye!
+[09:14:51 INF] TSP Solver shutting down
 kushal@texas:~$ exit
 logout
 Connection to 192.168.0.120 closed.
