@@ -3,7 +3,12 @@ PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
 Your branch is up to date with 'origin/master'.
 
-nothing to commit, working tree clean
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   scripts/PowerShell.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
 * remote origin
   Fetch URL: git@github.com:kusl/tsp.git
   Push  URL: git@github.com:kusl/tsp.git
@@ -14,19 +19,6 @@ nothing to commit, working tree clean
     master merges with remote master
   Local ref configured for 'git push':
     master pushes to master (up to date)
-Removing TravelingSalesman.ConsoleApp/bin/
-Removing TravelingSalesman.ConsoleApp/obj/
-Removing TravelingSalesman.Core/bin/
-Removing TravelingSalesman.Core/obj/
-Removing TravelingSalesman.Specs/Features/Benchmarking.feature.cs
-Removing TravelingSalesman.Specs/Features/CityOperations.feature.cs
-Removing TravelingSalesman.Specs/Features/DataGeneration.feature.cs
-Removing TravelingSalesman.Specs/Features/TspSolvers.feature.cs
-Removing TravelingSalesman.Specs/TestResults/
-Removing TravelingSalesman.Specs/bin/
-Removing TravelingSalesman.Specs/obj/
-Removing TravelingSalesman.Tests/bin/
-Removing TravelingSalesman.Tests/obj/
 Folder PATH listing
 Volume serial number is BE05-6605
 C:.
