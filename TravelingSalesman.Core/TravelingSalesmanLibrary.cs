@@ -316,7 +316,19 @@ namespace TravelingSalesman.Core
 
             _logger.LogDebug("Initial tour from Nearest Neighbor: {Distance:F2}", tour.TotalDistance);
 
-            return await Task.Run(() => Improve2OptParallel(tour, cancellationToken), cancellationToken);
+            // Store the initial NN solution to ensure we never return worse
+            var initialNNTour = tour.Clone();
+
+            var improvedTour = await Task.Run(() => Improve2OptParallel(tour, cancellationToken), cancellationToken);
+
+            // Absolutely ensure we never return a worse solution than NN
+            if (improvedTour.TotalDistance > initialNNTour.TotalDistance)
+            {
+                _logger.LogWarning("2-Opt failed to improve or worsened the solution. Returning original NN solution.");
+                return initialNNTour;
+            }
+
+            return improvedTour;
         }
 
         private Tour Improve2OptParallel(Tour tour, CancellationToken cancellationToken)
@@ -768,7 +780,7 @@ namespace TravelingSalesman.Core
 
             // Keep elite individuals
             var eliteCount = (int)(_populationSize * _elitismRate);
-            var elite = population.AsParallel()
+            var elite = population
                 .OrderBy(t => t.TotalDistance)
                 .Take(eliteCount)
                 .ToList();
