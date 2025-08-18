@@ -1,8 +1,3 @@
-I see the problem now! The script you downloaded from GitHub still has the bug. Let me create a simple, working script that directly constructs the URL without the problematic function structure:Save this simpler script and run it:
-
-```bash
-# Create the new simple script
-cat > ~/mybashscripts/install-kusl-tsp-simple.sh << 'EOF'
 #!/bin/bash
 
 # TSP Solver Installation Script for Linux (Simple Version)
@@ -127,19 +122,3 @@ if [[ -L "$SYMLINK_PATH" ]]; then
 fi
 echo
 echo "For help, run: ${BINARY_NAME} --help"
-EOF
-
-# Make it executable
-chmod +x ~/mybashscripts/install-kusl-tsp-simple.sh
-
-# Run it
-sudo ~/mybashscripts/install-kusl-tsp-simple.sh
-```
-
-This simplified script:
-1. Doesn't use complex function returns that were causing the issue
-2. Directly fetches and parses the GitHub API response
-3. Shows you exactly what URL it's constructing
-4. Has clearer error messages
-
-This should work on your Debian 13 system!
