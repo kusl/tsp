@@ -1,0 +1,311 @@
+#!/bin/bash
+
+# TSP Solver Installation Script for Linux
+# Installs the latest kusl/tsp release to /opt/kusl-tsp
+# Safe, idempotent, and non-destructive
+
+set -euo pipefail  # Exit on error, undefined variables, and pipe failures
+
+# Configuration
+readonly GITHUB_REPO="kusl/tsp"
+readonly INSTALL_DIR="/opt"
+readonly BINARY_NAME="kusl-tsp"
+readonly INSTALL_PATH="${INSTALL_DIR}/${BINARY_NAME}"
+readonly TEMP_DIR=$(mktemp -d)
+readonly GITHUB_API="https://api.github.com/repos/${GITHUB_REPO}/releases/latest"
+
+# Colors for output (works on most terminals)
+readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
+readonly YELLOW='\033[1;33m'
+readonly BLUE='\033[0;34m'
+readonly NC='\033[0m' # No Color
+
+# Cleanup function
+cleanup() {
+    if [[ -d "${TEMP_DIR}" ]]; then
+        rm -rf "${TEMP_DIR}"
+    fi
+}
+
+# Set trap to cleanup on exit
+trap cleanup EXIT INT TERM
+
+# Print colored messages
+print_error() {
+    echo -e "${RED}[ERROR]${NC} $1" >&2
+}
+
+print_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1"
+}
+
+print_info() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+print_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1"
+}
+
+# Check if running with appropriate permissions
+check_permissions() {
+    if [[ ! -w "${INSTALL_DIR}" ]]; then
+        if [[ $EUID -ne 0 ]]; then
+            print_error "This script needs write access to ${INSTALL_DIR}"
+            print_info "Please run with sudo: sudo $0"
+            exit 1
+        fi
+    fi
+}
+
+# Check for required commands
+check_dependencies() {
+    local deps=("curl" "jq" "chmod")
+    local missing=()
+    
+    for cmd in "${deps[@]}"; do
+        if ! command -v "$cmd" &> /dev/null; then
+            missing+=("$cmd")
+        fi
+    done
+    
+    if [[ ${#missing[@]} -gt 0 ]]; then
+        print_error "Missing required commands: ${missing[*]}"
+        print_info "Install them with:"
+        
+        # Detect package manager
+        if command -v dnf &> /dev/null; then
+            echo "  sudo dnf install ${missing[*]}"
+        elif command -v yum &> /dev/null; then
+            echo "  sudo yum install ${missing[*]}"
+        elif command -v apt-get &> /dev/null; then
+            echo "  sudo apt-get install ${missing[*]}"
+        else
+            echo "  Please install: ${missing[*]}"
+        fi
+        exit 1
+    fi
+}
+
+# Get the latest release information from GitHub
+get_latest_release_info() {
+    print_info "Fetching latest release information from GitHub..."
+    
+    local response
+    response=$(curl -s -f "${GITHUB_API}" 2>/dev/null) || {
+        print_error "Failed to fetch release information from GitHub"
+        print_info "API URL: ${GITHUB_API}"
+        return 1
+    }
+    
+    # Extract the Linux x64 binary URL
+    local download_url
+    download_url=$(echo "$response" | jq -r '.assets[] | select(.name | contains("linux-x64")) | .browser_download_url' 2>/dev/null | head -n1)
+    
+    if [[ -z "$download_url" ]]; then
+        # Try alternative pattern from release body or tag
+        local tag_name
+        tag_name=$(echo "$response" | jq -r '.tag_name' 2>/dev/null)
+        
+        if [[ -n "$tag_name" ]]; then
+            # Extract SHA from tag (format: v25.8.18.1138-76e0c299)
+            local sha
+            sha=$(echo "$tag_name" | grep -oP '[a-f0-9]{8}$' || true)
+            
+            if [[ -n "$sha" ]]; then
+                download_url="https://github.com/${GITHUB_REPO}/releases/download/${tag_name}/TSP-linux-x64-${sha}"
+            fi
+        fi
+    fi
+    
+    if [[ -z "$download_url" ]]; then
+        print_error "Could not find Linux x64 binary in the latest release"
+        print_info "Please check: https://github.com/${GITHUB_REPO}/releases"
+        return 1
+    fi
+    
+    local version
+    version=$(echo "$response" | jq -r '.tag_name' 2>/dev/null || echo "unknown")
+    
+    echo "$download_url|$version"
+}
+
+# Download the binary
+download_binary() {
+    local url=$1
+    local output_file=$2
+    
+    print_info "Downloading from: $url"
+    
+    if ! curl -L -f -o "$output_file" "$url" --progress-bar; then
+        print_error "Failed to download binary"
+        return 1
+    fi
+    
+    # Verify the download
+    if [[ ! -f "$output_file" ]]; then
+        print_error "Downloaded file not found"
+        return 1
+    fi
+    
+    local file_size
+    file_size=$(stat -c%s "$output_file" 2>/dev/null || stat -f%z "$output_file" 2>/dev/null || echo 0)
+    
+    if [[ "$file_size" -lt 1000 ]]; then
+        print_error "Downloaded file seems too small (${file_size} bytes)"
+        return 1
+    fi
+    
+    print_success "Download complete ($(numfmt --to=iec-i --suffix=B "$file_size" 2>/dev/null || echo "${file_size} bytes"))"
+}
+
+# Check if binary is already installed and get its version
+get_installed_version() {
+    if [[ -f "${INSTALL_PATH}" ]] && [[ -x "${INSTALL_PATH}" ]]; then
+        # Try to get version from the binary
+        local version
+        version=$("${INSTALL_PATH}" --version 2>/dev/null | head -n1 || echo "unknown")
+        echo "$version"
+    else
+        echo "none"
+    fi
+}
+
+# Install the binary
+install_binary() {
+    local temp_binary=$1
+    local version=$2
+    
+    print_info "Installing to ${INSTALL_PATH}..."
+    
+    # Backup existing binary if it exists
+    if [[ -f "${INSTALL_PATH}" ]]; then
+        local backup_path="${INSTALL_PATH}.backup.$(date +%Y%m%d-%H%M%S)"
+        print_info "Backing up existing binary to ${backup_path}"
+        cp "${INSTALL_PATH}" "${backup_path}"
+    fi
+    
+    # Make binary executable
+    chmod +x "$temp_binary"
+    
+    # Move to final location
+    if ! mv -f "$temp_binary" "${INSTALL_PATH}"; then
+        print_error "Failed to install binary to ${INSTALL_PATH}"
+        return 1
+    fi
+    
+    # Verify installation
+    if [[ ! -x "${INSTALL_PATH}" ]]; then
+        print_error "Installation verification failed"
+        return 1
+    fi
+    
+    print_success "Successfully installed ${BINARY_NAME} version ${version}"
+}
+
+# Create convenience symlink
+create_symlink() {
+    local symlink_path="/usr/local/bin/${BINARY_NAME}"
+    
+    print_info "Creating symlink for system-wide access..."
+    
+    # Check if /usr/local/bin exists
+    if [[ ! -d "/usr/local/bin" ]]; then
+        print_warning "/usr/local/bin does not exist, skipping symlink creation"
+        return 0
+    fi
+    
+    # Create or update symlink
+    if ln -sf "${INSTALL_PATH}" "${symlink_path}" 2>/dev/null; then
+        print_success "Symlink created: ${symlink_path} -> ${INSTALL_PATH}"
+    else
+        print_warning "Could not create symlink in /usr/local/bin (permission denied)"
+        print_info "You can manually create it with:"
+        echo "  sudo ln -sf ${INSTALL_PATH} ${symlink_path}"
+    fi
+}
+
+# Main installation process
+main() {
+    echo "================================================="
+    echo " TSP Solver Installation Script"
+    echo " Repository: https://github.com/${GITHUB_REPO}"
+    echo "================================================="
+    echo
+    
+    # Check permissions
+    check_permissions
+    
+    # Check dependencies
+    check_dependencies
+    
+    # Get currently installed version
+    local installed_version
+    installed_version=$(get_installed_version)
+    
+    if [[ "$installed_version" != "none" ]]; then
+        print_info "Currently installed version: ${installed_version}"
+    else
+        print_info "No existing installation found"
+    fi
+    
+    # Get latest release info
+    local release_info
+    release_info=$(get_latest_release_info) || exit 1
+    
+    IFS='|' read -r download_url latest_version <<< "$release_info"
+    
+    print_info "Latest available version: ${latest_version}"
+    
+    # Ask for confirmation if already installed
+    if [[ "$installed_version" != "none" ]]; then
+        echo
+        read -p "Do you want to proceed with the installation? (y/N): " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            print_info "Installation cancelled"
+            exit 0
+        fi
+    fi
+    
+    # Download binary to temp directory
+    local temp_binary="${TEMP_DIR}/tsp-binary"
+    download_binary "$download_url" "$temp_binary" || exit 1
+    
+    # Install the binary
+    install_binary "$temp_binary" "$latest_version" || exit 1
+    
+    # Create symlink for easier access
+    create_symlink
+    
+    echo
+    print_success "Installation complete!"
+    echo
+    echo "You can now run the TSP solver using:"
+    echo "  ${INSTALL_PATH}"
+    
+    if [[ -L "/usr/local/bin/${BINARY_NAME}" ]]; then
+        echo "  or simply: ${BINARY_NAME}"
+    else
+        echo
+        echo "To run from anywhere, add to PATH or create a symlink:"
+        echo "  sudo ln -sf ${INSTALL_PATH} /usr/local/bin/${BINARY_NAME}"
+    fi
+    
+    echo
+    echo "For help, run:"
+    echo "  ${BINARY_NAME} --help"
+    echo
+    
+    # Test the installation
+    print_info "Testing installation..."
+    if "${INSTALL_PATH}" --version &>/dev/null; then
+        print_success "Installation test passed!"
+    else
+        print_warning "Could not verify installation. Please test manually."
+    fi
+}
+
+# Run main function
+main "$@"
