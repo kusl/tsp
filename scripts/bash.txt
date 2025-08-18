@@ -1,44 +1,66 @@
-I see the issue! The script has a bug where it's outputting text while trying to parse the URL, causing the download URL to be malformed. Let me fix this script for you:The main issues I fixed:
+PowerShell 7.6.0-preview.4
+PS C:\Users\kushal>
+PS C:\Users\kushal> ssh kushal@192.168.0.120
+kushal@192.168.0.120's password:
+Linux texas 6.12.38+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.38-1 (2025-07-16) x86_64
 
-1. **URL parsing bug**: The script was mixing print statements with the URL extraction, causing malformed URLs like `[INFO] Fetching...` to be passed to curl
-2. **Better error handling**: Separated the URL and version into two separate lines
-3. **URL validation**: Added a check to ensure the URL starts with `https://`
-4. **Debian compatibility**: Prioritized `apt-get` in the package manager detection
-5. **Better `grep` compatibility**: Changed from `grep -oP` (Perl regex) to `grep -oE` (extended regex) for better compatibility
-6. **Simplified file size display**: Made `numfmt` optional since it might not be available on all systems
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
 
-To use the fixed script on your Debian 13 system:
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Thu Aug 14 10:58:39 2025 from 192.168.0.126
+kushal@texas:~$
+kushal@texas:~$ dotnet
+-bash: dotnet: command not found
+kushal@texas:~$ curl
+curl: try 'curl --help' or 'curl --manual' for more information
+kushal@texas:~$ curl --help
+Usage: curl [options...] <url>
+ -d, --data <data>           HTTP POST data
+ -f, --fail                  Fail fast with no output on HTTP errors
+ -h, --help <subject>        Get help for commands
+ -o, --output <file>         Write to file instead of stdout
+ -O, --remote-name           Write output to file named as remote file
+ -i, --show-headers          Show response headers in output
+ -s, --silent                Silent mode
+ -T, --upload-file <file>    Transfer local FILE to destination
+ -u, --user <user:password>  Server user and password
+ -A, --user-agent <name>     Send User-Agent <name> to server
+ -v, --verbose               Make the operation more talkative
+ -V, --version               Show version number and quit
 
-```bash
-# First, install jq if you don't have it
-sudo apt-get update && sudo apt-get install -y jq
+This is not the full help; this menu is split into categories.
+Use "--help category" to get an overview of all categories, which are:
+auth, connection, curl, deprecated, dns, file, ftp, global, http, imap, ldap, output, pop3, post, proxy, scp, sftp, smtp, ssh, telnet, tftp, timeout, tls, upload, verbose.
+Use "--help all" to list all options
+Use "--help [option]" to view documentation for a given option
+kushal@texas:~$ curl --version
+curl 8.14.1 (x86_64-pc-linux-gnu) libcurl/8.14.1 OpenSSL/3.5.1 zlib/1.3.1 brotli/1.1.0 zstd/1.5.7 libidn2/2.3.8 libpsl/0.21.2 libssh2/1.11.1 nghttp2/1.64.0 nghttp3/1.8.0 librtmp/2.3 OpenLDAP/2.6.10
+Release-Date: 2025-06-04, security patched: 8.14.1-2
+Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtmp rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
+Features: alt-svc AsynchDNS brotli GSS-API HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL threadsafe TLS-SRP UnixSockets zstd
+kushal@texas:~$ cd mybashscripts/
+kushal@texas:~/mybashscripts$ time curl -o install-kusl-tsp.sh https://raw.githubusercontent.com/kusl/tsp/master/install-linux.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    14  100    14    0     0    119      0 --:--:-- --:--:-- --:--:--   119
 
-# Download the fixed script
-curl -o install-kusl-tsp.sh https://raw.githubusercontent.com/kusl/tsp/refs/heads/master/scripts/install-linux.sh
+real    0m0.136s
+user    0m0.039s
+sys     0m0.009s
+kushal@texas:~/mybashscripts$ cat ~/mybashscripts/install-kusl-tsp.sh
+404: Not Foundkushal@texas:~/mybashscripts$
+kushal@texas:~/mybashscripts$ time curl -o install-kusl-tsp.sh https://raw.githubusercontent.com/kusl/tsp/refs/heads/master/scripts/install-linux.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  9059  100  9059    0     0   120k      0 --:--:-- --:--:-- --:--:--  122k
 
-# Or save the fixed version I provided above
-nano install-kusl-tsp.sh
-# (paste the fixed script)
-
-# Make it executable
-chmod +x install-kusl-tsp.sh
-
-# Run with sudo
-sudo ./install-kusl-tsp.sh
-```
-
-The script should now:
-1. Properly fetch the latest release info from GitHub
-2. Correctly parse the download URL
-3. Download the binary without errors
-4. Install it to `/opt/kusl-tsp`
-5. Create a symlink in `/usr/local/bin` if possible
-
-Let me know if you encounter any other issues!
-
-
-
-```bash
+real    0m0.091s
+user    0m0.038s
+sys     0m0.008s
+kushal@texas:~/mybashscripts$ cat ~/mybashscripts/install-kusl-tsp.sh
 #!/bin/bash
 
 # TSP Solver Installation Script for Linux
@@ -116,12 +138,12 @@ check_dependencies() {
         print_info "Install them with:"
 
         # Detect package manager
-        if command -v apt-get &> /dev/null; then
-            echo "  sudo apt-get update && sudo apt-get install -y ${missing[*]}"
-        elif command -v dnf &> /dev/null; then
-            echo "  sudo dnf install -y ${missing[*]}"
+        if command -v dnf &> /dev/null; then
+            echo "  sudo dnf install ${missing[*]}"
         elif command -v yum &> /dev/null; then
-            echo "  sudo yum install -y ${missing[*]}"
+            echo "  sudo yum install ${missing[*]}"
+        elif command -v apt-get &> /dev/null; then
+            echo "  sudo apt-get install ${missing[*]}"
         else
             echo "  Please install: ${missing[*]}"
         fi
@@ -140,28 +162,27 @@ get_latest_release_info() {
         return 1
     }
 
-    # Extract the Linux x64 binary URL from assets
+    # Extract the Linux x64 binary URL
     local download_url
     download_url=$(echo "$response" | jq -r '.assets[] | select(.name | contains("linux-x64")) | .browser_download_url' 2>/dev/null | head -n1)
 
-    # If no asset found, construct URL from tag
-    if [[ -z "$download_url" ]] || [[ "$download_url" == "null" ]]; then
+    if [[ -z "$download_url" ]]; then
+        # Try alternative pattern from release body or tag
         local tag_name
         tag_name=$(echo "$response" | jq -r '.tag_name' 2>/dev/null)
 
-        if [[ -n "$tag_name" ]] && [[ "$tag_name" != "null" ]]; then
+        if [[ -n "$tag_name" ]]; then
             # Extract SHA from tag (format: v25.8.18.1138-76e0c299)
             local sha
-            sha=$(echo "$tag_name" | grep -oE '[a-f0-9]{8}$' || true)
+            sha=$(echo "$tag_name" | grep -oP '[a-f0-9]{8}$' || true)
 
             if [[ -n "$sha" ]]; then
                 download_url="https://github.com/${GITHUB_REPO}/releases/download/${tag_name}/TSP-linux-x64-${sha}"
-                print_info "Constructed download URL from tag: ${tag_name}"
             fi
         fi
     fi
 
-    if [[ -z "$download_url" ]] || [[ "$download_url" == "null" ]]; then
+    if [[ -z "$download_url" ]]; then
         print_error "Could not find Linux x64 binary in the latest release"
         print_info "Please check: https://github.com/${GITHUB_REPO}/releases"
         return 1
@@ -170,9 +191,7 @@ get_latest_release_info() {
     local version
     version=$(echo "$response" | jq -r '.tag_name' 2>/dev/null || echo "unknown")
 
-    # Return both URL and version
-    echo "${download_url}"
-    echo "${version}"
+    echo "$download_url|$version"
 }
 
 # Download the binary
@@ -182,9 +201,8 @@ download_binary() {
 
     print_info "Downloading from: $url"
 
-    # Use curl with proper error handling
-    if ! curl -L -f -o "$output_file" "$url" --progress-bar 2>/dev/null; then
-        print_error "Failed to download binary from $url"
+    if ! curl -L -f -o "$output_file" "$url" --progress-bar; then
+        print_error "Failed to download binary"
         return 1
     fi
 
@@ -199,19 +217,10 @@ download_binary() {
 
     if [[ "$file_size" -lt 1000 ]]; then
         print_error "Downloaded file seems too small (${file_size} bytes)"
-        print_error "This might indicate a 404 or other download error"
         return 1
     fi
 
-    # Use a simpler size display that works on more systems
-    local size_display
-    if command -v numfmt &> /dev/null; then
-        size_display=$(numfmt --to=iec-i --suffix=B "$file_size" 2>/dev/null || echo "${file_size} bytes")
-    else
-        size_display="${file_size} bytes"
-    fi
-    
-    print_success "Download complete (${size_display})"
+    print_success "Download complete ($(numfmt --to=iec-i --suffix=B "$file_size" 2>/dev/null || echo "${file_size} bytes"))"
 }
 
 # Check if binary is already installed and get its version
@@ -304,21 +313,11 @@ main() {
         print_info "No existing installation found"
     fi
 
-    # Get latest release info (now returns two lines)
+    # Get latest release info
     local release_info
     release_info=$(get_latest_release_info) || exit 1
 
-    # Read the two lines
-    local download_url
-    local latest_version
-    download_url=$(echo "$release_info" | head -n1)
-    latest_version=$(echo "$release_info" | tail -n1)
-
-    # Validate URL
-    if [[ ! "$download_url" =~ ^https:// ]]; then
-        print_error "Invalid download URL: $download_url"
-        exit 1
-    fi
+    IFS='|' read -r download_url latest_version <<< "$release_info"
 
     print_info "Latest available version: ${latest_version}"
 
@@ -366,7 +365,6 @@ main() {
     print_info "Testing installation..."
     if "${INSTALL_PATH}" --version &>/dev/null; then
         print_success "Installation test passed!"
-        echo "Version: $("${INSTALL_PATH}" --version 2>/dev/null | head -n1 || echo "unknown")"
     else
         print_warning "Could not verify installation. Please test manually."
     fi
@@ -374,4 +372,48 @@ main() {
 
 # Run main function
 main "$@"
-```
+kushal@texas:~/mybashscripts$ chmod +x install-kusl-tsp.sh
+kushal@texas:~/mybashscripts$ sudo date; time sudo ./install-kusl-tsp.sh
+[sudo] password for kushal:
+Sorry, try again.
+[sudo] password for kushal:
+Sun Aug 17 09:57:48 PM EDT 2025
+=================================================
+ TSP Solver Installation Script
+ Repository: https://github.com/kusl/tsp
+=================================================
+
+[INFO] No existing installation found
+[INFO] Latest available version:
+[INFO] Downloading from: [INFO] Fetching latest release information from GitHub...
+curl: (3) bad range in URL position 4:
+[INFO] Fetching latest release information from GitHub...
+   ^
+[ERROR] Failed to download binary
+
+real    0m0.246s
+user    0m0.000s
+sys     0m0.017s
+kushal@texas:~/mybashscripts$ sudo date; time sudo ./install-kusl-tsp.sh
+Sun Aug 17 09:57:59 PM EDT 2025
+=================================================
+ TSP Solver Installation Script
+ Repository: https://github.com/kusl/tsp
+=================================================
+
+[INFO] No existing installation found
+[INFO] Latest available version:
+[INFO] Downloading from: [INFO] Fetching latest release information from GitHub...
+curl: (3) bad range in URL position 4:
+[INFO] Fetching latest release information from GitHub...
+   ^
+[ERROR] Failed to download binary
+
+real    0m0.201s
+user    0m0.015s
+sys     0m0.000s
+kushal@texas:~/mybashscripts$
+kushal@texas:~/mybashscripts$ exit
+logout
+Connection to 192.168.0.120 closed.
+PS C:\Users\kushal>
