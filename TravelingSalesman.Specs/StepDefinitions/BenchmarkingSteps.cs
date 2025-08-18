@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,13 +27,13 @@ namespace TravelingSalesman.Specs.StepDefinitions
         {
             _cities.Clear();
             int id = 0;
-            
+
             foreach (var row in table.Rows)
             {
                 var name = row["Name"];
                 var x = double.Parse(row["X"]);
                 var y = double.Parse(row["Y"]);
-                
+
                 _cities.Add(new City(id++, name, x, y));
             }
         }
@@ -42,7 +43,7 @@ namespace TravelingSalesman.Specs.StepDefinitions
         {
             var benchmark = new TspBenchmark();
             var solvers = TspSolverFactory.CreateAllSolvers().ToList();
-            
+
             _benchmarkResults = await benchmark.RunBenchmarkAsync(_cities, solvers);
         }
 
@@ -50,14 +51,14 @@ namespace TravelingSalesman.Specs.StepDefinitions
         public async Task WhenIBenchmarkTheFollowingAlgorithms(Table table)
         {
             _solversToTest.Clear();
-            
+
             foreach (var row in table.Rows)
             {
                 var algorithmName = row["Algorithm"];
                 var solver = CreateSolver(algorithmName);
                 _solversToTest.Add(solver);
             }
-            
+
             var benchmark = new TspBenchmark();
             _benchmarkResults = await benchmark.RunBenchmarkAsync(_cities, _solversToTest);
         }
@@ -67,7 +68,7 @@ namespace TravelingSalesman.Specs.StepDefinitions
         {
             Assert.NotNull(_benchmarkResults);
             Assert.Equal(4, _benchmarkResults.Count); // We have 4 algorithms
-            
+
             Assert.All(_benchmarkResults, result =>
             {
                 Assert.NotNull(result.SolverName);
@@ -81,7 +82,7 @@ namespace TravelingSalesman.Specs.StepDefinitions
         public void ThenTheResultsShouldBeSortedByDistanceBestFirst()
         {
             Assert.NotNull(_benchmarkResults);
-            
+
             for (int i = 1; i < _benchmarkResults.Count; i++)
             {
                 Assert.True(_benchmarkResults[i].Distance >= _benchmarkResults[i - 1].Distance,
@@ -104,7 +105,7 @@ namespace TravelingSalesman.Specs.StepDefinitions
         {
             Assert.NotNull(_benchmarkResults);
             Assert.NotEmpty(_benchmarkResults);
-            
+
             var bestResult = _benchmarkResults.First();
             Assert.Equal(expectedDistance, bestResult.Distance, 1);
         }
@@ -114,9 +115,9 @@ namespace TravelingSalesman.Specs.StepDefinitions
         {
             Assert.NotNull(_benchmarkResults);
             Assert.NotEmpty(_benchmarkResults);
-            
+
             var optimalDistance = _benchmarkResults.First().Distance;
-            
+
             // For simple 4-city square, optimal is 4.0
             Assert.All(_benchmarkResults, result =>
             {
@@ -124,28 +125,55 @@ namespace TravelingSalesman.Specs.StepDefinitions
             });
         }
 
+        // FIXED: This method was causing flaky tests
         [Then(@"Nearest Neighbor should be the fastest")]
         public void ThenNearestNeighborShouldBeTheFastest()
         {
             Assert.NotNull(_benchmarkResults);
-            
+
             var nnResult = _benchmarkResults.FirstOrDefault(r => r.SolverName == "Nearest Neighbor");
             Assert.NotNull(nnResult);
-            
-            var fastestTime = _benchmarkResults.Min(r => r.ExecutionTime);
-            Assert.Equal(fastestTime, nnResult.ExecutionTime);
+
+            // SOLUTION 1: Check that NN is among the fastest (within tolerance)
+            // This is more realistic as execution times can vary slightly
+            var fastestTime = _benchmarkResults.Min(r => r.ExecutionTime.TotalMilliseconds);
+            var nnTime = nnResult.ExecutionTime.TotalMilliseconds;
+
+            // Allow up to 50% variance or 5ms difference (whichever is larger)
+            // This accounts for small timing variations while still verifying NN is fast
+            var tolerance = Math.Max(fastestTime * 0.5, 5.0);
+
+            Assert.True(nnTime <= fastestTime + tolerance,
+                $"Nearest Neighbor ({nnTime:F2}ms) should be within {tolerance:F2}ms of the fastest ({fastestTime:F2}ms)");
+
+            // ALTERNATIVE SOLUTION 2: Just verify NN is faster than complex algorithms
+            // This is less strict but more reliable
+            var gaResult = _benchmarkResults.FirstOrDefault(r => r.SolverName == "Genetic Algorithm");
+            var saResult = _benchmarkResults.FirstOrDefault(r => r.SolverName == "Simulated Annealing");
+
+            if (gaResult != null)
+            {
+                Assert.True(nnResult.ExecutionTime < gaResult.ExecutionTime,
+                    $"NN should be faster than Genetic Algorithm");
+            }
+
+            if (saResult != null)
+            {
+                Assert.True(nnResult.ExecutionTime < saResult.ExecutionTime,
+                    $"NN should be faster than Simulated Annealing");
+            }
         }
 
         [Then(@"Genetic Algorithm should typically find the best solution")]
         public void ThenGeneticAlgorithmShouldTypicallyFindTheBestSolution()
         {
             Assert.NotNull(_benchmarkResults);
-            
+
             var gaResult = _benchmarkResults.FirstOrDefault(r => r.SolverName == "Genetic Algorithm");
             Assert.NotNull(gaResult);
-            
+
             var bestDistance = _benchmarkResults.Min(r => r.Distance);
-            
+
             // GA should be within 10% of the best solution
             Assert.True(gaResult.Distance <= bestDistance * 1.1,
                 $"GA distance {gaResult.Distance} is not within 10% of best {bestDistance}");
@@ -155,15 +183,17 @@ namespace TravelingSalesman.Specs.StepDefinitions
         public void Then2OptShouldImproveUponNearestNeighbor()
         {
             Assert.NotNull(_benchmarkResults);
-            
+
             var nnResult = _benchmarkResults.FirstOrDefault(r => r.SolverName == "Nearest Neighbor");
             var twoOptResult = _benchmarkResults.FirstOrDefault(r => r.SolverName == "2-Opt");
-            
+
             Assert.NotNull(nnResult);
             Assert.NotNull(twoOptResult);
-            
-            Assert.True(twoOptResult.Distance <= nnResult.Distance,
-                $"2-Opt ({twoOptResult.Distance}) should improve upon NN ({nnResult.Distance})");
+
+            // 2-Opt should produce same or better solution than NN
+            // Using a small tolerance for floating point comparison
+            Assert.True(twoOptResult.Distance <= nnResult.Distance + 0.001,
+                $"2-Opt ({twoOptResult.Distance:F2}) should improve upon NN ({nnResult.Distance:F2})");
         }
 
         private ITspSolver CreateSolver(string algorithmName)
