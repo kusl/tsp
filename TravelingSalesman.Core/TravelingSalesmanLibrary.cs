@@ -329,6 +329,13 @@ namespace TravelingSalesman.Core
 
             _logger.LogDebug("Starting 2-Opt improvement from distance {InitialDistance:F2}", initialDistance);
 
+            // Handle small tours
+            if (n <= 3)
+            {
+                _logger.LogDebug("Tour has {CityCount} cities, limited optimization possible", n);
+                return bestTour;
+            }
+
             while (improved && iteration < _maxIterations)
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -374,23 +381,35 @@ namespace TravelingSalesman.Core
                 }
                 else
                 {
-                    // Sequential for small problems
-                    for (int i = 1; i < n - 2; i++)
+                    // Sequential for small problems - check all swaps in each iteration
+                    var bestDelta = 0.0;
+                    var bestI = -1;
+                    var bestJ = -1;
+
+                    for (int i = 1; i < n - 1; i++)
                     {
-                        for (int j = i + 2; j < n; j++)
+                        for (int j = i + 1; j < n; j++)
                         {
+                            if (i == 1 && j == n - 1) continue; // Skip reversing entire tour
+                            
                             cancellationToken.ThrowIfCancellationRequested();
 
                             var delta = bestTour.Calculate2OptDelta(i, j);
 
-                            if (delta < -0.001)
+                            if (delta < bestDelta)
                             {
-                                bestTour.Reverse(i, j);
-                                improved = true;
-                                break; // First improvement strategy
+                                bestDelta = delta;
+                                bestI = i;
+                                bestJ = j;
                             }
                         }
-                        if (improved) break;
+                    }
+
+                    if (bestI != -1 && bestDelta < -0.001)
+                    {
+                        bestTour.Reverse(bestI, bestJ);
+                        improved = true;
+                        _logger.LogTrace("2-Opt improvement found: delta = {Delta:F2}", bestDelta);
                     }
                 }
 
@@ -402,10 +421,18 @@ namespace TravelingSalesman.Core
                 }
             }
 
+            // Ensure we never return a worse solution than we started with
+            if (bestTour.TotalDistance > initialDistance + 0.001)
+            {
+                _logger.LogWarning("2-Opt resulted in worse solution ({NewDistance:F2} > {InitialDistance:F2}), returning original",
+                    bestTour.TotalDistance, initialDistance);
+                bestTour = tour.Clone();
+            }
+
             var finalImprovement = ((initialDistance - bestTour.TotalDistance) / initialDistance) * 100;
             _logger.LogInformation("2-Opt completed after {Iterations} iterations. " +
                                  "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%)",
-                                 iteration, bestTour.TotalDistance, finalImprovement);
+                                 iteration, bestTour.TotalDistance, Math.Max(0, finalImprovement));
 
             return bestTour;
         }
@@ -417,44 +444,75 @@ namespace TravelingSalesman.Core
             var iteration = 0;
             var bestTour = tour.Clone();
             var initialDistance = bestTour.TotalDistance;
+            var n = tour.Cities.Count;
 
             _logger.LogDebug("Starting 2-Opt improvement from distance {InitialDistance:F2}", initialDistance);
+
+            // Handle small tours
+            if (n <= 3)
+            {
+                _logger.LogDebug("Tour has {CityCount} cities, limited optimization possible", n);
+                return bestTour;
+            }
 
             while (improved && iteration < _maxIterations)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 improved = false;
 
-                for (int i = 1; i < tour.Cities.Count - 2; i++)
+                // Check all possible 2-opt swaps in this iteration
+                var bestDelta = 0.0;
+                var bestI = -1;
+                var bestJ = -1;
+
+                for (int i = 1; i < n - 1; i++)
                 {
-                    for (int j = i + 1; j < tour.Cities.Count; j++)
+                    for (int j = i + 1; j < n; j++)
                     {
+                        if (i == 1 && j == n - 1) continue; // Skip reversing entire tour
+
                         cancellationToken.ThrowIfCancellationRequested();
 
                         // Try reversing the tour between i and j
                         var newTour = bestTour.Clone();
                         newTour.Reverse(i, j);
 
-                        if (newTour.TotalDistance < bestTour.TotalDistance - 0.001) // Add tolerance
+                        var delta = newTour.TotalDistance - bestTour.TotalDistance;
+                        
+                        if (delta < bestDelta)
                         {
-                            _logger.LogTrace("2-Opt improvement found: {OldDistance:F2} -> {NewDistance:F2}",
-                                bestTour.TotalDistance, newTour.TotalDistance);
-                            bestTour = newTour;
-                            improved = true;
-                            break; // First improvement strategy
+                            bestDelta = delta;
+                            bestI = i;
+                            bestJ = j;
                         }
                     }
-                    if (improved) break;
+                }
+
+                // Apply the best improvement found in this iteration
+                if (bestI != -1 && bestDelta < -0.001) // Add tolerance
+                {
+                    bestTour.Reverse(bestI, bestJ);
+                    improved = true;
+                    _logger.LogTrace("2-Opt improvement found: {OldDistance:F2} -> {NewDistance:F2}",
+                        bestTour.TotalDistance - bestDelta, bestTour.TotalDistance);
                 }
 
                 iteration++;
                 OnProgressChanged(iteration, bestTour.TotalDistance, $"2-Opt iteration {iteration}");
             }
 
+            // Ensure we never return a worse solution than we started with
+            if (bestTour.TotalDistance > initialDistance + 0.001)
+            {
+                _logger.LogWarning("2-Opt resulted in worse solution ({NewDistance:F2} > {InitialDistance:F2}), returning original",
+                    bestTour.TotalDistance, initialDistance);
+                bestTour = tour.Clone();
+            }
+
             var finalImprovement = ((initialDistance - bestTour.TotalDistance) / initialDistance) * 100;
             _logger.LogInformation("2-Opt completed after {Iterations} iterations. " +
                                  "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%)",
-                                 iteration, bestTour.TotalDistance, finalImprovement);
+                                 iteration, bestTour.TotalDistance, Math.Max(0, finalImprovement));
 
             return bestTour;
         }
