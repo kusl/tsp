@@ -2,7 +2,7 @@ PowerShell 7.6.0-preview.4
 PS C:\Users\kushal>
 PS C:\Users\kushal> C:\code\TSP\scripts\cat.ps1
 On branch master
-Your branch is ahead of 'origin/master' by 10 commits.
+Your branch is ahead of 'origin/master' by 12 commits.
   (use "git push" to publish your local commits)
 
 nothing to commit, working tree clean
@@ -345,9 +345,9 @@ ENTRYPOINT ["./TravelingSalesman.ConsoleApp"]
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
     <!-- Reqnroll BDD Testing -->
-    <PackageVersion Include="Reqnroll" Version="2.2.1" />
-    <PackageVersion Include="Reqnroll.xUnit" Version="2.2.1" />
-    <PackageVersion Include="Reqnroll.Verify" Version="2.2.1" />
+    <PackageVersion Include="Reqnroll" Version="2.4.1" />
+    <PackageVersion Include="Reqnroll.xUnit" Version="2.4.1" />
+    <PackageVersion Include="Reqnroll.Verify" Version="2.4.1" />
   </ItemGroup>
 </Project>
 
@@ -5086,4 +5086,4 @@ Scenario: Nearest Neighbor produces deterministic results
     And I solve the same problem again using Nearest Neighbor algorithm
     Then both solutions should have the same total distance
     And both solutions should have the same route
-PS C:\code\TSP>
+PS C:\code\TSP> C:\code\TSP\scripts\cat.ps1
