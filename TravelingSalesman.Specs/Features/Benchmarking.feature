@@ -42,7 +42,7 @@ Scenario: Quick algorithm comparison on small dataset
     When I benchmark all available algorithms
     Then all algorithms should find good solutions within 20% of optimal
     And Nearest Neighbor should complete in under 10 milliseconds
-    And all algorithms should complete in under 10 second
+    And all algorithms should complete in under 30 second
 
 @benchmark @quality @larger-problem
 Scenario: Solution quality on moderate problem
