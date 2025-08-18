@@ -1,77 +1,44 @@
-PowerShell 7.6.0-preview.4
-PS C:\Users\kushal> ssh kushal@192.168.0.120
-kushal@192.168.0.120's password:
-Linux texas 6.12.38+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.38-1 (2025-07-16) x86_64
+I see the issue - the function `get_latest_release_info()` is still outputting the `print_info` message while trying to return the URL, which contaminates the output. Let me provide a completely fixed version:The key fix is that all `print_*` functions now output to **stderr** (`>&2`) instead of stdout. This prevents the status messages from contaminating the function's return values. The function `get_latest_release_info()` returns its data on stdout, while all status messages go to stderr.
 
-The programs included with the Debian GNU/Linux system are free software;
-the exact distribution terms for each program are described in the
-individual files in /usr/share/doc/*/copyright.
+Here's how to use it:
 
-Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
-permitted by applicable law.
-Last login: Sun Aug 17 21:52:02 2025 from 192.168.0.213
-kushal@texas:~$ sudo date; time sudo apt-get update && sudo apt-get install -y jq
-[sudo] password for kushal:
-Sun Aug 17 10:04:13 PM EDT 2025
-Hit:1 http://deb.debian.org/debian trixie InRelease
-Get:2 http://security.debian.org/debian-security trixie-security InRelease [43.4 kB]
-Get:3 http://deb.debian.org/debian trixie-updates InRelease [47.1 kB]
-Get:4 http://security.debian.org/debian-security trixie-security/main Sources [21.0 kB]
-Get:5 http://security.debian.org/debian-security trixie-security/main amd64 Packages [8,780 B]
-Get:6 http://security.debian.org/debian-security trixie-security/main Translation-en [9,164 B]
-Fetched 130 kB in 0s (616 kB/s)
-Reading package lists... Done
+```bash
+# Remove old script
+rm -f ~/mybashscripts/install-kusl-tsp.sh
 
-real    0m1.338s
-user    0m0.006s
-sys     0m0.015s
-Reading package lists... Done
-Building dependency tree... Done
-Reading state information... Done
-jq is already the newest version (1.7.1-6+deb13u1).
-The following packages were automatically installed and are no longer required:
-  libaio1 libavcodec59 libavdevice59 libavfilter8 libavformat59 libavutil57 libcbor0.8 libcodec2-1.0 libdav1d6 libdrm-nouveau2 libdrm-radeon1 libepoxy0 libflac12 libfuse2 libglapi-mesa libicu72 libjxl0.7
-  libldap-2.5-0 libllvm15 libmbedcrypto7 libmfx1 libnsl2 libperl5.36 libplacebo208 libpostproc56 libpython3.11-minimal libpython3.11-stdlib libquadmath0 librav1e0 libssh-gcrypt-4 libsvtav1enc1 libswresample4
-  libswscale6 libtheora0 libutempter0 libvpx7 libx265-199 libxcb-dri2-0 perl-modules-5.36 python3-autocommand python3-httplib2 python3-inflect python3-jaraco.context python3-jaraco.functools
-  python3-more-itertools python3-pkg-resources python3-pycurl python3-pyparsing python3-pysimplesoap python3-six python3-typeguard python3-typing-extensions python3.11 python3.11-minimal
-Use 'sudo apt autoremove' to remove them.
-0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.
-kushal@texas:~$ cd ~/mybashscripts/; curl -o install-kusl-tsp.sh https://raw.githubusercontent.com/kusl/tsp/refs/heads/master/scripts/install-linux.sh
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100  9882  100  9882    0     0  81645      0 --:--:-- --:--:-- --:--:-- 82350
-kushal@texas:~/mybashscripts$ chmod +x install-kusl-tsp.sh
-kushal@texas:~/mybashscripts$ sudo date; time sudo ./install-kusl-tsp.sh
-Sun Aug 17 10:05:09 PM EDT 2025
-=================================================
- TSP Solver Installation Script
- Repository: https://github.com/kusl/tsp
-=================================================
+# Save the new script (copy the content above)
+cat > ~/mybashscripts/install-kusl-tsp.sh << 'EOF'
+# [paste the script content here]
+EOF
 
-[INFO] No existing installation found
-[ERROR] Invalid download URL: [INFO] Fetching latest release information from GitHub...
+# Or download if you've updated it on GitHub
+curl -o ~/mybashscripts/install-kusl-tsp.sh https://raw.githubusercontent.com/kusl/tsp/refs/heads/master/scripts/install-linux.sh
 
-real    0m0.202s
-user    0m0.002s
-sys     0m0.011s
-kushal@texas:~/mybashscripts$ exit
-logout
-Connection to 192.168.0.120 closed.
-PS C:\Users\kushal> ssh kushal@192.168.0.120
-kushal@192.168.0.120's password:
-Linux texas 6.12.38+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.38-1 (2025-07-16) x86_64
+# Make executable
+chmod +x ~/mybashscripts/install-kusl-tsp.sh
 
-The programs included with the Debian GNU/Linux system are free software;
-the exact distribution terms for each program are described in the
-individual files in /usr/share/doc/*/copyright.
+# Run with sudo
+sudo ~/mybashscripts/install-kusl-tsp.sh
+```
 
-Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
-permitted by applicable law.
-Last login: Sun Aug 17 22:03:36 2025 from 192.168.0.213
-kushal@texas:~$ cd ~/mybashscripts/; curl -o install-kusl-tsp.sh https://raw.githubusercontent.com/kusl/tsp/refs/heads/master/scripts/install-linux.sh; cat ~/mybashscripts/install-kusl-tsp.sh
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100  9882  100  9882    0     0   151k      0 --:--:-- --:--:-- --:--:--  153k
+The script should now work correctly because:
+1. All informational messages go to stderr
+2. The function returns clean data on stdout
+3. The URL validation will show the actual URL being tested
+4. Progress bar from curl is shown properly
+
+If it still fails, the script will now show you the actual URL it's trying to use, which will help debug further.
+
+
+
+
+
+
+
+
+
+
+```bash
 #!/bin/bash
 
 # TSP Solver Installation Script for Linux
@@ -115,11 +82,11 @@ print_success() {
 }
 
 print_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+    echo -e "${BLUE}[INFO]${NC} $1" >&2
 }
 
 print_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
+    echo -e "${YELLOW}[WARNING]${NC} $1" >&2
 }
 
 # Check if running with appropriate permissions
@@ -150,13 +117,13 @@ check_dependencies() {
 
         # Detect package manager
         if command -v apt-get &> /dev/null; then
-            echo "  sudo apt-get update && sudo apt-get install -y ${missing[*]}"
+            echo "  sudo apt-get update && sudo apt-get install -y ${missing[*]}" >&2
         elif command -v dnf &> /dev/null; then
-            echo "  sudo dnf install -y ${missing[*]}"
+            echo "  sudo dnf install -y ${missing[*]}" >&2
         elif command -v yum &> /dev/null; then
-            echo "  sudo yum install -y ${missing[*]}"
+            echo "  sudo yum install -y ${missing[*]}" >&2
         else
-            echo "  Please install: ${missing[*]}"
+            echo "  Please install: ${missing[*]}" >&2
         fi
         exit 1
     fi
@@ -164,6 +131,7 @@ check_dependencies() {
 
 # Get the latest release information from GitHub
 get_latest_release_info() {
+    # Print status to stderr so it doesn't contaminate the return value
     print_info "Fetching latest release information from GitHub..."
 
     local response
@@ -203,7 +171,7 @@ get_latest_release_info() {
     local version
     version=$(echo "$response" | jq -r '.tag_name' 2>/dev/null || echo "unknown")
 
-    # Return both URL and version
+    # Return URL and version on stdout (not stderr)
     echo "${download_url}"
     echo "${version}"
 }
@@ -216,7 +184,7 @@ download_binary() {
     print_info "Downloading from: $url"
 
     # Use curl with proper error handling
-    if ! curl -L -f -o "$output_file" "$url" --progress-bar 2>/dev/null; then
+    if ! curl -L -f -o "$output_file" "$url" --progress-bar; then
         print_error "Failed to download binary from $url"
         return 1
     fi
@@ -233,6 +201,8 @@ download_binary() {
     if [[ "$file_size" -lt 1000 ]]; then
         print_error "Downloaded file seems too small (${file_size} bytes)"
         print_error "This might indicate a 404 or other download error"
+        # Show first few bytes to debug
+        print_error "File content preview: $(head -c 100 "$output_file" 2>/dev/null | tr '\n' ' ')"
         return 1
     fi
 
@@ -241,7 +211,12 @@ download_binary() {
     if command -v numfmt &> /dev/null; then
         size_display=$(numfmt --to=iec-i --suffix=B "$file_size" 2>/dev/null || echo "${file_size} bytes")
     else
-        size_display="${file_size} bytes"
+        # Convert to MB if large enough
+        if [[ "$file_size" -gt 1048576 ]]; then
+            size_display="$((file_size / 1048576)) MB"
+        else
+            size_display="${file_size} bytes"
+        fi
     fi
 
     print_success "Download complete (${size_display})"
@@ -309,7 +284,7 @@ create_symlink() {
     else
         print_warning "Could not create symlink in /usr/local/bin (permission denied)"
         print_info "You can manually create it with:"
-        echo "  sudo ln -sf ${INSTALL_PATH} ${symlink_path}"
+        echo "  sudo ln -sf ${INSTALL_PATH} ${symlink_path}" >&2
     fi
 }
 
@@ -337,7 +312,7 @@ main() {
         print_info "No existing installation found"
     fi
 
-    # Get latest release info (now returns two lines)
+    # Get latest release info (capture stdout, let stderr through for messages)
     local release_info
     release_info=$(get_latest_release_info) || exit 1
 
@@ -350,10 +325,13 @@ main() {
     # Validate URL
     if [[ ! "$download_url" =~ ^https:// ]]; then
         print_error "Invalid download URL: $download_url"
+        print_info "Raw response was:"
+        echo "$release_info" | head -c 200 >&2
         exit 1
     fi
 
     print_info "Latest available version: ${latest_version}"
+    print_info "Download URL: ${download_url}"
 
     # Ask for confirmation if already installed
     if [[ "$installed_version" != "none" ]]; then
@@ -407,7 +385,4 @@ main() {
 
 # Run main function
 main "$@"
-kushal@texas:~/mybashscripts$ exit
-logout
-Connection to 192.168.0.120 closed.
-PS C:\Users\kushal>
+```

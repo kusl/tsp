@@ -41,11 +41,11 @@ print_success() {
 }
 
 print_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+    echo -e "${BLUE}[INFO]${NC} $1" >&2
 }
 
 print_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
+    echo -e "${YELLOW}[WARNING]${NC} $1" >&2
 }
 
 # Check if running with appropriate permissions
@@ -76,13 +76,13 @@ check_dependencies() {
 
         # Detect package manager
         if command -v apt-get &> /dev/null; then
-            echo "  sudo apt-get update && sudo apt-get install -y ${missing[*]}"
+            echo "  sudo apt-get update && sudo apt-get install -y ${missing[*]}" >&2
         elif command -v dnf &> /dev/null; then
-            echo "  sudo dnf install -y ${missing[*]}"
+            echo "  sudo dnf install -y ${missing[*]}" >&2
         elif command -v yum &> /dev/null; then
-            echo "  sudo yum install -y ${missing[*]}"
+            echo "  sudo yum install -y ${missing[*]}" >&2
         else
-            echo "  Please install: ${missing[*]}"
+            echo "  Please install: ${missing[*]}" >&2
         fi
         exit 1
     fi
@@ -90,6 +90,7 @@ check_dependencies() {
 
 # Get the latest release information from GitHub
 get_latest_release_info() {
+    # Print status to stderr so it doesn't contaminate the return value
     print_info "Fetching latest release information from GitHub..."
 
     local response
@@ -129,7 +130,7 @@ get_latest_release_info() {
     local version
     version=$(echo "$response" | jq -r '.tag_name' 2>/dev/null || echo "unknown")
 
-    # Return both URL and version
+    # Return URL and version on stdout (not stderr)
     echo "${download_url}"
     echo "${version}"
 }
@@ -142,7 +143,7 @@ download_binary() {
     print_info "Downloading from: $url"
 
     # Use curl with proper error handling
-    if ! curl -L -f -o "$output_file" "$url" --progress-bar 2>/dev/null; then
+    if ! curl -L -f -o "$output_file" "$url" --progress-bar; then
         print_error "Failed to download binary from $url"
         return 1
     fi
@@ -159,6 +160,8 @@ download_binary() {
     if [[ "$file_size" -lt 1000 ]]; then
         print_error "Downloaded file seems too small (${file_size} bytes)"
         print_error "This might indicate a 404 or other download error"
+        # Show first few bytes to debug
+        print_error "File content preview: $(head -c 100 "$output_file" 2>/dev/null | tr '\n' ' ')"
         return 1
     fi
 
@@ -167,9 +170,14 @@ download_binary() {
     if command -v numfmt &> /dev/null; then
         size_display=$(numfmt --to=iec-i --suffix=B "$file_size" 2>/dev/null || echo "${file_size} bytes")
     else
-        size_display="${file_size} bytes"
+        # Convert to MB if large enough
+        if [[ "$file_size" -gt 1048576 ]]; then
+            size_display="$((file_size / 1048576)) MB"
+        else
+            size_display="${file_size} bytes"
+        fi
     fi
-    
+
     print_success "Download complete (${size_display})"
 }
 
@@ -235,7 +243,7 @@ create_symlink() {
     else
         print_warning "Could not create symlink in /usr/local/bin (permission denied)"
         print_info "You can manually create it with:"
-        echo "  sudo ln -sf ${INSTALL_PATH} ${symlink_path}"
+        echo "  sudo ln -sf ${INSTALL_PATH} ${symlink_path}" >&2
     fi
 }
 
@@ -263,7 +271,7 @@ main() {
         print_info "No existing installation found"
     fi
 
-    # Get latest release info (now returns two lines)
+    # Get latest release info (capture stdout, let stderr through for messages)
     local release_info
     release_info=$(get_latest_release_info) || exit 1
 
@@ -276,10 +284,13 @@ main() {
     # Validate URL
     if [[ ! "$download_url" =~ ^https:// ]]; then
         print_error "Invalid download URL: $download_url"
+        print_info "Raw response was:"
+        echo "$release_info" | head -c 200 >&2
         exit 1
     fi
 
     print_info "Latest available version: ${latest_version}"
+    print_info "Download URL: ${download_url}"
 
     # Ask for confirmation if already installed
     if [[ "$installed_version" != "none" ]]; then
