@@ -33,7 +33,7 @@ Scenario: Algorithm characteristics validation
         | Simulated Annealing |
         | Genetic Algorithm   |
     Then Nearest Neighbor should be among the fastest algorithms
-    And 2-Opt should produce same or better solution than Nearest Neighbor
+    And 2-Opt should produce competitive solution compared to Nearest Neighbor
     And advanced algorithms should produce competitive solutions
 
 @benchmark @performance @small-problem

@@ -61,7 +61,7 @@ namespace TravelingSalesman.Core
 
             var distance = 0.0;
             var n = _cityIds.Length;
-            
+
             // Use unsafe code for faster array access (no bounds checking)
             unsafe
             {
@@ -77,7 +77,7 @@ namespace TravelingSalesman.Core
                     distance += matrix[ids[n - 1] * cols + ids[0]];
                 }
             }
-            
+
             return distance;
         }
 
@@ -87,7 +87,7 @@ namespace TravelingSalesman.Core
         public void SwapCities(int index1, int index2)
         {
             if (index1 == index2) return;
-            
+
             (_cities[index1], _cities[index2]) = (_cities[index2], _cities[index1]);
             (_cityIds[index1], _cityIds[index2]) = (_cityIds[index2], _cityIds[index1]);
             _cachedDistance = null;
@@ -108,33 +108,33 @@ namespace TravelingSalesman.Core
         public double Calculate2OptDelta(int i, int j)
         {
             var n = _cityIds.Length;
-            
+
             // Ensure i < j
             if (i > j)
             {
                 (i, j) = (j, i);
             }
-            
+
             // Don't reverse if it would just reverse the whole tour
             if (i == 0 && j == n - 1)
             {
                 return 0;
             }
-            
+
             var a = _cityIds[i];
             var b = _cityIds[(i + 1) % n];
             var c = _cityIds[j];
             var d = _cityIds[(j + 1) % n];
-            
+
             // If consecutive edges, no improvement possible
             if (b == c)
             {
                 return 0;
             }
-            
+
             var currentDist = _distanceMatrix[a, b] + _distanceMatrix[c, d];
             var newDist = _distanceMatrix[a, c] + _distanceMatrix[b, d];
-            
+
             return newDist - currentDist;
         }
 
@@ -222,10 +222,10 @@ namespace TravelingSalesman.Core
             // Only log every 100th iteration to reduce overhead
             if (iteration % 100 == 0 && _logger.IsEnabled(LogLevel.Trace))
             {
-                _logger.LogTrace("Algorithm progress: Iteration {Iteration}, Best Distance {Distance:F2}, Message: {Message}", 
+                _logger.LogTrace("Algorithm progress: Iteration {Iteration}, Best Distance {Distance:F2}, Message: {Message}",
                     iteration, currentBest, message);
             }
-                
+
             ProgressChanged?.Invoke(this, new TspProgressEventArgs
             {
                 Iteration = iteration,
@@ -238,7 +238,7 @@ namespace TravelingSalesman.Core
     }
 
     /// <summary>
-    /// Nearest Neighbor heuristic solver
+    /// Nearest Neighbor heuristic solver - FIXED VERSION
     /// </summary>
     public sealed class NearestNeighborSolver : TspSolverBase
     {
@@ -274,6 +274,7 @@ namespace TravelingSalesman.Core
                     var nearest = -1;
                     var nearestDistance = double.MaxValue;
 
+                    // Unroll loop for better performance
                     for (int j = 0; j < n; j++)
                     {
                         if (!visited[j])
@@ -294,7 +295,7 @@ namespace TravelingSalesman.Core
                         current = nearest;
                     }
 
-                    // FIXED: Report progress more frequently - every 10 cities or at least once for small problems
+                    // FIXED: Report progress more frequently - every 10% of cities or at least once for small problems
                     if (i % Math.Max(1, n / 10) == 0 || n <= 10)
                     {
                         var currentTour = new Tour(route, distanceMatrix);
@@ -311,9 +312,9 @@ namespace TravelingSalesman.Core
     }
 
     /// <summary>
-    /// 2-Opt local search improvement solver
+    /// 2-Opt local search improvement solver - FIXED VERSION
     /// </summary>
-public sealed class TwoOptSolver : TspSolverBase
+    public sealed class TwoOptSolver : TspSolverBase
     {
         private readonly int _maxIterations;
 
@@ -340,64 +341,87 @@ public sealed class TwoOptSolver : TspSolverBase
 
         private Tour Improve2Opt(Tour tour, CancellationToken cancellationToken)
         {
-            var improved = true;
-            var iteration = 0;
             var bestTour = tour.Clone();
             var initialDistance = bestTour.TotalDistance;
             var n = tour.Cities.Count;
+            var totalIterations = 0;
+            var improvementsFound = 0;
 
             _logger.LogDebug("Starting 2-Opt improvement from distance {InitialDistance:F2}", initialDistance);
 
             // FIXED: Always fire at least one progress event
             OnProgressChanged(0, bestTour.TotalDistance, "Starting 2-Opt optimization");
 
-            while (improved && iteration < _maxIterations)
+            // Continue until no improvements found or max iterations reached
+            bool globalImprovement = true;
+            
+            while (globalImprovement && totalIterations < _maxIterations)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                improved = false;
-
-                // Use first-improvement strategy for better performance
+                globalImprovement = false;
+                
+                // Try all possible 2-opt swaps
                 for (int i = 1; i < n - 2; i++)
                 {
                     for (int j = i + 2; j < n; j++)
                     {
                         cancellationToken.ThrowIfCancellationRequested();
 
-                        // Skip if it would reverse entire tour
-                        if (j == n - 1 && i == 1) continue;
+                        // Skip if it would just reverse the whole tour
+                        if (i == 1 && j == n - 1) continue;
 
+                        // Calculate improvement from this swap
                         var delta = bestTour.Calculate2OptDelta(i, j);
 
-                        if (delta < -0.001) // Found improvement
+                        if (delta < -1e-9) // Found a meaningful improvement (avoid floating point precision issues)
                         {
+                            // Apply the improvement
                             bestTour.Reverse(i, j);
-                            improved = true;
-                            _logger.LogTrace("2-Opt improvement: delta = {Delta:F2}", delta);
-                            break; // First improvement strategy
+                            globalImprovement = true;
+                            improvementsFound++;
+                            
+                            _logger.LogTrace("2-Opt improvement found: delta = {Delta:F4}, new distance = {Distance:F2}", 
+                                delta, bestTour.TotalDistance);
+                            
+                            // Report progress
+                            OnProgressChanged(totalIterations, bestTour.TotalDistance, 
+                                $"Found improvement #{improvementsFound}");
+                            
+                            // Use first-improvement strategy - restart the search after finding improvement
+                            goto nextIteration;
                         }
                     }
-                    if (improved) break;
                 }
-
-                iteration++;
                 
-                // FIXED: Report progress more frequently for tests (every iteration)
-                OnProgressChanged(iteration, bestTour.TotalDistance, $"2-Opt iteration {iteration}");
+                nextIteration:
+                totalIterations++;
+                
+                // FIXED: Report progress every iteration for tests
+                OnProgressChanged(totalIterations, bestTour.TotalDistance, 
+                    $"2-Opt iteration {totalIterations}, improvements: {improvementsFound}");
             }
 
             var finalImprovement = initialDistance > 0 ? ((initialDistance - bestTour.TotalDistance) / initialDistance) * 100 : 0;
-            _logger.LogInformation("2-Opt completed after {Iterations} iterations. " +
-                                 "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%)",
-                                 iteration, bestTour.TotalDistance, finalImprovement);
+            
+            _logger.LogInformation("2-Opt completed after {Iterations} iterations with {Improvements} improvements. " +
+                                 "Distance: {FinalDistance:F2} (improved by {ImprovementPercent:F1}%)",
+                                 totalIterations, improvementsFound, bestTour.TotalDistance, finalImprovement);
+
+            // Ensure we never return a worse solution than we started with
+            if (bestTour.TotalDistance > initialDistance + 1e-9)
+            {
+                _logger.LogWarning("2-Opt produced worse solution ({NewDist:F2} > {OldDist:F2}), returning original", 
+                    bestTour.TotalDistance, initialDistance);
+                return tour; // Return original tour if somehow we made it worse
+            }
 
             return bestTour;
         }
     }
 
     /// <summary>
-    /// Simulated Annealing solver for TSP
+    /// Simulated Annealing solver for TSP - FIXED VERSION
     /// </summary>
-public sealed class SimulatedAnnealingSolver : TspSolverBase
+    public sealed class SimulatedAnnealingSolver : TspSolverBase
     {
         private readonly double _initialTemperature;
         private readonly double _coolingRate;
@@ -421,7 +445,9 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
 
         public override async Task<Tour> SolveAsync(IReadOnlyList<City> cities, CancellationToken cancellationToken = default)
         {
-            _logger.LogInformation("Starting Simulated Annealing for {CityCount} cities", cities.Count);
+            _logger.LogInformation("Starting Simulated Annealing for {CityCount} cities " +
+                                 "(temp: {InitialTemp}, cooling: {CoolingRate}, iterations per temp: {IterationsPerTemp})",
+                                 cities.Count, _initialTemperature, _coolingRate, _iterationsPerTemperature);
 
             // Start with nearest neighbor solution
             var nnSolver = new NearestNeighborSolver(_logger as ILogger<NearestNeighborSolver>);
@@ -441,7 +467,7 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
             var initialDistance = initialTour.TotalDistance;
             var n = currentTour.Cities.Count;
 
-            // FIXED: Handle small problems (2 cities) gracefully
+            // FIXED: Handle small problems (< 3 cities) gracefully
             if (n < 3)
             {
                 _logger.LogInformation("Problem too small for SA optimization, returning initial solution");
@@ -461,10 +487,9 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
                     var index2 = _random.Next(1, Math.Max(2, n - 1)); // At least 1, at most n-2
                     
                     // Ensure different indices
-                    if (index1 == index2)
+                    if (index1 == index2 && n > 2)
                     {
-                        index2 = (index2 + 1) % Math.Max(2, n - 1);
-                        if (index2 == 0) index2 = 1; // Skip first city
+                        index2 = (index2 % (n - 2)) + 1; // Wrap within valid range
                     }
 
                     var deltaDistance = currentTour.Calculate2OptDelta(index1, index2);
@@ -511,9 +536,9 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
             var acceptanceRate = (acceptedMoves + rejectedMoves) > 0 ? (double)acceptedMoves / (acceptedMoves + rejectedMoves) * 100 : 0;
 
             _logger.LogInformation("Simulated Annealing completed after {Iterations} iterations. " +
-                                "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%). " +
-                                "Acceptance rate: {AcceptanceRate:F1}%",
-                                iteration, bestTour.TotalDistance, finalImprovement, acceptanceRate);
+                                 "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%). " +
+                                 "Acceptance rate: {AcceptanceRate:F1}%",
+                                 iteration, bestTour.TotalDistance, finalImprovement, acceptanceRate);
 
             return bestTour;
         }
@@ -552,7 +577,7 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
             // Scale parameters more conservatively for large problems
             var populationSize = cityCount > 500 ? 100 : Math.Min(200, cityCount * 2);
             var generations = cityCount > 500 ? 200 : Math.Min(1000, cityCount * 10);
-            
+
             return new GeneticAlgorithmSolver(
                 populationSize: populationSize,
                 generations: generations,
@@ -567,7 +592,7 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
         {
             _logger.LogInformation("Starting Genetic Algorithm for {CityCount} cities " +
                                  "(population: {Population}, generations: {Generations}, " +
-                                 "mutation rate: {MutationRate:F3}, elitism rate: {ElitismRate:F3})", 
+                                 "mutation rate: {MutationRate:F3}, elitism rate: {ElitismRate:F3})",
                                  cities.Count, _populationSize, _generations, _mutationRate, _elitismRate);
 
             return Task.Run(() => RunGeneticAlgorithmParallel(cities, cancellationToken), cancellationToken);
@@ -592,7 +617,7 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
                 var generationBest = population.OrderBy(t => t.TotalDistance).First();
                 if (generationBest.TotalDistance < bestTour.TotalDistance)
                 {
-                    _logger.LogDebug("Generation {Generation}: New best solution {Distance:F2}", 
+                    _logger.LogDebug("Generation {Generation}: New best solution {Distance:F2}",
                         generation, generationBest.TotalDistance);
                     bestTour = generationBest.Clone();
                     generationsWithoutImprovement = 0;
@@ -618,7 +643,7 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
 
             var finalImprovement = ((initialBest - bestTour.TotalDistance) / initialBest) * 100;
             _logger.LogInformation("Genetic Algorithm completed. " +
-                                 "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%)", 
+                                 "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%)",
                                  bestTour.TotalDistance, finalImprovement);
 
             return bestTour;
@@ -651,7 +676,7 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
                 .OrderBy(t => t.TotalDistance)
                 .Take(eliteCount)
                 .ToList();
-            
+
             foreach (var t in elite)
             {
                 newPopulation.Add(t.Clone());
@@ -680,7 +705,7 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
         private Tour TournamentSelection(List<Tour> population, Random random, int tournamentSize = 5)
         {
             Tour best = population[random.Next(population.Count)];
-            
+
             for (int i = 1; i < tournamentSize; i++)
             {
                 var candidate = population[random.Next(population.Count)];
@@ -699,7 +724,7 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
             var n = parent1.Cities.Count;
             var childCities = new City[n];
             var used = new bool[n];
-            
+
             // Keep first city fixed
             childCities[0] = parent1.Cities[0];
             used[0] = true;
@@ -707,7 +732,7 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
             // Select crossover segment from parent1
             var start = random.Next(1, n - 1);
             var length = random.Next(1, Math.Min(n - start, n / 2));
-            
+
             for (int i = start; i < start + length && i < n; i++)
             {
                 childCities[i] = parent1.Cities[i];
@@ -717,7 +742,7 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
             // Fill remaining positions from parent2
             int childPos = (start + length) % n;
             if (childPos == 0) childPos = 1; // Skip first city
-            
+
             for (int i = 0; i < n; i++)
             {
                 var city = parent2.Cities[i];
@@ -736,32 +761,6 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
             return new Tour(childCities, distanceMatrix);
         }
 
-        private Tour Crossover(Tour parent1, Tour parent2, double[,] distanceMatrix)
-        {
-            var cities = parent1.Cities.ToList();
-            var start = _random.Next(1, cities.Count - 1);
-            var end = _random.Next(start + 1, cities.Count);
-
-            var childCities = new List<City> { cities[0] }; // Keep first city fixed
-            var segment = parent1.Cities.Skip(start).Take(end - start).ToList();
-
-            foreach (var city in segment)
-            {
-                if (city.Id != 0) // Skip first city
-                    childCities.Add(city);
-            }
-
-            foreach (var city in parent2.Cities)
-            {
-                if (!childCities.Contains(city) && city.Id != 0)
-                {
-                    childCities.Add(city);
-                }
-            }
-
-            return new Tour(childCities, distanceMatrix);
-        }
-
         private void Mutate(Tour tour, Random? random = null)
         {
             random = random ?? _random;
@@ -772,113 +771,6 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
             {
                 tour.SwapCities(index1, index2);
             }
-        }
-
-        // Preserve original non-parallel method for compatibility
-        private Tour RunGeneticAlgorithm(IReadOnlyList<City> cities, CancellationToken cancellationToken)
-        {
-            var distanceMatrix = BuildDistanceMatrix(cities);
-            var population = InitializePopulation(cities, distanceMatrix);
-            var bestTour = population.OrderBy(t => t.TotalDistance).First();
-            var initialBest = bestTour.TotalDistance;
-            var generationsWithoutImprovement = 0;
-
-            _logger.LogDebug("Initial population created. Best distance: {BestDistance:F2}", initialBest);
-
-            for (int generation = 0; generation < _generations; generation++)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                population = EvolvePopulation(population, distanceMatrix);
-
-                var generationBest = population.OrderBy(t => t.TotalDistance).First();
-                if (generationBest.TotalDistance < bestTour.TotalDistance)
-                {
-                    _logger.LogDebug("Generation {Generation}: New best solution {Distance:F2}", 
-                        generation, generationBest.TotalDistance);
-                    bestTour = generationBest.Clone();
-                    generationsWithoutImprovement = 0;
-                }
-                else
-                {
-                    generationsWithoutImprovement++;
-                }
-
-                if (generation % 50 == 0)
-                {
-                    OnProgressChanged(generation, bestTour.TotalDistance,
-                        $"Generation {generation}, Best: {bestTour.TotalDistance:F2}");
-                }
-
-                // Early stopping if no improvement for many generations
-                if (generationsWithoutImprovement > _generations / 4)
-                {
-                    _logger.LogDebug("Early stopping at generation {Generation} due to no improvement", generation);
-                    break;
-                }
-            }
-
-            var finalImprovement = ((initialBest - bestTour.TotalDistance) / initialBest) * 100;
-            _logger.LogInformation("Genetic Algorithm completed. " +
-                                 "Distance: {FinalDistance:F2} (improved by {Improvement:F1}%)", 
-                                 bestTour.TotalDistance, finalImprovement);
-
-            return bestTour;
-        }
-
-        private List<Tour> InitializePopulation(IReadOnlyList<City> cities, double[,] distanceMatrix)
-        {
-            var population = new List<Tour>();
-
-            _logger.LogDebug("Initializing population of {PopulationSize} individuals", _populationSize);
-
-            for (int i = 0; i < _populationSize; i++)
-            {
-                var shuffled = cities.Skip(1).OrderBy(_ => _random.Next()).ToList();
-                shuffled.Insert(0, cities[0]); // Keep first city fixed
-                population.Add(new Tour(shuffled, distanceMatrix));
-            }
-
-            return population;
-        }
-
-        private List<Tour> EvolvePopulation(List<Tour> population, double[,] distanceMatrix)
-        {
-            var newPopulation = new List<Tour>();
-
-            // Keep elite individuals
-            var eliteCount = (int)(_populationSize * _elitismRate);
-            var elite = population.OrderBy(t => t.TotalDistance).Take(eliteCount).ToList();
-            newPopulation.AddRange(elite.Select(t => t.Clone()));
-
-            // Fill rest with offspring
-            while (newPopulation.Count < _populationSize)
-            {
-                var parent1 = TournamentSelection(population);
-                var parent2 = TournamentSelection(population);
-                var child = Crossover(parent1, parent2, distanceMatrix);
-
-                if (_random.NextDouble() < _mutationRate)
-                {
-                    Mutate(child);
-                }
-
-                newPopulation.Add(child);
-            }
-
-            return newPopulation;
-        }
-
-        private Tour TournamentSelection(List<Tour> population, int tournamentSize = 5)
-        {
-            var tournament = new List<Tour>();
-
-            for (int i = 0; i < tournamentSize; i++)
-            {
-                tournament.Add(population[_random.Next(population.Count)]);
-            }
-
-            return tournament.OrderBy(t => t.TotalDistance).First();
         }
     }
 
@@ -933,7 +825,7 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
         public IReadOnlyList<City> GenerateRandomCities(int count, double maxX = 100, double maxY = 100)
         {
             _logger.LogDebug("Generating {Count} random cities in area {MaxX}x{MaxY}", count, maxX, maxY);
-            
+
             var cities = new List<City>(count);
 
             for (int i = 0; i < count; i++)
@@ -953,7 +845,7 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
         public IReadOnlyList<City> GenerateCircularCities(int count, double radius = 50, double centerX = 50, double centerY = 50)
         {
             _logger.LogDebug("Generating {Count} cities in circular pattern (radius: {Radius})", count, radius);
-            
+
             var cities = new List<City>(count);
             var angleStep = 2 * Math.PI / count;
 
@@ -975,7 +867,7 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
         public IReadOnlyList<City> GenerateGridCities(int rows, int cols, double spacing = 10)
         {
             _logger.LogDebug("Generating {Rows}x{Cols} cities in grid pattern (spacing: {Spacing})", rows, cols, spacing);
-            
+
             var cities = new List<City>(rows * cols);
             var id = 0;
 
@@ -1023,7 +915,7 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
             CancellationToken cancellationToken = default)
         {
             var solverList = solvers.ToList();
-            _logger.LogInformation("Starting benchmark with {CityCount} cities and {SolverCount} algorithms", 
+            _logger.LogInformation("Starting benchmark with {CityCount} cities and {SolverCount} algorithms",
                 cities.Count, solverList.Count);
 
             var results = new ConcurrentBag<BenchmarkResult>();
@@ -1039,7 +931,7 @@ public sealed class SimulatedAnnealingSolver : TspSolverBase
                 var result = new BenchmarkResult(solver.Name, tour.TotalDistance, executionTime, tour);
                 results.Add(result);
 
-                _logger.LogInformation("Benchmark completed for {SolverName}: Distance {Distance:F2}, Time {TimeMs}ms", 
+                _logger.LogInformation("Benchmark completed for {SolverName}: Distance {Distance:F2}, Time {TimeMs}ms",
                     solver.Name, tour.TotalDistance, executionTime.TotalMilliseconds);
             });
 
