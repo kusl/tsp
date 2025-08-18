@@ -5257,4 +5257,707 @@ Scenario: Nearest Neighbor produces deterministic results
     And I solve the same problem again using Nearest Neighbor algorithm
     Then both solutions should have the same total distance
     And both solutions should have the same route
-PS C:\code\TSP>
+PS C:\code\TSP> dotnet test --logger "console;verbosity=detailed"
+Restore complete (3.6s)
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+  TravelingSalesman.Core succeeded (7.1s) → TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
+  TravelingSalesman.Tests succeeded (3.4s) → TravelingSalesman.Tests\bin\Debug\net9.0\TravelingSalesman.Tests.dll
+  TravelingSalesman.ConsoleApp succeeded (3.4s) → TravelingSalesman.ConsoleApp\bin\Debug\net9.0\TravelingSalesman.ConsoleApp.dll
+A total of 1 test files matched the specified pattern.
+C:\code\TSP\TravelingSalesman.Tests\bin\Debug\net9.0\TravelingSalesman.Tests.dll
+[xUnit.net 00:00:00.01] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 9.0.8)
+[xUnit.net 00:00:00.01] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 9.0.8)
+  TravelingSalesman.Specs succeeded (4.9s) → TravelingSalesman.Specs\bin\Debug\net9.0\TravelingSalesman.Specs.dll
+[xUnit.net 00:00:01.14]   Discovering: TravelingSalesman.Tests
+[xUnit.net 00:00:01.14]   Discovering: TravelingSalesman.Tests
+A total of 1 test files matched the specified pattern.
+C:\code\TSP\TravelingSalesman.Specs\bin\Debug\net9.0\TravelingSalesman.Specs.dll
+[xUnit.net 00:00:01.35]   Discovered:  TravelingSalesman.Tests
+[xUnit.net 00:00:01.35]   Discovered:  TravelingSalesman.Tests
+[xUnit.net 00:00:01.46]   Starting:    TravelingSalesman.Tests
+[xUnit.net 00:00:01.46]   Starting:    TravelingSalesman.Tests
+  Passed TravelingSalesman.Tests.TspSolverBaseTests.TspSolverBase_BuildDistanceMatrix_ShouldCreateCorrectMatrix [343 ms]
+  Passed TravelingSalesman.Tests.TspProgressEventArgsTests.TspProgressEventArgs_Properties_ShouldSetCorrectly [343 ms]
+  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateAllSolvers_ShouldReturnAllTypes [343 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GeneratedCities_ShouldHaveValidNames [343 ms]
+  Passed TravelingSalesman.Tests.TspProgressEventArgsTests.TspProgressEventArgs_InheritsFromEventArgs [< 1 ms]
+  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateSolver_ShouldReturnCorrectSolverType(solverType: SimulatedAnnealing, expectedName: "Simulated Annealing") [1 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateRandomCities_ShouldGenerateCorrectCount(count: 50) [1 ms]
+  Passed TravelingSalesman.Tests.TspProgressEventArgsTests.TspProgressEventArgs_DefaultMessage_ShouldBeEmpty [< 1 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateRandomCities_ShouldGenerateCorrectCount(count: 1) [< 1 ms]
+  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateSolver_ShouldReturnCorrectSolverType(solverType: TwoOpt, expectedName: "2-Opt") [< 1 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateRandomCities_ShouldGenerateCorrectCount(count: 5) [< 1 ms]
+  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateSolver_ShouldReturnCorrectSolverType(solverType: GeneticAlgorithm, expectedName: "Genetic Algorithm") [< 1 ms]
+  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateSolver_ShouldReturnCorrectSolverType(solverType: NearestNeighbor, expectedName: "Nearest Neighbor") [< 1 ms]
+  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateAllSolvers_WithNullLoggerFactory_ShouldWork [< 1 ms]
+  Passed TravelingSalesman.Tests.TspSolverBaseTests.TspSolverBase_SolveAsync_ShouldReturnValidTour [3 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateCircularCities_CustomParameters_ShouldWork [1 ms]
+  Passed TravelingSalesman.Tests.TspSolverBaseTests.TspSolverBase_ProgressChanged_ShouldRaiseEvent [1 ms]
+  Passed TravelingSalesman.Tests.CityTests.City_DistanceTo_VariousCoordinates_ShouldCalculateCorrectly(x1: 1, y1: 1, x2: 4, y2: 5, expected: 5) [< 1 ms]
+  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateSolver_InvalidType_ShouldThrow [6 ms]
+  Passed TravelingSalesman.Tests.TspSolverFactoryTests.TspSolverFactory_CreateSolver_WithNullLoggerFactory_ShouldWork [< 1 ms]
+  Passed TravelingSalesman.Tests.CityTests.City_DistanceTo_VariousCoordinates_ShouldCalculateCorrectly(x1: 0, y1: 0, x2: 0, y2: 1, expected: 1) [< 1 ms]
+  Passed TravelingSalesman.Tests.CityTests.City_DistanceTo_VariousCoordinates_ShouldCalculateCorrectly(x1: -1, y1: -1, x2: 2, y2: 3, expected: 5) [< 1 ms]
+  Passed TravelingSalesman.Tests.CityTests.City_DistanceTo_VariousCoordinates_ShouldCalculateCorrectly(x1: 0, y1: 0, x2: 1, y2: 0, expected: 1) [< 1 ms]
+  Passed TravelingSalesman.Tests.CityTests.City_DistanceTo_ShouldCalculateCorrectEuclideanDistance [< 1 ms]
+  Passed TravelingSalesman.Tests.CityTests.City_Constructor_ShouldCreateValidCity [< 1 ms]
+  Passed TravelingSalesman.Tests.TourTests.Tour_Reverse_WholeRange_ShouldReverseAll [2 ms]
+  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_Constructor_CustomParameters_ShouldWork [< 1 ms]
+  Passed TravelingSalesman.Tests.TspBenchmarkTests.TspBenchmark_RunBenchmarkAsync_Cancellation_ShouldThrow [3 ms]
+  Passed TravelingSalesman.Tests.TspBenchmarkTests.TspBenchmark_BenchmarkResult_Record_ShouldWorkCorrectly [4 ms]
+  Passed TravelingSalesman.Tests.TourTests.Tour_SwapCities_ShouldUpdateTour [7 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_AllMethods_ShouldGenerateUniqueIds [18 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateGridCities_ShouldGenerateGridPattern(rows: 2, cols: 3) [< 1 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateGridCities_ShouldGenerateGridPattern(rows: 1, cols: 5) [< 1 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateGridCities_ShouldGenerateGridPattern(rows: 4, cols: 4) [< 1 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateGridCities_CustomSpacing_ShouldWork [< 1 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_Constructor_WithSeed_ShouldWork [< 1 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_Constructor_ShouldWork [< 1 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateCircularCities_ShouldGenerateCircularPattern(count: 8) [< 1 ms]
+  Passed TravelingSalesman.Tests.TspBenchmarkTests.TspBenchmark_RunBenchmarkAsync_EmptySolvers_ShouldReturnEmpty [6 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateCircularCities_ShouldGenerateCircularPattern(count: 16) [< 1 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateCircularCities_ShouldGenerateCircularPattern(count: 3) [< 1 ms]
+  Passed TravelingSalesman.Tests.TspBenchmarkTests.TspBenchmark_Constructor_ShouldWork [< 1 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateRandomCities_WithSeed_ShouldBeDeterministic [< 1 ms]
+  Passed TravelingSalesman.Tests.TspDataGeneratorTests.TspDataGenerator_GenerateRandomCities_CustomBounds_ShouldRespectBounds [< 1 ms]
+  Passed TravelingSalesman.Tests.CityTests.City_Record_Equality_ShouldWorkCorrectly [19 ms]
+  Passed TravelingSalesman.Tests.CityTests.City_DistanceTo_NegativeCoordinates_ShouldWork [< 1 ms]
+  Passed TravelingSalesman.Tests.CityTests.City_DistanceTo_SameCity_ShouldReturnZero [1 ms]
+  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_SolveAsync_Cancellation_ShouldThrow [389 ms]
+  Passed TravelingSalesman.Tests.LoggingTests.Logging_TspBenchmark_ShouldLogResults [389 ms]
+  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_ShouldReturnValidTour [35 ms]
+  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_SolveAsync_DifferentMaxIterations_ShouldWork(maxIterations: 1) [400 ms]
+  Passed TravelingSalesman.Tests.TourTests.Tour_ToString_ShouldReturnFormattedString [32 ms]
+  Passed TravelingSalesman.Tests.TourTests.Tour_Constructor_ShouldCreateValidTour [< 1 ms]
+  Passed TravelingSalesman.Tests.TourTests.Tour_TotalDistance_ShouldCalculateCorrectly [< 1 ms]
+  Passed TravelingSalesman.Tests.TourTests.Tour_TotalDistance_SingleCity_ShouldReturnZero [< 1 ms]
+  Passed TravelingSalesman.Tests.TourTests.Tour_TotalDistance_ShouldCacheResult [< 1 ms]
+  Passed TravelingSalesman.Tests.TourTests.Tour_SwapCities_SameIndex_ShouldNotChange [< 1 ms]
+  Passed TravelingSalesman.Tests.TourTests.Tour_Clone_ShouldCreateIndependentCopy [< 1 ms]
+  Passed TravelingSalesman.Tests.TourTests.Tour_Reverse_ShouldReverseSegment [< 1 ms]
+  Passed TravelingSalesman.Tests.TourTests.Tour_SwapCities_ShouldInvalidateCache [< 1 ms]
+  Passed TravelingSalesman.Tests.TourTests.Tour_TotalDistance_EmptyTour_ShouldReturnZero [< 1 ms]
+  Passed TravelingSalesman.Tests.TspBenchmarkTests.TspBenchmark_RunBenchmarkAsync_ShouldSortResultsByDistance [33 ms]
+  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_SolveAsync_WithSeed_ShouldBeDeterministic [413 ms]
+  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_Name_ShouldReturnCorrectName [< 1 ms]
+  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_ShouldRaiseProgressEvents [11 ms]
+  Passed TravelingSalesman.Tests.LoggingTests.Logging_NearestNeighborSolver_ShouldLogProgress [11 ms]
+  Passed TravelingSalesman.Tests.LoggingTests.Logging_TspDataGenerator_ShouldLogGeneration [1 ms]
+  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_SolveAsync_ShouldRaiseProgressEvents [15 ms]
+  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_SolveAsync_DifferentMaxIterations_ShouldWork(maxIterations: 10) [19 ms]
+  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_SolveAsync_TwoCities_ShouldReturnValidTour [30 ms]
+  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_SolveAsync_TwoCities_ShouldWork [35 ms]
+  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_DifferentRates_ShouldWork(mutationRate: 0, elitismRate: 0.10000000000000001) [38 ms]
+  Passed TravelingSalesman.Tests.TspBenchmarkTests.TspBenchmark_RunBenchmarkAsync_ShouldReturnResults [38 ms]
+  Passed TravelingSalesman.Tests.TspBenchmarkTests.TspBenchmark_FormatResults_ShouldReturnFormattedString [2 ms]
+  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_SolveAsync_DifferentMaxIterations_ShouldWork(maxIterations: 100) [10 ms]
+  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_Constructor_ShouldAcceptMaxIterations [< 1 ms]
+  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_DifferentRates_ShouldWork(mutationRate: 0.20000000000000001, elitismRate: 0.29999999999999999) [14 ms]
+  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_SolveAsync_ShouldReturnValidTour [17 ms]
+  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_Constructor_CustomParameters_ShouldWork [< 1 ms]
+  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_SolveAsync_SingleCity_ShouldReturnSingleCityTour [18 ms]
+  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_DifferentRates_ShouldWork(mutationRate: 0.10000000000000001, elitismRate: 0) [4 ms]
+  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_Constructor_DefaultParameters_ShouldWork [< 1 ms]
+  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_SolveAsync_Cancellation_ShouldThrow [8 ms]
+  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_SolveAsync_ShouldRaiseProgressEvents [4 ms]
+  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_SolveAsync_MultipleCities_ShouldStartFromFirstCity [3 ms]
+  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_Cancellation_ShouldThrow [6 ms]
+  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_SolveAsync_EmptyList_ShouldReturnEmptyTour [4 ms]
+  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_SolveAsync_SmallTour_ShouldComplete [6 ms]
+  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_Name_ShouldReturnCorrectName [< 1 ms]
+  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_Name_ShouldReturnCorrectName [< 1 ms]
+  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_SolveAsync_Cancellation_ShouldThrow [5 ms]
+  Passed TravelingSalesman.Tests.SimulatedAnnealingSolverTests.SimulatedAnnealingSolver_Constructor_DefaultParameters_ShouldWork [< 1 ms]
+  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_SolveAsync_ShouldImproveInitialSolution [11 ms]
+  Passed TravelingSalesman.Tests.NearestNeighborSolverTests.NearestNeighborSolver_SolveAsync_DeterministicResults [11 ms]
+  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_WithSeed_ShouldBeDeterministic [13 ms]
+[xUnit.net 00:00:02.16]   Finished:    TravelingSalesman.Tests
+[xUnit.net 00:00:02.16]   Finished:    TravelingSalesman.Tests
+  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_Name_ShouldReturnCorrectName [< 1 ms]
+  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_CreateScaledGeneticSolver_ShouldCreateWithScaledParameters [< 1 ms]
+  Passed TravelingSalesman.Tests.TwoOptSolverTests.TwoOptSolver_SolveAsync_ShouldRaiseProgressEvents [4 ms]
+  Passed TravelingSalesman.Tests.GeneticAlgorithmSolverTests.GeneticAlgorithmSolver_SolveAsync_TwoCities_ShouldWork [2 ms]
+
+Test Run Successful.
+Total tests: 99
+     Passed: 99
+ Total time: 4.3095 Seconds
+  TravelingSalesman.Tests test succeeded (5.3s)
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 9.0.8)
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 9.0.8)
+[xUnit.net 00:00:01.32]   Discovering: TravelingSalesman.Specs
+[xUnit.net 00:00:01.32]   Discovering: TravelingSalesman.Specs
+[xUnit.net 00:00:01.63]   Discovered:  TravelingSalesman.Specs
+[xUnit.net 00:00:01.63]   Discovered:  TravelingSalesman.Specs
+[xUnit.net 00:00:01.71]   Starting:    TravelingSalesman.Specs
+[xUnit.net 00:00:01.71]   Starting:    TravelingSalesman.Specs
+-> Loading plugin C:\code\TSP\TravelingSalesman.Specs\bin\Debug\net9.0\Reqnroll.Verify.ReqnrollPlugin.dll
+-> Loading plugin C:\code\TSP\TravelingSalesman.Specs\bin\Debug\net9.0\Reqnroll.Verify.ReqnrollPlugin.dll
+-> Loading plugin C:\code\TSP\TravelingSalesman.Specs\bin\Debug\net9.0\Reqnroll.xUnit.ReqnrollPlugin.dll
+-> Loading plugin C:\code\TSP\TravelingSalesman.Specs\bin\Debug\net9.0\Reqnroll.xUnit.ReqnrollPlugin.dll
+-> Loading plugin C:\code\TSP\TravelingSalesman.Specs\bin\Debug\net9.0\TravelingSalesman.Specs.dll
+-> Loading plugin C:\code\TSP\TravelingSalesman.Specs\bin\Debug\net9.0\TravelingSalesman.Specs.dll
+-> Using reqnroll.json
+-> Using reqnroll.json
+Starting TSP Reqnroll test run
+Starting TSP Reqnroll test run
+Starting scenario: Nearest Neighbor produces deterministic results
+Starting scenario: Nearest Neighbor produces deterministic results
+Starting scenario: Run benchmark on small problem
+Starting scenario: Run benchmark on small problem
+Starting scenario: Calculate distance between two cities
+Starting scenario: Calculate distance between two cities
+Starting scenario: Generate circular city pattern
+Starting scenario: Generate circular city pattern
+Completed scenario: Calculate distance between two cities
+Completed scenario: Calculate distance between two cities
+Completed scenario: Nearest Neighbor produces deterministic results
+Completed scenario: Nearest Neighbor produces deterministic results
+Completed scenario: Generate circular city pattern
+Completed scenario: Generate circular city pattern
+Starting scenario: Generate random cities
+Starting scenario: Generate random cities
+Starting scenario: Tour calculates total distance correctly
+Starting scenario: Tour calculates total distance correctly
+Starting scenario: Different algorithms produce valid tours
+Starting scenario: Different algorithms produce valid tours
+Completed scenario: Tour calculates total distance correctly
+Completed scenario: Tour calculates total distance correctly
+Starting scenario: Cities at the same location have zero distance
+Starting scenario: Cities at the same location have zero distance
+Completed scenario: Cities at the same location have zero distance
+Completed scenario: Cities at the same location have zero distance
+Starting scenario: Empty tour has zero distance
+Starting scenario: Empty tour has zero distance
+Completed scenario: Empty tour has zero distance
+Completed scenario: Empty tour has zero distance
+Completed scenario: Different algorithms produce valid tours
+Completed scenario: Different algorithms produce valid tours
+Starting scenario: Different algorithms produce valid tours
+Starting scenario: Different algorithms produce valid tours
+Completed scenario: Generate random cities
+Completed scenario: Generate random cities
+Starting scenario: Seeded generation is deterministic
+Starting scenario: Seeded generation is deterministic
+Completed scenario: Different algorithms produce valid tours
+Completed scenario: Different algorithms produce valid tours
+Starting scenario: Different algorithms produce valid tours
+Starting scenario: Different algorithms produce valid tours
+Completed scenario: Seeded generation is deterministic
+Completed scenario: Seeded generation is deterministic
+Starting scenario: Generate grid city pattern
+Starting scenario: Generate grid city pattern
+Completed scenario: Generate grid city pattern
+Completed scenario: Generate grid city pattern
+Completed scenario: Different algorithms produce valid tours
+Completed scenario: Different algorithms produce valid tours
+Starting scenario: Different algorithms produce valid tours
+Starting scenario: Different algorithms produce valid tours
+  Passed Calculate distance between two cities [588 ms]
+  Standard Output Messages:
+ Given I have a city "A" at coordinates (0, 0)
+ -> done: CityOperationSteps.GivenIHaveACityAtCoordinates("A", 0, 0) (0.0s)
+ And I have a city "B" at coordinates (3, 4)
+ -> done: CityOperationSteps.GivenIHaveACityAtCoordinates("B", 3, 4) (0.0s)
+ When I calculate the distance from city "A" to city "B"
+ -> done: CityOperationSteps.WhenICalculateTheDistanceFromCityToCity("A", "B") (0.0s)
+ Then the distance should be 5.0 units
+ -> done: CityOperationSteps.ThenTheDistanceShouldBeUnits(5) (0.3s)
+
+
+  Passed Generate circular city pattern [603 ms]
+  Standard Output Messages:
+ When I generate 8 cities in a circular pattern with radius 10
+ -> done: DataGenerationSteps.WhenIGenerateCitiesInACircularPatternWithRadius(8, 10) (0.0s)
+ Then I should have 8 cities
+ -> done: DataGenerationSteps.ThenIShouldHaveCities(8) (0.3s)
+ And all cities should be approximately 10 units from center (50,50)
+ -> done: DataGenerationSteps.ThenAllCitiesShouldBeApproximatelyUnitsFromCenter(10, 50, 50) (0.0s)
+ And the cities should be evenly distributed around the circle
+ -> done: DataGenerationSteps.ThenTheCitiesShouldBeEvenlyDistributedAroundTheCircle() (0.0s)
+
+
+  Passed Nearest Neighbor produces deterministic results [596 ms]
+  Standard Output Messages:
+ Given I have the following cities:
+   --- table step argument ---
+   | Name | X | Y |
+   | A    | 0 | 0 |
+   | B    | 3 | 0 |
+   | C    | 3 | 4 |
+   | D    | 0 | 4 |
+ -> done: TspSolverSteps.GivenIHaveTheFollowingCities(<table>) (0.0s)
+ When I solve the TSP using Nearest Neighbor algorithm
+ -> done: TspSolverSteps.WhenISolveTheTSPUsingAlgorithm("Nearest Neighbor") (0.0s)
+ And I solve the same problem again using Nearest Neighbor algorithm
+ -> done: TspSolverSteps.WhenISolveTheSameProblemAgainUsingAlgorithm("Nearest Neighbor") (0.0s)
+ Then both solutions should have the same total distance
+ -> done: TspSolverSteps.ThenBothSolutionsShouldHaveTheSameTotalDistance() (0.3s)
+ And both solutions should have the same route
+ -> done: TspSolverSteps.ThenBothSolutionsShouldHaveTheSameRoute() (0.0s)
+
+
+  Passed Tour calculates total distance correctly [10 ms]
+  Standard Output Messages:
+ Given I have the following cities in order:
+   --- table step argument ---
+   | Name | X | Y |
+   | A    | 0 | 0 |
+   | B    | 1 | 0 |
+   | C    | 1 | 1 |
+   | D    | 0 | 1 |
+ -> done: CityOperationSteps.GivenIHaveTheFollowingCitiesInOrder(<table>) (0.0s)
+ When I create a tour visiting cities in the order A, B, C, D
+ -> done: CityOperationSteps.WhenICreateATourVisitingCitiesInTheOrder("A, B, C, D") (0.0s)
+ Then the total tour distance should be 4.0 units
+ -> done: CityOperationSteps.ThenTheTotalTourDistanceShouldBeUnits(4) (0.0s)
+
+
+  Passed Cities at the same location have zero distance [5 ms]
+  Standard Output Messages:
+ Given I have a city "A" at coordinates (10.5, 20.3)
+ -> done: CityOperationSteps.GivenIHaveACityAtCoordinates("A", 10.5, 20.3) (0.0s)
+ When I calculate the distance from city "A" to itself
+ -> done: CityOperationSteps.WhenICalculateTheDistanceFromCityToItself("A") (0.0s)
+ Then the distance should be 0.0 units
+ -> done: CityOperationSteps.ThenTheDistanceShouldBeUnits(0) (0.0s)
+
+
+  Passed Empty tour has zero distance [5 ms]
+  Standard Output Messages:
+ Given I have no cities
+ -> done: CityOperationSteps.GivenIHaveNoCities() (0.0s)
+ When I create an empty tour
+ -> done: CityOperationSteps.WhenICreateAnEmptyTour() (0.0s)
+ Then the total tour distance should be 0.0 units
+ -> done: CityOperationSteps.ThenTheTotalTourDistanceShouldBeUnits(0) (0.0s)
+
+
+  Passed Different algorithms produce valid tours(algorithm: "2-Opt", exampleTags: []) [28 ms]
+  Standard Output Messages:
+ Given I have the following cities:
+   --- table step argument ---
+   | Name | X | Y |
+   | A    | 0 | 0 |
+   | B    | 3 | 0 |
+   | C    | 3 | 4 |
+   | D    | 0 | 4 |
+ -> done: TspSolverSteps.GivenIHaveTheFollowingCities(<table>) (0.0s)
+ When I solve the TSP using 2-Opt algorithm
+ -> done: TspSolverSteps.WhenISolveTheTSPUsingAlgorithm("2-Opt") (0.0s)
+ Then the tour should visit all 4 cities
+ -> done: TspSolverSteps.ThenTheTourShouldVisitAllCities(4) (0.0s)
+ And the tour should return to the starting city
+ -> done: TspSolverSteps.ThenTheTourShouldReturnToTheStartingCity() (0.0s)
+ And the total distance should be between 10 and 20 units
+ -> done: TspSolverSteps.ThenTheTotalDistanceShouldBeBetweenUnits(10, 20) (0.0s)
+
+
+  Passed Generate random cities [34 ms]
+  Standard Output Messages:
+ When I generate 10 random cities with seed 42
+ -> done: DataGenerationSteps.WhenIGenerateRandomCitiesWithSeed(10, 42) (0.0s)
+ Then I should have 10 cities
+ -> done: DataGenerationSteps.ThenIShouldHaveCities(10) (0.0s)
+ And all cities should be within bounds (0,0) to (100,100)
+ -> done: DataGenerationSteps.ThenAllCitiesShouldBeWithinBounds(0, 0, 100, 100) (0.0s)
+ And all cities should have unique IDs from 0 to 9
+ -> done: DataGenerationSteps.ThenAllCitiesShouldHaveUniqueIDsFromTo(0, 9) (0.0s)
+
+
+Completed scenario: Different algorithms produce valid tours
+Completed scenario: Different algorithms produce valid tours
+Starting scenario: Nearest Neighbor solver finds a valid tour
+Starting scenario: Nearest Neighbor solver finds a valid tour
+Completed scenario: Nearest Neighbor solver finds a valid tour
+Completed scenario: Nearest Neighbor solver finds a valid tour
+Starting scenario: 2-Opt improves upon Nearest Neighbor solution
+Starting scenario: 2-Opt improves upon Nearest Neighbor solution
+Completed scenario: 2-Opt improves upon Nearest Neighbor solution
+Completed scenario: 2-Opt improves upon Nearest Neighbor solution
+Starting scenario: Solvers handle large problem instances
+Starting scenario: Solvers handle large problem instances
+Completed scenario: Solvers handle large problem instances
+Completed scenario: Solvers handle large problem instances
+  Passed Different algorithms produce valid tours(algorithm: "Nearest Neighbor", exampleTags: []) [7 ms]
+  Standard Output Messages:
+ Given I have the following cities:
+   --- table step argument ---
+   | Name | X | Y |
+   | A    | 0 | 0 |
+   | B    | 3 | 0 |
+   | C    | 3 | 4 |
+   | D    | 0 | 4 |
+ -> done: TspSolverSteps.GivenIHaveTheFollowingCities(<table>) (0.0s)
+ When I solve the TSP using Nearest Neighbor algorithm
+ -> done: TspSolverSteps.WhenISolveTheTSPUsingAlgorithm("Nearest Neighbor") (0.0s)
+ Then the tour should visit all 4 cities
+ -> done: TspSolverSteps.ThenTheTourShouldVisitAllCities(4) (0.0s)
+ And the tour should return to the starting city
+ -> done: TspSolverSteps.ThenTheTourShouldReturnToTheStartingCity() (0.0s)
+ And the total distance should be between 10 and 20 units
+ -> done: TspSolverSteps.ThenTheTotalDistanceShouldBeBetweenUnits(10, 20) (0.0s)
+
+
+  Passed Seeded generation is deterministic [7 ms]
+  Standard Output Messages:
+ When I generate 5 random cities with seed 123
+ -> done: DataGenerationSteps.WhenIGenerateRandomCitiesWithSeed(5, 123) (0.0s)
+ And I generate 5 random cities again with seed 123
+ -> done: DataGenerationSteps.WhenIGenerateRandomCitiesAgainWithSeed(5, 123) (0.0s)
+ Then both city sets should be identical
+ -> done: DataGenerationSteps.ThenBothCitySetsShouldBeIdentical() (0.0s)
+
+
+  Passed Generate grid city pattern [33 ms]
+  Standard Output Messages:
+ When I generate a 3x3 grid of cities with spacing 10
+ -> done: DataGenerationSteps.WhenIGenerateAGridOfCitiesWithSpacing(3, 3, 10) (0.0s)
+ Then I should have 9 cities
+ -> done: DataGenerationSteps.ThenIShouldHaveCities(9) (0.0s)
+ And the cities should form a regular grid pattern
+ -> done: DataGenerationSteps.ThenTheCitiesShouldFormARegularGridPattern() (0.0s)
+ And the minimum distance between adjacent cities should be 10 units
+ -> done: DataGenerationSteps.ThenTheMinimumDistanceBetweenAdjacentCitiesShouldBeUnits(10) (0.0s)
+
+
+  Passed Different algorithms produce valid tours(algorithm: "Genetic Algorithm", exampleTags: []) [36 ms]
+  Standard Output Messages:
+ Given I have the following cities:
+   --- table step argument ---
+   | Name | X | Y |
+   | A    | 0 | 0 |
+   | B    | 3 | 0 |
+   | C    | 3 | 4 |
+   | D    | 0 | 4 |
+ -> done: TspSolverSteps.GivenIHaveTheFollowingCities(<table>) (0.0s)
+ When I solve the TSP using Genetic Algorithm algorithm
+ -> done: TspSolverSteps.WhenISolveTheTSPUsingAlgorithm("Genetic Algorithm") (0.0s)
+ Then the tour should visit all 4 cities
+ -> done: TspSolverSteps.ThenTheTourShouldVisitAllCities(4) (0.0s)
+ And the tour should return to the starting city
+ -> done: TspSolverSteps.ThenTheTourShouldReturnToTheStartingCity() (0.0s)
+ And the total distance should be between 10 and 20 units
+ -> done: TspSolverSteps.ThenTheTotalDistanceShouldBeBetweenUnits(10, 20) (0.0s)
+
+
+  Passed Different algorithms produce valid tours(algorithm: "Simulated Annealing", exampleTags: []) [25 ms]
+  Standard Output Messages:
+ Given I have the following cities:
+   --- table step argument ---
+   | Name | X | Y |
+   | A    | 0 | 0 |
+   | B    | 3 | 0 |
+   | C    | 3 | 4 |
+   | D    | 0 | 4 |
+ -> done: TspSolverSteps.GivenIHaveTheFollowingCities(<table>) (0.0s)
+ When I solve the TSP using Simulated Annealing algorithm
+ -> done: TspSolverSteps.WhenISolveTheTSPUsingAlgorithm("Simulated Annealing") (0.0s)
+ Then the tour should visit all 4 cities
+ -> done: TspSolverSteps.ThenTheTourShouldVisitAllCities(4) (0.0s)
+ And the tour should return to the starting city
+ -> done: TspSolverSteps.ThenTheTourShouldReturnToTheStartingCity() (0.0s)
+ And the total distance should be between 10 and 20 units
+ -> done: TspSolverSteps.ThenTheTotalDistanceShouldBeBetweenUnits(10, 20) (0.0s)
+
+
+  Passed Nearest Neighbor solver finds a valid tour [11 ms]
+  Standard Output Messages:
+ Given I have the following cities:
+   --- table step argument ---
+   | Name | X | Y |
+   | A    | 0 | 0 |
+   | B    | 3 | 0 |
+   | C    | 3 | 4 |
+   | D    | 0 | 4 |
+ -> done: TspSolverSteps.GivenIHaveTheFollowingCities(<table>) (0.0s)
+ When I solve the TSP using Nearest Neighbor algorithm
+ -> done: TspSolverSteps.WhenISolveTheTSPUsingAlgorithm("Nearest Neighbor") (0.0s)
+ Then the tour should visit all 4 cities
+ -> done: TspSolverSteps.ThenTheTourShouldVisitAllCities(4) (0.0s)
+ And the tour should return to the starting city
+ -> done: TspSolverSteps.ThenTheTourShouldReturnToTheStartingCity() (0.0s)
+ And the total distance should be greater than 0
+ -> done: TspSolverSteps.ThenTheTotalDistanceShouldBeGreaterThan(0) (0.0s)
+
+
+  Passed 2-Opt improves upon Nearest Neighbor solution [14 ms]
+  Standard Output Messages:
+ Given I have the following cities:
+   --- table step argument ---
+   | Name | X | Y |
+   | A    | 0 | 0 |
+   | B    | 3 | 0 |
+   | C    | 3 | 4 |
+   | D    | 0 | 4 |
+ -> done: TspSolverSteps.GivenIHaveTheFollowingCities(<table>) (0.0s)
+ Given I have solved the TSP using Nearest Neighbor algorithm
+ -> done: TspSolverSteps.GivenIHaveSolvedTheTSPUsingNearestNeighborAlgorithm() (0.0s)
+ When I apply 2-Opt optimization
+ -> done: TspSolverSteps.WhenIApply2OptOptimization() (0.0s)
+ Then the optimized tour distance should be less than or equal to the initial distance
+ -> done: TspSolverSteps.ThenTheOptimizedTourDistanceShouldBeLessThanOrEqualToTheInitialDistance() (0.0s)
+
+
+  Passed Solvers handle large problem instances [16 ms]
+  Standard Output Messages:
+ Given I have the following cities:
+   --- table step argument ---
+   | Name | X | Y |
+   | A    | 0 | 0 |
+   | B    | 3 | 0 |
+   | C    | 3 | 4 |
+   | D    | 0 | 4 |
+ -> done: TspSolverSteps.GivenIHaveTheFollowingCities(<table>) (0.0s)
+ Given I have 50 randomly generated cities for the TSP solver
+ -> done: TspSolverSteps.GivenIHaveRandomlyGeneratedCities(50) (0.0s)
+ When I solve the TSP using Nearest Neighbor algorithm
+ -> done: TspSolverSteps.WhenISolveTheTSPUsingAlgorithm("Nearest Neighbor") (0.0s)
+ Then the solution should complete within 1 second
+ -> done: TspSolverSteps.ThenTheSolutionShouldCompleteWithinSeconds(1) (0.0s)
+ And the tour should visit all 50 cities
+ -> done: TspSolverSteps.ThenTheTourShouldVisitAllCities(50) (0.0s)
+
+
+Completed scenario: Run benchmark on small problem
+Completed scenario: Run benchmark on small problem
+  Passed Run benchmark on small problem [24 s]
+  Standard Output Messages:
+ Given I have 10 randomly generated cities for benchmarking
+ -> done: BenchmarkingSteps.GivenIHaveRandomlyGeneratedCities(10) (0.0s)
+ When I benchmark all available algorithms
+ -> done: BenchmarkingSteps.WhenIBenchmarkAllAvailableAlgorithms() (24.5s)
+ Then I should receive benchmark results for each algorithm
+ -> done: BenchmarkingSteps.ThenIShouldReceiveBenchmarkResultsForEachAlgorithm() (0.0s)
+ And the results should be sorted by distance (best first)
+ -> done: BenchmarkingSteps.ThenTheResultsShouldBeSortedByDistanceBestFirst() (0.0s)
+ And each result should include execution time
+ -> done: BenchmarkingSteps.ThenEachResultShouldIncludeExecutionTime() (0.0s)
+
+
+Starting scenario: Benchmark identifies best solution on simple problem
+Starting scenario: Benchmark identifies best solution on simple problem
+Completed scenario: Benchmark identifies best solution on simple problem
+Completed scenario: Benchmark identifies best solution on simple problem
+  Passed Benchmark identifies best solution on simple problem [16 s]
+  Standard Output Messages:
+ Given I have the following simple cities:
+   --- table step argument ---
+   | Name | X | Y |
+   | A    | 0 | 0 |
+   | B    | 1 | 0 |
+   | C    | 1 | 1 |
+   | D    | 0 | 1 |
+ -> done: BenchmarkingSteps.GivenIHaveTheFollowingSimpleCities(<table>) (0.0s)
+ When I benchmark all available algorithms
+ -> done: BenchmarkingSteps.WhenIBenchmarkAllAvailableAlgorithms() (16.5s)
+ Then the best solution should have a distance of 4.0 units
+ -> done: BenchmarkingSteps.ThenTheBestSolutionShouldHaveADistanceOfUnits(4) (0.0s)
+ And all algorithms should find the optimal solution
+ -> done: BenchmarkingSteps.ThenAllAlgorithmsShouldFindTheOptimalSolution() (0.0s)
+
+
+Starting scenario: Algorithm characteristics validation
+Starting scenario: Algorithm characteristics validation
+Completed scenario: Algorithm characteristics validation
+Completed scenario: Algorithm characteristics validation
+Starting scenario: Quick algorithm comparison on small dataset
+Starting scenario: Quick algorithm comparison on small dataset
+  Passed Algorithm characteristics validation [145 ms]
+  Standard Output Messages:
+ Given I have 15 randomly generated cities for benchmarking
+ -> done: BenchmarkingSteps.GivenIHaveRandomlyGeneratedCities(15) (0.0s)
+ When I benchmark the following algorithms:
+   --- table step argument ---
+   | Algorithm           |
+   | Nearest Neighbor    |
+   | 2-Opt               |
+   | Simulated Annealing |
+   | Genetic Algorithm   |
+ -> done: BenchmarkingSteps.WhenIBenchmarkTheFollowingAlgorithms(<table>) (0.1s)
+ Then Nearest Neighbor should be among the fastest algorithms
+ -> done: BenchmarkingSteps.ThenNearestNeighborShouldBeAmongTheFastestAlgorithms() (0.0s)
+ And 2-Opt should produce same or better solution than Nearest Neighbor
+ -> done: BenchmarkingSteps.ThenOptShouldProduceSameOrBetterSolutionThanNearestNeighbor(2) (0.0s)
+ And advanced algorithms should produce competitive solutions
+ -> done: BenchmarkingSteps.ThenAdvancedAlgorithmsShouldProduceCompetitiveSolutions() (0.0s)
+
+
+Completed scenario: Quick algorithm comparison on small dataset
+Completed scenario: Quick algorithm comparison on small dataset
+Starting scenario: Solution quality on moderate problem
+Starting scenario: Solution quality on moderate problem
+[xUnit.net 00:01:05.97]     Quick algorithm comparison on small dataset [FAIL]
+[xUnit.net 00:01:05.97]     Quick algorithm comparison on small dataset [FAIL]
+[xUnit.net 00:01:05.97]       Assert.All() Failure: 1 out of 4 items in the collection did not pass.
+[xUnit.net 00:01:05.97]       Assert.All() Failure: 1 out of 4 items in the collection did not pass.
+[xUnit.net 00:01:05.97]       [2]: Item:  BenchmarkResult { SolverName = Simulated Annealing, Distance = 208.04823134626918, ExecutionTime = 00:00:21.5877660, Tour = Tour Distance: 208.05
+[xUnit.net 00:01:05.97]       [2]: Item:  BenchmarkResult { SolverName = Simulated Annealing, Distance = 208.04823134626918, ExecutionTime = 00:00:21.5877660, Tour = Tour Distance: 208.05
+[xUnit.net 00:01:05.97]                   Route:
+[xUnit.net 00:01:05.97]                   Route:
+[xUnit.net 00:01:05.97]                   City_0 -> City_6 -> City_7 -> City_5 -> City_2 -> City_1 -> City_4 -> City_3 -> City_0 }
+[xUnit.net 00:01:05.97]                   City_0 -> City_6 -> City_7 -> City_5 -> City_2 -> City_1 -> City_4 -> City_3 -> City_0 }
+[xUnit.net 00:01:05.97]            Error: Simulated Annealing took 21587.77ms, expected under 1000ms
+[xUnit.net 00:01:05.97]            Error: Simulated Annealing took 21587.77ms, expected under 1000ms
+[xUnit.net 00:01:05.97]       Stack Trace:
+[xUnit.net 00:01:05.97]       Stack Trace:
+[xUnit.net 00:01:05.97]         C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(287,0): at TravelingSalesman.Specs.StepDefinitions.BenchmarkingSteps.ThenAllAlgorithmsShouldCompleteInUnderSeconds(Int32 seconds)
+[xUnit.net 00:01:05.97]         C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(287,0): at TravelingSalesman.Specs.StepDefinitions.BenchmarkingSteps.ThenAllAlgorithmsShouldCompleteInUnderSeconds(Int32 seconds)
+[xUnit.net 00:01:05.97]            at InvokeStub_Action`2.Invoke(Object, Span`1)
+[xUnit.net 00:01:05.97]            at InvokeStub_Action`2.Invoke(Object, Span`1)
+[xUnit.net 00:01:05.97]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:01:05.97]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:01:05.97]         --- End of stack trace from previous location ---
+[xUnit.net 00:01:05.97]         --- End of stack trace from previous location ---
+[xUnit.net 00:01:05.97]            at Reqnroll.Bindings.BindingInvoker.InvokeBindingAsync(IBinding binding, IContextManager contextManager, Object[] arguments, ITestTracer testTracer, DurationHolder durationHolder)
+[xUnit.net 00:01:05.97]            at Reqnroll.Bindings.BindingInvoker.InvokeBindingAsync(IBinding binding, IContextManager contextManager, Object[] arguments, ITestTracer testTracer, DurationHolder durationHolder)
+[xUnit.net 00:01:05.97]            at Reqnroll.Infrastructure.TestExecutionEngine.ExecuteStepMatchAsync(BindingMatch match, Object[] arguments, DurationHolder durationHolder)
+[xUnit.net 00:01:05.97]            at Reqnroll.Infrastructure.TestExecutionEngine.ExecuteStepMatchAsync(BindingMatch match, Object[] arguments, DurationHolder durationHolder)
+[xUnit.net 00:01:05.97]            at Reqnroll.Infrastructure.TestExecutionEngine.ExecuteStepAsync(IContextManager contextManager, StepInstance stepInstance)
+[xUnit.net 00:01:05.97]            at Reqnroll.Infrastructure.TestExecutionEngine.ExecuteStepAsync(IContextManager contextManager, StepInstance stepInstance)
+[xUnit.net 00:01:05.97]            at Reqnroll.Infrastructure.TestExecutionEngine.OnAfterLastStepAsync()
+[xUnit.net 00:01:05.97]            at Reqnroll.Infrastructure.TestExecutionEngine.OnAfterLastStepAsync()
+[xUnit.net 00:01:05.97]            at Reqnroll.TestRunner.CollectScenarioErrorsAsync()
+[xUnit.net 00:01:05.97]            at Reqnroll.TestRunner.CollectScenarioErrorsAsync()
+[xUnit.net 00:01:05.97]            at TravelingSalesman.Specs.Features.AlgorithmBenchmarkingFeature.ScenarioCleanupAsync()
+[xUnit.net 00:01:05.97]            at TravelingSalesman.Specs.Features.AlgorithmBenchmarkingFeature.ScenarioCleanupAsync()
+[xUnit.net 00:01:05.97]         C:\code\TSP\TravelingSalesman.Specs\Features\Benchmarking.feature(45,0): at TravelingSalesman.Specs.Features.AlgorithmBenchmarkingFeature.QuickAlgorithmComparisonOnSmallDataset()
+[xUnit.net 00:01:05.97]         C:\code\TSP\TravelingSalesman.Specs\Features\Benchmarking.feature(45,0): at TravelingSalesman.Specs.Features.AlgorithmBenchmarkingFeature.QuickAlgorithmComparisonOnSmallDataset()
+[xUnit.net 00:01:05.97]         --- End of stack trace from previous location ---
+[xUnit.net 00:01:05.97]         --- End of stack trace from previous location ---
+[xUnit.net 00:01:05.97]       Output:
+[xUnit.net 00:01:05.97]       Output:
+[xUnit.net 00:01:05.97]         Given I have 8 randomly generated cities for benchmarking
+[xUnit.net 00:01:05.97]         Given I have 8 randomly generated cities for benchmarking
+[xUnit.net 00:01:05.97]         -> done: BenchmarkingSteps.GivenIHaveRandomlyGeneratedCities(8) (0.0s)
+[xUnit.net 00:01:05.97]         -> done: BenchmarkingSteps.GivenIHaveRandomlyGeneratedCities(8) (0.0s)
+[xUnit.net 00:01:05.97]         When I benchmark all available algorithms
+[xUnit.net 00:01:05.97]         When I benchmark all available algorithms
+[xUnit.net 00:01:05.97]         -> done: BenchmarkingSteps.WhenIBenchmarkAllAvailableAlgorithms() (21.6s)
+[xUnit.net 00:01:05.97]         -> done: BenchmarkingSteps.WhenIBenchmarkAllAvailableAlgorithms() (21.6s)
+[xUnit.net 00:01:05.97]         Then all algorithms should find good solutions within 20% of optimal
+[xUnit.net 00:01:05.97]         Then all algorithms should find good solutions within 20% of optimal
+[xUnit.net 00:01:05.97]         -> done: BenchmarkingSteps.ThenAllAlgorithmsShouldFindGoodSolutionsWithinOfOptimal(20) (0.0s)
+[xUnit.net 00:01:05.97]         -> done: BenchmarkingSteps.ThenAllAlgorithmsShouldFindGoodSolutionsWithinOfOptimal(20) (0.0s)
+[xUnit.net 00:01:05.97]         And Nearest Neighbor should complete in under 10 milliseconds
+[xUnit.net 00:01:05.97]         And Nearest Neighbor should complete in under 10 milliseconds
+[xUnit.net 00:01:05.97]         -> done: BenchmarkingSteps.ThenNearestNeighborShouldCompleteInUnderMilliseconds(10) (0.0s)
+[xUnit.net 00:01:05.97]         -> done: BenchmarkingSteps.ThenNearestNeighborShouldCompleteInUnderMilliseconds(10) (0.0s)
+[xUnit.net 00:01:05.97]         And all algorithms should complete in under 1 second
+[xUnit.net 00:01:05.97]         And all algorithms should complete in under 1 second
+[xUnit.net 00:01:05.97]         -> error: Assert.All() Failure: 1 out of 4 items in the collection did not pass.
+[xUnit.net 00:01:05.97]         -> error: Assert.All() Failure: 1 out of 4 items in the collection did not pass.
+[xUnit.net 00:01:05.97]         [2]: Item:  BenchmarkResult { SolverName = Simulated Annealing, Distance = 208.04823134626918, ExecutionTime = 00:00:21.5877660, Tour = Tour Distance: 208.05
+[xUnit.net 00:01:05.97]         [2]: Item:  BenchmarkResult { SolverName = Simulated Annealing, Distance = 208.04823134626918, ExecutionTime = 00:00:21.5877660, Tour = Tour Distance: 208.05
+[xUnit.net 00:01:05.97]                     Route:
+[xUnit.net 00:01:05.97]                     Route:
+[xUnit.net 00:01:05.97]                     City_0 -> City_6 -> City_7 -> City_5 -> City_2 -> City_1 -> City_4 -> City_3 -> City_0 }
+[xUnit.net 00:01:05.97]                     City_0 -> City_6 -> City_7 -> City_5 -> City_2 -> City_1 -> City_4 -> City_3 -> City_0 }
+[xUnit.net 00:01:05.97]              Error: Simulated Annealing took 21587.77ms, expected under 1000ms (0.0s)
+[xUnit.net 00:01:05.97]              Error: Simulated Annealing took 21587.77ms, expected under 1000ms (0.0s)
+  Failed Quick algorithm comparison on small dataset [21 s]
+  Error Message:
+   Assert.All() Failure: 1 out of 4 items in the collection did not pass.
+[2]: Item:  BenchmarkResult { SolverName = Simulated Annealing, Distance = 208.04823134626918, ExecutionTime = 00:00:21.5877660, Tour = Tour Distance: 208.05
+            Route:
+            City_0 -> City_6 -> City_7 -> City_5 -> City_2 -> City_1 -> City_4 -> City_3 -> City_0 }
+     Error: Simulated Annealing took 21587.77ms, expected under 1000ms
+  Stack Trace:
+     at TravelingSalesman.Specs.StepDefinitions.BenchmarkingSteps.ThenAllAlgorithmsShouldCompleteInUnderSeconds(Int32 seconds) in C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs:line 287
+   at InvokeStub_Action`2.Invoke(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+--- End of stack trace from previous location ---
+   at Reqnroll.Bindings.BindingInvoker.InvokeBindingAsync(IBinding binding, IContextManager contextManager, Object[] arguments, ITestTracer testTracer, DurationHolder durationHolder)
+   at Reqnroll.Infrastructure.TestExecutionEngine.ExecuteStepMatchAsync(BindingMatch match, Object[] arguments, DurationHolder durationHolder)
+   at Reqnroll.Infrastructure.TestExecutionEngine.ExecuteStepAsync(IContextManager contextManager, StepInstance stepInstance)
+   at Reqnroll.Infrastructure.TestExecutionEngine.OnAfterLastStepAsync()
+   at Reqnroll.TestRunner.CollectScenarioErrorsAsync()
+   at TravelingSalesman.Specs.Features.AlgorithmBenchmarkingFeature.ScenarioCleanupAsync()
+   at TravelingSalesman.Specs.Features.AlgorithmBenchmarkingFeature.QuickAlgorithmComparisonOnSmallDataset() in C:\code\TSP\TravelingSalesman.Specs\Features\Benchmarking.feature:line 45
+--- End of stack trace from previous location ---
+  Standard Output Messages:
+ Given I have 8 randomly generated cities for benchmarking
+ -> done: BenchmarkingSteps.GivenIHaveRandomlyGeneratedCities(8) (0.0s)
+ When I benchmark all available algorithms
+ -> done: BenchmarkingSteps.WhenIBenchmarkAllAvailableAlgorithms() (21.6s)
+ Then all algorithms should find good solutions within 20% of optimal
+ -> done: BenchmarkingSteps.ThenAllAlgorithmsShouldFindGoodSolutionsWithinOfOptimal(20) (0.0s)
+ And Nearest Neighbor should complete in under 10 milliseconds
+ -> done: BenchmarkingSteps.ThenNearestNeighborShouldCompleteInUnderMilliseconds(10) (0.0s)
+ And all algorithms should complete in under 1 second
+ -> error: Assert.All() Failure: 1 out of 4 items in the collection did not pass.
+ [2]: Item:  BenchmarkResult { SolverName = Simulated Annealing, Distance = 208.04823134626918, ExecutionTime = 00:00:21.5877660, Tour = Tour Distance: 208.05
+             Route:
+             City_0 -> City_6 -> City_7 -> City_5 -> City_2 -> City_1 -> City_4 -> City_3 -> City_0 }
+      Error: Simulated Annealing took 21587.77ms, expected under 1000ms (0.0s)
+
+
+Completed scenario: Solution quality on moderate problem
+Completed scenario: Solution quality on moderate problem
+Completed TSP Reqnroll test run
+Completed TSP Reqnroll test run
+[xUnit.net 00:01:06.14]   Finished:    TravelingSalesman.Specs
+[xUnit.net 00:01:06.14]   Finished:    TravelingSalesman.Specs
+  Passed Solution quality on moderate problem [149 ms]
+  Standard Output Messages:
+ Given I have 25 randomly generated cities for benchmarking
+ -> done: BenchmarkingSteps.GivenIHaveRandomlyGeneratedCities(25) (0.0s)
+ When I benchmark the following algorithms:
+   --- table step argument ---
+   | Algorithm           |
+   | 2-Opt               |
+   | Simulated Annealing |
+   | Genetic Algorithm   |
+ -> done: BenchmarkingSteps.WhenIBenchmarkTheFollowingAlgorithms(<table>) (0.1s)
+ Then each algorithm should find a valid tour
+ -> done: BenchmarkingSteps.ThenEachAlgorithmShouldFindAValidTour() (0.0s)
+ And the best solution should be better than a random tour
+ -> done: BenchmarkingSteps.ThenTheBestSolutionShouldBeBetterThanARandomTour() (0.0s)
+
+
+
+Test Run Failed.
+Total tests: 21
+     Passed: 20
+     Failed: 1
+ Total time: 1.1346 Minutes
+  TravelingSalesman.Specs test failed with 1 error(s) (69.1s)
+    C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs(287): error TESTERROR:
+      Quick algorithm comparison on small dataset (21s 666ms): Error Message: Assert.All() Failure: 1 out of 4 items in the collection did not pass.
+      [2]: Item:  BenchmarkResult { SolverName = Simulated Annealing, Distance = 208.04823134626918, ExecutionTime = 00:00:21.5877660, Tour = Tour Distance: 208.05
+                  Route:
+                  City_0 -> City_6 -> City_7 -> City_5 -> City_2 -> City_1 -> City_4 -> City_3 -> City_0 }
+           Error: Simulated Annealing took 21587.77ms, expected under 1000ms
+      Stack Trace:
+         at TravelingSalesman.Specs.StepDefinitions.BenchmarkingSteps.ThenAllAlgorithmsShouldCompleteInUnderSeconds(Int32 seconds) in C:\code\TSP\TravelingSalesman.Specs\StepDefinitions\BenchmarkingSteps.cs:li
+      ne 287
+         at InvokeStub_Action`2.Invoke(Object, Span`1)
+         at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+      --- End of stack trace from previous location ---
+         at Reqnroll.Bindings.BindingInvoker.InvokeBindingAsync(IBinding binding, IContextManager contextManager, Object[] arguments, ITestTracer testTracer, DurationHolder durationHolder)
+         at Reqnroll.Infrastructure.TestExecutionEngine.ExecuteStepMatchAsync(BindingMatch match, Object[] arguments, DurationHolder durationHolder)
+         at Reqnroll.Infrastructure.TestExecutionEngine.ExecuteStepAsync(IContextManager contextManager, StepInstance stepInstance)
+         at Reqnroll.Infrastructure.TestExecutionEngine.OnAfterLastStepAsync()
+         at Reqnroll.TestRunner.CollectScenarioErrorsAsync()
+         at TravelingSalesman.Specs.Features.AlgorithmBenchmarkingFeature.ScenarioCleanupAsync()
+         at TravelingSalesman.Specs.Features.AlgorithmBenchmarkingFeature.QuickAlgorithmComparisonOnSmallDataset() in C:\code\TSP\TravelingSalesman.Specs\Features\Benchmarking.feature:line 45
+      --- End of stack trace from previous location ---
+        Standard Output Messages:
+       Given I have 8 randomly generated cities for benchmarking
+       -> done: BenchmarkingSteps.GivenIHaveRandomlyGeneratedCities(8) (0.0s)
+       When I benchmark all available algorithms
+       -> done: BenchmarkingSteps.WhenIBenchmarkAllAvailableAlgorithms() (21.6s)
+       Then all algorithms should find good solutions within 20% of optimal
+       -> done: BenchmarkingSteps.ThenAllAlgorithmsShouldFindGoodSolutionsWithinOfOptimal(20) (0.0s)
+       And Nearest Neighbor should complete in under 10 milliseconds
+       -> done: BenchmarkingSteps.ThenNearestNeighborShouldCompleteInUnderMilliseconds(10) (0.0s)
+       And all algorithms should complete in under 1 second
+       -> error: Assert.All() Failure: 1 out of 4 items in the collection did not pass.
+       [2]: Item:  BenchmarkResult { SolverName = Simulated Annealing, Distance = 208.04823134626918, ExecutionTime = 00:00:21.5877660, Tour = Tour Distance: 208.05
+                   Route:
+                   City_0 -> City_6 -> City_7 -> City_5 -> City_2 -> City_1 -> City_4 -> City_3 -> City_0 }
+            Error: Simulated Annealing took 21587.77ms, expected under 1000ms (0.0s)
+
+Test summary: total: 120, failed: 1, succeeded: 119, skipped: 0, duration: 72.2s
+Build failed with 1 error(s) in 87.1s
+PS C:\code\TSP> C:\code\TSP\scripts\cat.ps1
