@@ -53,6 +53,23 @@ $outFile = "C:\code\TSP\scripts\PowerShell.txt"
 
 Write-Host "Script output has been saved to $outFile"
 
+$buildAndTestResultsFile = "C:\code\TSP\docs\build.txt"
+
+& {
+    Set-Location "C:\code\tsp"
+    git status
+    git remote show origin
+    git clean -dfx
+    tree /F
+    dotnet restore
+    dotnet build
+    dotnet test
+    dotnet test TravelingSalesman.Specs
+    dotnet test TravelingSalesman.Specs --logger "console;verbosity=detailed"
+    dotnet test TravelingSalesman.Specs --logger "html;LogFileName=test-results.html"
+    Copy-Item -Path "C:\code\TSP\TravelingSalesman.Specs\TestResults\test-results.html" -Destination "C:\code\TSP\docs\results.html" -Force
+}
+
 git add .
 git commit --message "add all files"
 git pull --rebase --strategy-option=theirs 
