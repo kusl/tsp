@@ -73,5 +73,5 @@ Write-Host "Script output has been saved to $buildAndTestResultsFile"
 
 git add .
 git commit --message "add all files"
-# git pull --rebase --strategy-option=theirs 
-# git push origin master
+git pull --rebase --strategy-option=theirs 
+git push origin master
