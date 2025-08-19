@@ -68,9 +68,11 @@ $buildAndTestResultsFile = "C:\code\TSP\docs\build.txt"
     dotnet test TravelingSalesman.Specs --logger "console;verbosity=detailed"
     dotnet test TravelingSalesman.Specs --logger "html;LogFileName=test-results.html"
     Copy-Item -Path "C:\code\TSP\TravelingSalesman.Specs\TestResults\test-results.html" -Destination "C:\code\TSP\docs\results.html" -Force
-}
+} | Out-File -FilePath $buildAndTestResultsFile -Encoding utf8
+
+Write-Host "Script output has been saved to $buildAndTestResultsFile"
 
 git add .
 git commit --message "add all files"
-git pull --rebase --strategy-option=theirs 
-git push origin master
+# git pull --rebase --strategy-option=theirs 
+# git push origin master
