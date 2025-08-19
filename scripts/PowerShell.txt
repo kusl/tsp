@@ -3,7 +3,7 @@ Path
 ----
 C:\code\TSP
 On branch master
-Your branch is ahead of 'origin/master' by 2 commits.
+Your branch is ahead of 'origin/master' by 5 commits.
   (use "git push" to publish your local commits)
 
 Changes not staged for commit:
@@ -33,7 +33,6 @@ Removing TravelingSalesman.Specs/Features/TspSolvers.feature.cs
 Removing TravelingSalesman.Specs/TestResults/
 Removing TravelingSalesman.Specs/bin/
 Removing TravelingSalesman.Specs/obj/
-Removing TravelingSalesman.Tests/TestResults/
 Removing TravelingSalesman.Tests/bin/
 Removing TravelingSalesman.Tests/obj/
 Folder PATH listing
@@ -55,7 +54,9 @@ C:.
 ª           release.yml
 ª           
 +---docs
+ª       build.txt
 ª       index.html
+ª       results.html
 ª       
 +---scripts
 ª       bash.txt
