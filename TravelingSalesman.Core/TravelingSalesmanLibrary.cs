@@ -95,6 +95,32 @@ namespace TravelingSalesman.Core
 
         public void Reverse(int start, int end)
         {
+            // Optimized version for larger segments
+            if (end - start > 10)
+            {
+                var segmentLength = end - start + 1;
+                var segment = new City[segmentLength];
+                var segmentIds = new int[segmentLength];
+                
+                // Copy segment
+                for (int i = 0; i < segmentLength; i++)
+                {
+                    segment[i] = _cities[start + i];
+                    segmentIds[i] = _cityIds[start + i];
+                }
+                
+                // Reverse and copy back
+                for (int i = 0; i < segmentLength; i++)
+                {
+                    _cities[start + i] = segment[segmentLength - 1 - i];
+                    _cityIds[start + i] = segmentIds[segmentLength - 1 - i];
+                }
+                
+                _cachedDistance = null;
+                return;
+            }
+            
+            // Keep existing implementation for small segments
             while (start < end)
             {
                 SwapCities(start, end);
@@ -108,6 +134,12 @@ namespace TravelingSalesman.Core
         public double Calculate2OptDelta(int i, int j)
         {
             var n = _cityIds.Length;
+
+            // Add bounds checking for safety
+            if (i < 0 || j >= n || n < 2)
+            {
+                return 0;
+            }
 
             // Ensure i < j
             if (i > j)
@@ -190,6 +222,15 @@ namespace TravelingSalesman.Core
         protected double[,] BuildDistanceMatrix(IReadOnlyList<City> cities)
         {
             var n = cities.Count;
+            
+            // Add memory check for very large problems
+            if (n > 5000)
+            {
+                var memorySizeMB = (long)n * n * sizeof(double) / (1024 * 1024);
+                _logger.LogWarning("Large distance matrix ({N}x{N}) will use approximately {MB}MB of memory", 
+                    n, n, memorySizeMB);
+            }
+            
             var matrix = new double[n, n];
 
             // REMOVED PLINQ: Use regular parallel for AOT compatibility
@@ -499,14 +540,14 @@ namespace TravelingSalesman.Core
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    // FIXED: Ensure indices are within valid bounds for swapping
-                    var index1 = _random.Next(1, Math.Max(2, n - 1)); // At least 1, at most n-2
-                    var index2 = _random.Next(1, Math.Max(2, n - 1)); // At least 1, at most n-2
+                    // FIXED: Corrected index bounds for proper range
+                    var index1 = _random.Next(1, n); // Range: [1, n-1]
+                    var index2 = _random.Next(1, n); // Range: [1, n-1]
                     
                     // Ensure different indices
-                    if (index1 == index2 && n > 2)
+                    while (index1 == index2 && n > 2)
                     {
-                        index2 = (index2 % (n - 2)) + 1; // Wrap within valid range
+                        index2 = _random.Next(1, n);
                     }
 
                     var deltaDistance = currentTour.Calculate2OptDelta(index1, index2);
@@ -846,6 +887,13 @@ namespace TravelingSalesman.Core
                 }
             }
 
+            // Validate that crossover created a complete tour
+            if (childCities.Any(c => c == null))
+            {
+                _logger.LogError("Crossover failed to create complete tour, falling back to parent1");
+                return parent1.Clone();
+            }
+
             return new Tour(childCities, distanceMatrix);
         }
 
@@ -1009,19 +1057,29 @@ namespace TravelingSalesman.Core
 
             var results = new ConcurrentBag<BenchmarkResult>();
 
-            // Use Task.WhenAll instead of Parallel.ForEachAsync for better AOT support
+            // Add concurrency limit for better resource management
+            using var semaphore = new SemaphoreSlim(Environment.ProcessorCount);
+            
             var tasks = solverList.Select(async solver =>
             {
-                _logger.LogDebug("Running benchmark for {SolverName}", solver.Name);
-                var startTime = DateTime.UtcNow;
-                var tour = await solver.SolveAsync(cities, cancellationToken);
-                var executionTime = DateTime.UtcNow - startTime;
+                await semaphore.WaitAsync(cancellationToken);
+                try
+                {
+                    _logger.LogDebug("Running benchmark for {SolverName}", solver.Name);
+                    var startTime = DateTime.UtcNow;
+                    var tour = await solver.SolveAsync(cities, cancellationToken);
+                    var executionTime = DateTime.UtcNow - startTime;
 
-                var result = new BenchmarkResult(solver.Name, tour.TotalDistance, executionTime, tour);
-                results.Add(result);
+                    var result = new BenchmarkResult(solver.Name, tour.TotalDistance, executionTime, tour);
+                    results.Add(result);
 
-                _logger.LogInformation("Benchmark completed for {SolverName}: Distance {Distance:F2}, Time {TimeMs}ms",
-                    solver.Name, tour.TotalDistance, executionTime.TotalMilliseconds);
+                    _logger.LogInformation("Benchmark completed for {SolverName}: Distance {Distance:F2}, Time {TimeMs}ms",
+                        solver.Name, tour.TotalDistance, executionTime.TotalMilliseconds);
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
             }).ToArray();
 
             await Task.WhenAll(tasks);
