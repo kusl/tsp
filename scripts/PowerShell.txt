@@ -1,14 +1,15 @@
+
+Path
+----
+C:\code\TSP
 On branch master
-Your branch is up to date with 'origin/master'.
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
 
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
 	modified:   scripts/PowerShell.txt
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	scripts/push.ps1
 
 no changes added to commit (use "git add" and/or "git commit -a")
 * remote origin
@@ -20,21 +21,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
   Local branch configured for 'git pull':
     master merges with remote master
   Local ref configured for 'git push':
-    master pushes to master (up to date)
-Removing TravelingSalesman.ConsoleApp/bin/
-Removing TravelingSalesman.ConsoleApp/obj/
-Removing TravelingSalesman.Core/bin/
-Removing TravelingSalesman.Core/obj/
-Removing TravelingSalesman.Specs/Features/Benchmarking.feature.cs
-Removing TravelingSalesman.Specs/Features/CityOperations.feature.cs
-Removing TravelingSalesman.Specs/Features/DataGeneration.feature.cs
-Removing TravelingSalesman.Specs/Features/TspSolvers.feature.cs
-Removing TravelingSalesman.Specs/TestResults/
-Removing TravelingSalesman.Specs/bin/
-Removing TravelingSalesman.Specs/obj/
-Removing TravelingSalesman.Tests/bin/
-Removing TravelingSalesman.Tests/obj/
-Removing scripts/push.ps1
+    master pushes to master (fast-forwardable)
 Folder PATH listing
 Volume serial number is BE05-6605
 C:.
@@ -63,6 +50,7 @@ C:.
 ª       install-linux.sh
 ª       linux-installation-command.txt
 ª       PowerShell.txt
+ª       push.ps1
 ª       
 +---TravelingSalesman.ConsoleApp
 ª   ª   Program.cs
@@ -5523,3 +5511,4 @@ Scenario: Nearest Neighbor produces deterministic results
     And I solve the same problem again using Nearest Neighbor algorithm
     Then both solutions should have the same total distance
     And both solutions should have the same route
+
