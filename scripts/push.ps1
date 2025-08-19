@@ -59,7 +59,6 @@ $buildAndTestResultsFile = "C:\code\TSP\docs\build.txt"
     Set-Location "C:\code\tsp"
     git status
     git remote show origin
-    git clean -dfx
     tree /F
     dotnet restore
     dotnet build
