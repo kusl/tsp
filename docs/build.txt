@@ -1,6 +1,5 @@
 On branch master
-Your branch is ahead of 'origin/master' by 2 commits.
-  (use "git push" to publish your local commits)
+Your branch is up to date with 'origin/master'.
 
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
@@ -18,7 +17,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
   Local branch configured for 'git pull':
     master merges with remote master
   Local ref configured for 'git push':
-    master pushes to master (fast-forwardable)
+    master pushes to master (up to date)
 Folder PATH listing
 Volume serial number is BE05-6605
 C:.
@@ -86,14 +85,14 @@ C:.
         TravelingSalesman.Tests.csproj
         
   Determining projects to restore...
-  Restored C:\code\TSP\TravelingSalesman.Specs\TravelingSalesman.Specs.csproj (in 1.3 sec).
-  Restored C:\code\TSP\TravelingSalesman.Tests\TravelingSalesman.Tests.csproj (in 1.3 sec).
-  Restored C:\code\TSP\TravelingSalesman.ConsoleApp\TravelingSalesman.ConsoleApp.csproj (in 1.3 sec).
-  Restored C:\code\TSP\TravelingSalesman.Core\TravelingSalesman.Core.csproj (in 1.3 sec).
+  Restored C:\code\TSP\TravelingSalesman.Core\TravelingSalesman.Core.csproj (in 1.19 sec).
+  Restored C:\code\TSP\TravelingSalesman.Tests\TravelingSalesman.Tests.csproj (in 1.19 sec).
+  Restored C:\code\TSP\TravelingSalesman.Specs\TravelingSalesman.Specs.csproj (in 1.2 sec).
+  Restored C:\code\TSP\TravelingSalesman.ConsoleApp\TravelingSalesman.ConsoleApp.csproj (in 1.19 sec).
   Determining projects to restore...
   All projects are up-to-date for restore.
-C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(335,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [C:\code\TSP\TravelingSalesman.Tests\TravelingSalesman.Tests.csproj]
 C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(335,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [C:\code\TSP\TravelingSalesman.Core\TravelingSalesman.Core.csproj]
+C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(335,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [C:\code\TSP\TravelingSalesman.Tests\TravelingSalesman.Tests.csproj]
 C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(335,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [C:\code\TSP\TravelingSalesman.Specs\TravelingSalesman.Specs.csproj]
 C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(335,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [C:\code\TSP\TravelingSalesman.ConsoleApp\TravelingSalesman.ConsoleApp.csproj]
   TravelingSalesman.Core -> C:\code\TSP\TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
@@ -105,15 +104,15 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:13.91
+Time Elapsed 00:00:15.35
   Determining projects to restore...
   All projects are up-to-date for restore.
 C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(335,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [C:\code\TSP\TravelingSalesman.Tests\TravelingSalesman.Tests.csproj]
 C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(335,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [C:\code\TSP\TravelingSalesman.Specs\TravelingSalesman.Specs.csproj]
 C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(335,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [C:\code\TSP\TravelingSalesman.Core\TravelingSalesman.Core.csproj]
   TravelingSalesman.Core -> C:\code\TSP\TravelingSalesman.Core\bin\Debug\net9.0\TravelingSalesman.Core.dll
-C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(335,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [C:\code\TSP\TravelingSalesman.ConsoleApp\TravelingSalesman.ConsoleApp.csproj]
   TravelingSalesman.Tests -> C:\code\TSP\TravelingSalesman.Tests\bin\Debug\net9.0\TravelingSalesman.Tests.dll
+C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(335,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [C:\code\TSP\TravelingSalesman.ConsoleApp\TravelingSalesman.ConsoleApp.csproj]
 Test run for C:\code\TSP\TravelingSalesman.Tests\bin\Debug\net9.0\TravelingSalesman.Tests.dll (.NETCoreApp,Version=v9.0)
 VSTest version 17.15.0-preview-25358-103 (x64)
 
@@ -127,9 +126,9 @@ VSTest version 17.15.0-preview-25358-103 (x64)
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:    99, Skipped:     0, Total:    99, Duration: 578 ms - TravelingSalesman.Tests.dll (net9.0)
+Passed!  - Failed:     0, Passed:    99, Skipped:     0, Total:    99, Duration: 472 ms - TravelingSalesman.Tests.dll (net9.0)
 
-Passed!  - Failed:     0, Passed:    21, Skipped:     0, Total:    21, Duration: 22 s - TravelingSalesman.Specs.dll (net9.0)
+Passed!  - Failed:     0, Passed:    21, Skipped:     0, Total:    21, Duration: 23 s - TravelingSalesman.Specs.dll (net9.0)
   Determining projects to restore...
   All projects are up-to-date for restore.
 C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(335,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [C:\code\TSP\TravelingSalesman.Specs\TravelingSalesman.Specs.csproj]
@@ -143,7 +142,7 @@ VSTest version 17.15.0-preview-25358-103 (x64)
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:    21, Skipped:     0, Total:    21, Duration: 26 s - TravelingSalesman.Specs.dll (net9.0)
+Passed!  - Failed:     0, Passed:    21, Skipped:     0, Total:    21, Duration: 23 s - TravelingSalesman.Specs.dll (net9.0)
   Determining projects to restore...
   All projects are up-to-date for restore.
 C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(335,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [C:\code\TSP\TravelingSalesman.Specs\TravelingSalesman.Specs.csproj]
@@ -158,18 +157,18 @@ Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 C:\code\TSP\TravelingSalesman.Specs\bin\Debug\net9.0\TravelingSalesman.Specs.dll
 [xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 9.0.8)
-[xUnit.net 00:00:00.19]   Discovering: TravelingSalesman.Specs
-[xUnit.net 00:00:00.32]   Discovered:  TravelingSalesman.Specs
-[xUnit.net 00:00:00.39]   Starting:    TravelingSalesman.Specs
+[xUnit.net 00:00:00.27]   Discovering: TravelingSalesman.Specs
+[xUnit.net 00:00:00.46]   Discovered:  TravelingSalesman.Specs
+[xUnit.net 00:00:00.59]   Starting:    TravelingSalesman.Specs
 -> Loading plugin C:\code\TSP\TravelingSalesman.Specs\bin\Debug\net9.0\Reqnroll.Verify.ReqnrollPlugin.dll
 -> Loading plugin C:\code\TSP\TravelingSalesman.Specs\bin\Debug\net9.0\Reqnroll.xUnit.ReqnrollPlugin.dll
 -> Loading plugin C:\code\TSP\TravelingSalesman.Specs\bin\Debug\net9.0\TravelingSalesman.Specs.dll
 -> Using reqnroll.json
 Starting TSP Reqnroll test run
-Starting scenario: Nearest Neighbor produces deterministic results
 Starting scenario: Calculate distance between two cities
-Starting scenario: Run benchmark on small problem
 Starting scenario: Generate circular city pattern
+Starting scenario: Nearest Neighbor produces deterministic results
+Starting scenario: Run benchmark on small problem
 Completed scenario: Calculate distance between two cities
 Completed scenario: Generate circular city pattern
 Completed scenario: Nearest Neighbor produces deterministic results
@@ -180,11 +179,9 @@ Starting scenario: Cities at the same location have zero distance
 Starting scenario: Different algorithms produce valid tours
 Completed scenario: Cities at the same location have zero distance
 Starting scenario: Empty tour has zero distance
-Completed scenario: Empty tour has zero distance
 Completed scenario: Generate random cities
 Starting scenario: Seeded generation is deterministic
-Completed scenario: Different algorithms produce valid tours
-Starting scenario: Different algorithms produce valid tours
+Completed scenario: Empty tour has zero distance
 Completed scenario: Seeded generation is deterministic
 Starting scenario: Generate grid city pattern
 Completed scenario: Different algorithms produce valid tours
@@ -193,25 +190,10 @@ Completed scenario: Different algorithms produce valid tours
 Starting scenario: Different algorithms produce valid tours
 Completed scenario: Generate grid city pattern
 Completed scenario: Different algorithms produce valid tours
+Starting scenario: Different algorithms produce valid tours
+Completed scenario: Different algorithms produce valid tours
 Starting scenario: Nearest Neighbor solver finds a valid tour
-Completed scenario: Nearest Neighbor solver finds a valid tour
-Starting scenario: 2-Opt improves upon Nearest Neighbor solution
-Completed scenario: 2-Opt improves upon Nearest Neighbor solution
-Starting scenario: Solvers handle large problem instances
-Completed scenario: Solvers handle large problem instances
-  Passed Calculate distance between two cities [91 ms]
-  Standard Output Messages:
- Given I have a city "A" at coordinates (0, 0)
- -> done: CityOperationSteps.GivenIHaveACityAtCoordinates("A", 0, 0) (0.0s)
- And I have a city "B" at coordinates (3, 4)
- -> done: CityOperationSteps.GivenIHaveACityAtCoordinates("B", 3, 4) (0.0s)
- When I calculate the distance from city "A" to city "B"
- -> done: CityOperationSteps.WhenICalculateTheDistanceFromCityToCity("A", "B") (0.0s)
- Then the distance should be 5.0 units
- -> done: CityOperationSteps.ThenTheDistanceShouldBeUnits(5) (0.0s)
-
-
-  Passed Generate circular city pattern [107 ms]
+  Passed Generate circular city pattern [116 ms]
   Standard Output Messages:
  When I generate 8 cities in a circular pattern with radius 10
  -> done: DataGenerationSteps.WhenIGenerateCitiesInACircularPatternWithRadius(8, 10) (0.0s)
@@ -223,7 +205,19 @@ Completed scenario: Solvers handle large problem instances
  -> done: DataGenerationSteps.ThenTheCitiesShouldBeEvenlyDistributedAroundTheCircle() (0.0s)
 
 
-  Passed Nearest Neighbor produces deterministic results [120 ms]
+  Passed Calculate distance between two cities [102 ms]
+  Standard Output Messages:
+ Given I have a city "A" at coordinates (0, 0)
+ -> done: CityOperationSteps.GivenIHaveACityAtCoordinates("A", 0, 0) (0.0s)
+ And I have a city "B" at coordinates (3, 4)
+ -> done: CityOperationSteps.GivenIHaveACityAtCoordinates("B", 3, 4) (0.0s)
+ When I calculate the distance from city "A" to city "B"
+ -> done: CityOperationSteps.WhenICalculateTheDistanceFromCityToCity("A", "B") (0.0s)
+ Then the distance should be 5.0 units
+ -> done: CityOperationSteps.ThenTheDistanceShouldBeUnits(5) (0.0s)
+
+
+  Passed Nearest Neighbor produces deterministic results [129 ms]
   Standard Output Messages:
  Given I have the following cities:
    --- table step argument ---
@@ -243,7 +237,7 @@ Completed scenario: Solvers handle large problem instances
  -> done: TspSolverSteps.ThenBothSolutionsShouldHaveTheSameRoute() (0.0s)
 
 
-  Passed Tour calculates total distance correctly [21 ms]
+  Passed Tour calculates total distance correctly [9 ms]
   Standard Output Messages:
  Given I have the following cities in order:
    --- table step argument ---
@@ -259,7 +253,7 @@ Completed scenario: Solvers handle large problem instances
  -> done: CityOperationSteps.ThenTheTotalTourDistanceShouldBeUnits(4) (0.0s)
 
 
-  Passed Cities at the same location have zero distance [4 ms]
+  Passed Cities at the same location have zero distance [5 ms]
   Standard Output Messages:
  Given I have a city "A" at coordinates (10.5, 20.3)
  -> done: CityOperationSteps.GivenIHaveACityAtCoordinates("A", 10.5, 20.3) (0.0s)
@@ -269,17 +263,7 @@ Completed scenario: Solvers handle large problem instances
  -> done: CityOperationSteps.ThenTheDistanceShouldBeUnits(0) (0.0s)
 
 
-  Passed Empty tour has zero distance [4 ms]
-  Standard Output Messages:
- Given I have no cities
- -> done: CityOperationSteps.GivenIHaveNoCities() (0.0s)
- When I create an empty tour
- -> done: CityOperationSteps.WhenICreateAnEmptyTour() (0.0s)
- Then the total tour distance should be 0.0 units
- -> done: CityOperationSteps.ThenTheTotalTourDistanceShouldBeUnits(0) (0.0s)
-
-
-  Passed Generate random cities [39 ms]
+  Passed Generate random cities [19 ms]
   Standard Output Messages:
  When I generate 10 random cities with seed 42
  -> done: DataGenerationSteps.WhenIGenerateRandomCitiesWithSeed(10, 42) (0.0s)
@@ -291,7 +275,32 @@ Completed scenario: Solvers handle large problem instances
  -> done: DataGenerationSteps.ThenAllCitiesShouldHaveUniqueIDsFromTo(0, 9) (0.0s)
 
 
-  Passed Different algorithms produce valid tours(algorithm: "2-Opt", exampleTags: []) [17 ms]
+Completed scenario: Nearest Neighbor solver finds a valid tour
+Starting scenario: 2-Opt improves upon Nearest Neighbor solution
+Completed scenario: 2-Opt improves upon Nearest Neighbor solution
+Starting scenario: Solvers handle large problem instances
+Completed scenario: Solvers handle large problem instances
+  Passed Empty tour has zero distance [5 ms]
+  Standard Output Messages:
+ Given I have no cities
+ -> done: CityOperationSteps.GivenIHaveNoCities() (0.0s)
+ When I create an empty tour
+ -> done: CityOperationSteps.WhenICreateAnEmptyTour() (0.0s)
+ Then the total tour distance should be 0.0 units
+ -> done: CityOperationSteps.ThenTheTotalTourDistanceShouldBeUnits(0) (0.0s)
+
+
+  Passed Seeded generation is deterministic [4 ms]
+  Standard Output Messages:
+ When I generate 5 random cities with seed 123
+ -> done: DataGenerationSteps.WhenIGenerateRandomCitiesWithSeed(5, 123) (0.0s)
+ And I generate 5 random cities again with seed 123
+ -> done: DataGenerationSteps.WhenIGenerateRandomCitiesAgainWithSeed(5, 123) (0.0s)
+ Then both city sets should be identical
+ -> done: DataGenerationSteps.ThenBothCitySetsShouldBeIdentical() (0.0s)
+
+
+  Passed Different algorithms produce valid tours(algorithm: "2-Opt", exampleTags: []) [20 ms]
   Standard Output Messages:
  Given I have the following cities:
    --- table step argument ---
@@ -311,17 +320,7 @@ Completed scenario: Solvers handle large problem instances
  -> done: TspSolverSteps.ThenTheTotalDistanceShouldBeBetweenUnits(10, 20) (0.0s)
 
 
-  Passed Seeded generation is deterministic [6 ms]
-  Standard Output Messages:
- When I generate 5 random cities with seed 123
- -> done: DataGenerationSteps.WhenIGenerateRandomCitiesWithSeed(5, 123) (0.0s)
- And I generate 5 random cities again with seed 123
- -> done: DataGenerationSteps.WhenIGenerateRandomCitiesAgainWithSeed(5, 123) (0.0s)
- Then both city sets should be identical
- -> done: DataGenerationSteps.ThenBothCitySetsShouldBeIdentical() (0.0s)
-
-
-  Passed Different algorithms produce valid tours(algorithm: "Nearest Neighbor", exampleTags: []) [7 ms]
+  Passed Different algorithms produce valid tours(algorithm: "Nearest Neighbor", exampleTags: []) [19 ms]
   Standard Output Messages:
  Given I have the following cities:
    --- table step argument ---
@@ -341,7 +340,19 @@ Completed scenario: Solvers handle large problem instances
  -> done: TspSolverSteps.ThenTheTotalDistanceShouldBeBetweenUnits(10, 20) (0.0s)
 
 
-  Passed Different algorithms produce valid tours(algorithm: "Genetic Algorithm", exampleTags: []) [23 ms]
+  Passed Generate grid city pattern [34 ms]
+  Standard Output Messages:
+ When I generate a 3x3 grid of cities with spacing 10
+ -> done: DataGenerationSteps.WhenIGenerateAGridOfCitiesWithSpacing(3, 3, 10) (0.0s)
+ Then I should have 9 cities
+ -> done: DataGenerationSteps.ThenIShouldHaveCities(9) (0.0s)
+ And the cities should form a regular grid pattern
+ -> done: DataGenerationSteps.ThenTheCitiesShouldFormARegularGridPattern() (0.0s)
+ And the minimum distance between adjacent cities should be 10 units
+ -> done: DataGenerationSteps.ThenTheMinimumDistanceBetweenAdjacentCitiesShouldBeUnits(10) (0.0s)
+
+
+  Passed Different algorithms produce valid tours(algorithm: "Genetic Algorithm", exampleTags: []) [14 ms]
   Standard Output Messages:
  Given I have the following cities:
    --- table step argument ---
@@ -361,19 +372,7 @@ Completed scenario: Solvers handle large problem instances
  -> done: TspSolverSteps.ThenTheTotalDistanceShouldBeBetweenUnits(10, 20) (0.0s)
 
 
-  Passed Generate grid city pattern [36 ms]
-  Standard Output Messages:
- When I generate a 3x3 grid of cities with spacing 10
- -> done: DataGenerationSteps.WhenIGenerateAGridOfCitiesWithSpacing(3, 3, 10) (0.0s)
- Then I should have 9 cities
- -> done: DataGenerationSteps.ThenIShouldHaveCities(9) (0.0s)
- And the cities should form a regular grid pattern
- -> done: DataGenerationSteps.ThenTheCitiesShouldFormARegularGridPattern() (0.0s)
- And the minimum distance between adjacent cities should be 10 units
- -> done: DataGenerationSteps.ThenTheMinimumDistanceBetweenAdjacentCitiesShouldBeUnits(10) (0.0s)
-
-
-  Passed Different algorithms produce valid tours(algorithm: "Simulated Annealing", exampleTags: []) [13 ms]
+  Passed Different algorithms produce valid tours(algorithm: "Simulated Annealing", exampleTags: []) [14 ms]
   Standard Output Messages:
  Given I have the following cities:
    --- table step argument ---
@@ -393,7 +392,7 @@ Completed scenario: Solvers handle large problem instances
  -> done: TspSolverSteps.ThenTheTotalDistanceShouldBeBetweenUnits(10, 20) (0.0s)
 
 
-  Passed Nearest Neighbor solver finds a valid tour [8 ms]
+  Passed Nearest Neighbor solver finds a valid tour [10 ms]
   Standard Output Messages:
  Given I have the following cities:
    --- table step argument ---
@@ -431,7 +430,7 @@ Completed scenario: Solvers handle large problem instances
  -> done: TspSolverSteps.ThenTheOptimizedTourDistanceShouldBeLessThanOrEqualToTheInitialDistance() (0.0s)
 
 
-  Passed Solvers handle large problem instances [10 ms]
+  Passed Solvers handle large problem instances [11 ms]
   Standard Output Messages:
  Given I have the following cities:
    --- table step argument ---
@@ -458,7 +457,7 @@ Starting scenario: Benchmark identifies best solution on simple problem
  Given I have 10 randomly generated cities for benchmarking
  -> done: BenchmarkingSteps.GivenIHaveRandomlyGeneratedCities(10) (0.0s)
  When I benchmark all available algorithms
- -> done: BenchmarkingSteps.WhenIBenchmarkAllAvailableAlgorithms() (7.9s)
+ -> done: BenchmarkingSteps.WhenIBenchmarkAllAvailableAlgorithms() (8.3s)
  Then I should receive benchmark results for each algorithm
  -> done: BenchmarkingSteps.ThenIShouldReceiveBenchmarkResultsForEachAlgorithm() (0.0s)
  And the results should be sorted by distance (best first)
@@ -468,6 +467,7 @@ Starting scenario: Benchmark identifies best solution on simple problem
 
 
 Completed scenario: Benchmark identifies best solution on simple problem
+Starting scenario: Algorithm characteristics validation
   Passed Benchmark identifies best solution on simple problem [6 s]
   Standard Output Messages:
  Given I have the following simple cities:
@@ -479,18 +479,17 @@ Completed scenario: Benchmark identifies best solution on simple problem
    | D    | 0 | 1 |
  -> done: BenchmarkingSteps.GivenIHaveTheFollowingSimpleCities(<table>) (0.0s)
  When I benchmark all available algorithms
- -> done: BenchmarkingSteps.WhenIBenchmarkAllAvailableAlgorithms() (6.7s)
+ -> done: BenchmarkingSteps.WhenIBenchmarkAllAvailableAlgorithms() (6.9s)
  Then the best solution should have a distance of 4.0 units
  -> done: BenchmarkingSteps.ThenTheBestSolutionShouldHaveADistanceOfUnits(4) (0.0s)
  And all algorithms should find the optimal solution
  -> done: BenchmarkingSteps.ThenAllAlgorithmsShouldFindTheOptimalSolution() (0.0s)
 
 
-Starting scenario: Algorithm characteristics validation
 2-Opt competitive check: NN=301.67, 2-Opt=301.67, Ratio=1.000
 Completed scenario: Algorithm characteristics validation
 Starting scenario: Quick algorithm comparison on small dataset
-  Passed Algorithm characteristics validation [70 ms]
+  Passed Algorithm characteristics validation [102 ms]
   Standard Output Messages:
  Given I have 15 randomly generated cities for benchmarking
  -> done: BenchmarkingSteps.GivenIHaveRandomlyGeneratedCities(15) (0.0s)
@@ -516,7 +515,7 @@ Completed scenario: Quick algorithm comparison on small dataset
  Given I have 8 randomly generated cities for benchmarking
  -> done: BenchmarkingSteps.GivenIHaveRandomlyGeneratedCities(8) (0.0s)
  When I benchmark all available algorithms
- -> done: BenchmarkingSteps.WhenIBenchmarkAllAvailableAlgorithms() (7.7s)
+ -> done: BenchmarkingSteps.WhenIBenchmarkAllAvailableAlgorithms() (7.6s)
  Then all algorithms should find good solutions within 20% of optimal
  -> done: BenchmarkingSteps.ThenAllAlgorithmsShouldFindGoodSolutionsWithinOfOptimal(20) (0.0s)
  And Nearest Neighbor should complete in under 10 milliseconds
@@ -528,8 +527,8 @@ Completed scenario: Quick algorithm comparison on small dataset
 Starting scenario: Solution quality on moderate problem
 Completed scenario: Solution quality on moderate problem
 Completed TSP Reqnroll test run
-[xUnit.net 00:00:23.66]   Finished:    TravelingSalesman.Specs
-  Passed Solution quality on moderate problem [80 ms]
+[xUnit.net 00:00:24.59]   Finished:    TravelingSalesman.Specs
+  Passed Solution quality on moderate problem [58 ms]
   Standard Output Messages:
  Given I have 25 randomly generated cities for benchmarking
  -> done: BenchmarkingSteps.GivenIHaveRandomlyGeneratedCities(25) (0.0s)
@@ -550,7 +549,7 @@ Completed TSP Reqnroll test run
 Test Run Successful.
 Total tests: 21
      Passed: 21
- Total time: 24.6726 Seconds
+ Total time: 26.0407 Seconds
   Determining projects to restore...
   All projects are up-to-date for restore.
 C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(335,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [C:\code\TSP\TravelingSalesman.Specs\TravelingSalesman.Specs.csproj]
@@ -565,4 +564,4 @@ Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 Html test results file : C:\code\TSP\TravelingSalesman.Specs\TestResults\test-results.html
 
-Passed!  - Failed:     0, Passed:    21, Skipped:     0, Total:    21, Duration: 22 s - TravelingSalesman.Specs.dll (net9.0)
+Passed!  - Failed:     0, Passed:    21, Skipped:     0, Total:    21, Duration: 23 s - TravelingSalesman.Specs.dll (net9.0)

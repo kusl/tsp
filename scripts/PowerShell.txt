@@ -3,8 +3,7 @@ Path
 ----
 C:\code\TSP
 On branch master
-Your branch is ahead of 'origin/master' by 2 commits.
-  (use "git push" to publish your local commits)
+Your branch is up to date with 'origin/master'.
 
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
@@ -21,7 +20,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
   Local branch configured for 'git pull':
     master merges with remote master
   Local ref configured for 'git push':
-    master pushes to master (fast-forwardable)
+    master pushes to master (up to date)
 Removing TravelingSalesman.ConsoleApp/bin/
 Removing TravelingSalesman.ConsoleApp/obj/
 Removing TravelingSalesman.Core/bin/
