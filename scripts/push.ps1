@@ -4,6 +4,7 @@ $outFile = "C:\code\TSP\scripts\PowerShell.txt"
 
 # Wrap all commands in a script block and pipe the collected output to Out-File
 & {
+    Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     # Set location for the following commands
     Set-Location "C:\code\tsp"
 
@@ -49,7 +50,7 @@ $outFile = "C:\code\TSP\scripts\PowerShell.txt"
         "`n--- $($_.FullName) ---"
         Get-Content $_.FullName
     }
-
+    Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 } | Out-File -FilePath $outFile -Encoding utf8
 
 Write-Host "Script output has been saved to $outFile"
@@ -57,6 +58,7 @@ Write-Host "Script output has been saved to $outFile"
 $buildAndTestResultsFile = "C:\code\TSP\docs\build.txt"
 
 & {
+    Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     Set-Location "C:\code\tsp"
     git status
     git remote show origin
@@ -68,6 +70,7 @@ $buildAndTestResultsFile = "C:\code\TSP\docs\build.txt"
     dotnet test TravelingSalesman.Specs --logger "console;verbosity=detailed"
     dotnet test TravelingSalesman.Specs --logger "html;LogFileName=test-results.html"
     Copy-Item -Path "C:\code\TSP\TravelingSalesman.Specs\TestResults\test-results.html" -Destination "C:\code\TSP\docs\results.html" -Force
+    Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 } | Out-File -FilePath $buildAndTestResultsFile -Encoding utf8
 
 Write-Host "Script output has been saved to $buildAndTestResultsFile"
