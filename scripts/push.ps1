@@ -1,3 +1,4 @@
+Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 # Define the output file path
 $outFile = "C:\code\TSP\scripts\PowerShell.txt"
 
@@ -70,6 +71,7 @@ $buildAndTestResultsFile = "C:\code\TSP\docs\build.txt"
 } | Out-File -FilePath $buildAndTestResultsFile -Encoding utf8
 
 Write-Host "Script output has been saved to $buildAndTestResultsFile"
+Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 
 git add .
 git commit --message "add all files"
