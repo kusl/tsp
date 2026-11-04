@@ -204,7 +204,28 @@ Get:38 http://archive.ubuntu.com/ubuntu noble/universe amd64 clang amd64 1:18.0-
 Get:39 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 zlib1g-dev amd64 1:1.3.dfsg-3.1ubuntu2.3 [894 kB]
 Fetched 76.8 MB in 8s (9250 kB/s)
 Selecting previously unselected package libbsd0:amd64.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 9344 files and directories currently installed.)
+(Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 9344 files and directories currently installed.)
 Preparing to unpack .../00-libbsd0_0.12.1-1build1.1_amd64.deb ...
 Unpacking libbsd0:amd64 (0.12.1-1build1.1) ...
 Selecting previously unselected package libxml2:amd64.
@@ -525,3 +546,162 @@ Total source size: 0.13 MB across 92 files
   container    44s
   export        2s
 All steps completed successfully
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+kushal@fedora:~/src/dotnet/tsp$ time sudo dnf install clang zlib-ng-compat-devel
+[sudo] password for kushal: 
+Updating and loading repositories:
+Repositories loaded.
+Package "zlib-ng-compat-devel-2.3.3-3.fc44.x86_64" is already installed.
+
+Package                                                                 Arch             Version                                                                  Repository                                    Size
+Installing:
+ clang                                                                  x86_64           0:22.1.8-4.fc44                                                          updates                                   61.5 MiB
+
+Transaction Summary:
+ Installing:         1 package
+
+Total size of inbound packages is 7 MiB. Need to download 7 MiB.
+After this operation, 62 MiB extra will be used (install 62 MiB, remove 0 B).
+Warning: A pending offline transaction initiated by the following command will be invalidated: dnf5daemon-server
+Is this ok [y/N]: y
+[1/1] clang-0:22.1.8-4.fc44.x86_64                                                                                                                                          100% |   6.3 MiB/s |   7.1 MiB |  00m01s
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[1/1] Total                                                                                                                                                                 100% |   4.4 MiB/s |   7.1 MiB |  00m02s
+Running transaction
+[1/3] Verify package files                                                                                                                                                  100% |  38.0   B/s |   1.0   B |  00m00s
+[2/3] Prepare transaction                                                                                                                                                   100% |   3.0   B/s |   1.0   B |  00m00s
+[3/3] Installing clang-0:22.1.8-4.fc44.x86_64                                                                                                                               100% |  64.9 MiB/s |  61.5 MiB |  00m01s
+Warning: Pending offline transaction has been invalidated.
+To reschedule, run: dnf5daemon-server
+Complete!
+
+real	1m21.156s
+user	0m0.040s
+sys	0m0.043s
+kushal@fedora:~/src/dotnet/tsp$ cd ~/src/dotnet/tsp/; time bash scripts/export.sh > docs/llm/vendor/claude/terminal.txt
+
+real	0m1.444s
+user	0m0.698s
+sys	0m0.894s
+kushal@fedora:~/src/dotnet/tsp$ cd ~/src/dotnet/tsp/; time bash scripts/ci.sh > docs/llm/vendor/claude/terminal.txt
+debconf: delaying package configuration, since apt-utils is not installed
+Trying to pull mcr.microsoft.com/dotnet/runtime-deps:10.0-noble-chiseled...
+Getting image source signatures
+Copying blob 7f43fd7e5338 done   | 
+Copying blob f51c437ec364 done   | 
+Copying config bff0f07ac2 done   | 
+Writing manifest to image destination
+
+real	1m17.914s
+user	0m58.599s
+sys	0m17.643s
+kushal@fedora:~/src/dotnet/tsp$ cd ~/src/dotnet/tsp/; time dotnet list package; time dotnet list package --outdated;
+Restore succeeded with 1 warning(s) in 0.6s
+    /home/kushal/src/dotnet/tsp/src/TravelingSalesman.Cli/TravelingSalesman.Cli.csproj : warning NU1903: Package 'Microsoft.DotNet.ILCompiler' 10.0.13 has a known high severity vulnerability, https://github.com/advisories/GHSA-p3jp-9v83-76w9
+
+Build succeeded with 1 warning(s) in 0.7s
+Project 'TravelingSalesman.Cli' has the following package references
+   [net10.0]: 
+   Top-level Package                     Requested     Resolved
+   > Microsoft.DotNet.ILCompiler   (A)   [10.0.13, )   10.0.13 
+   > Microsoft.NET.ILLink.Tasks    (A)   [10.0.13, )   10.0.13 
+   > System.CommandLine                  2.0.14        2.0.14  
+
+Project 'TravelingSalesman.Core' has the following package references
+   [net10.0]: 
+   Top-level Package                    Requested     Resolved
+   > Microsoft.NET.ILLink.Tasks   (A)   [10.0.13, )   10.0.13 
+
+Project 'TravelingSalesman.Cli.Tests' has the following package references
+   [net10.0]: 
+   Top-level Package                                Requested   Resolved
+   > Microsoft.Testing.Extensions.CodeCoverage      18.12.0     18.12.0 
+   > xunit.v3                                       4.0.2       4.0.2   
+
+Project 'TravelingSalesman.Core.Tests' has the following package references
+   [net10.0]: 
+   Top-level Package                                Requested   Resolved
+   > Microsoft.Testing.Extensions.CodeCoverage      18.12.0     18.12.0 
+   > xunit.v3                                       4.0.2       4.0.2   
+
+Project 'TravelingSalesman.Specs' has the following package references
+   [net10.0]: 
+   Top-level Package                                Requested   Resolved
+   > Microsoft.Testing.Extensions.CodeCoverage      18.12.0     18.12.0 
+   > Reqnroll.xunit.v3                              3.3.4       3.3.4   
+   > xunit.v3                                       4.0.2       4.0.2   
+
+(A) : Auto-referenced package.
+
+real	0m1.776s
+user	0m1.850s
+sys	0m0.418s
+Restore succeeded with 1 warning(s) in 0.5s
+    /home/kushal/src/dotnet/tsp/src/TravelingSalesman.Cli/TravelingSalesman.Cli.csproj : warning NU1903: Package 'Microsoft.DotNet.ILCompiler' 10.0.13 has a known high severity vulnerability, https://github.com/advisories/GHSA-p3jp-9v83-76w9
+
+Build succeeded with 1 warning(s) in 0.6s
+
+The following sources were used:
+   https://api.nuget.org/v3/index.json
+
+The given project `TravelingSalesman.Cli` has no updates given the current sources.
+The given project `TravelingSalesman.Core` has no updates given the current sources.
+The given project `TravelingSalesman.Cli.Tests` has no updates given the current sources.
+The given project `TravelingSalesman.Core.Tests` has no updates given the current sources.
+The given project `TravelingSalesman.Specs` has no updates given the current sources.
+
+real	0m2.206s
+user	0m1.827s
+sys	0m0.391s
+kushal@fedora:~/src/dotnet/tsp$ 
