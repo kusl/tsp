@@ -33,3 +33,45 @@ Processing (26/26): scripts/install-linux.sh
 Export completed successfully!
 Output file: /home/kushal/src/dotnet/tsp/docs/llm/dump.txt
 Total source size: 0.26 MB across 26 files
+kushal@fedora:~/src/dotnet/tsp$ cd ~/src/dotnet/tsp; time git rm -r TSP.sln Dockerfile .dockerignore TravelingSalesman.ConsoleApp TravelingSalesman.Core TravelingSalesman.Specs TravelingSalesman.Tests .github/workflows/build.yml docs/build.txt docs/results.html scripts/PowerShell.txt scripts/bash.txt scripts/cat.ps1 scripts/push.ps1 scripts/linux-installation-command.txt scripts/install-linux.sh scripts/install-kusl-tsp-simple.sh
+rm '.dockerignore'
+rm '.github/workflows/build.yml'
+rm 'Dockerfile'
+rm 'TSP.sln'
+rm 'TravelingSalesman.ConsoleApp/Program.cs'
+rm 'TravelingSalesman.ConsoleApp/Properties/launchSettings.json'
+rm 'TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj'
+rm 'TravelingSalesman.Core/TravelingSalesman.Core.csproj'
+rm 'TravelingSalesman.Core/TravelingSalesmanLibrary.cs'
+rm 'TravelingSalesman.Specs/Features/Benchmarking.feature'
+rm 'TravelingSalesman.Specs/Features/CityOperations.feature'
+rm 'TravelingSalesman.Specs/Features/DataGeneration.feature'
+rm 'TravelingSalesman.Specs/Features/TspSolvers.feature'
+rm 'TravelingSalesman.Specs/StepDefinitions/BenchmarkingSteps.cs'
+rm 'TravelingSalesman.Specs/StepDefinitions/CityOperationSteps.cs'
+rm 'TravelingSalesman.Specs/StepDefinitions/DataGenerationSteps.cs'
+rm 'TravelingSalesman.Specs/StepDefinitions/TspSolverSteps.cs'
+rm 'TravelingSalesman.Specs/Support/Hooks.cs'
+rm 'TravelingSalesman.Specs/TravelingSalesman.Specs.csproj'
+rm 'TravelingSalesman.Specs/reqnroll.json'
+rm 'TravelingSalesman.Tests/Tests.cs'
+rm 'TravelingSalesman.Tests/TravelingSalesman.Tests.csproj'
+rm 'docs/build.txt'
+rm 'docs/results.html'
+rm 'scripts/PowerShell.txt'
+rm 'scripts/bash.txt'
+rm 'scripts/cat.ps1'
+rm 'scripts/install-kusl-tsp-simple.sh'
+rm 'scripts/install-linux.sh'
+rm 'scripts/linux-installation-command.txt'
+rm 'scripts/push.ps1'
+
+real	0m0.005s
+user	0m0.001s
+sys	0m0.003s
+kushal@fedora:~/src/dotnet/tsp$ cd ~/src/dotnet/tsp/; time rm -rf TravelingSalesman.ConsoleApp TravelingSalesman.Core TravelingSalesman.Specs TravelingSalesman.Tests
+
+real	0m0.001s
+user	0m0.001s
+sys	0m0.000s
+kushal@fedora:~/src/dotnet/tsp$ 
