@@ -1,8 +1,8 @@
 ===============================================================================
 PROJECT EXPORT
-Generated (UTC): 2026-11-04 14:36:23
+Generated (UTC): 2026-11-04 15:07:41
 Project Path:    /home/kushal/src/dotnet/tsp
-Git Commit:      ef755d4a98625ff10b919877cafb3444af015a0f
+Git Commit:      1bcfae2d6358cf0cc3270272b9cd42f821add9eb
 Git Branch:      master
 Git Dirty:       yes (uncommitted changes are included below)
 .NET SDK:        10.0.113
@@ -438,10 +438,10 @@ source-path=SCRIPTDIR
 
 ================================================================================
 FILE:     Containerfile
-SIZE:     1.32 KB (1356 bytes)
-LINES:    32
-SHA256:   e2c79d4ecc0d16edfbe71c2686612200888b4b0181a8bc0b4edaf65d93d82947
-MODIFIED: 2026-11-04 14:02:29 (UTC)
+SIZE:     1.31 KB (1341 bytes)
+LINES:    31
+SHA256:   6c23f2dcee906d3575f397f8e3ea032d99131b1fe69581ff8e8cf15c2ff80307
+MODIFIED: 2026-11-04 14:56:45 (UTC)
 ================================================================================
 
 ARG DOTNET_VERSION=10.0
@@ -475,7 +475,6 @@ WORKDIR /app
 COPY --from=build /app/tsp ./tsp
 USER $APP_UID
 ENTRYPOINT ["/app/tsp"]
-CMD ["--help"]
 
 
 ================================================================================
@@ -542,10 +541,10 @@ MODIFIED: 2026-11-04 13:49:47 (UTC)
 
 ================================================================================
 FILE:     README.md
-SIZE:     6.41 KB (6563 bytes)
-LINES:    127
-SHA256:   771416ba77a57b574e8097753e24bf075275f3dc7ddeb1ae3a8e634d3db4d7fa
-MODIFIED: 2026-11-04 14:03:23 (UTC)
+SIZE:     6.51 KB (6670 bytes)
+LINES:    129
+SHA256:   ffa9eb0c0bde88d3ae66cc45a850f239e5c6ce5afefe9f0642a9c2d4702c8239
+MODIFIED: 2026-11-04 14:59:59 (UTC)
 ================================================================================
 
 # tsp
@@ -584,6 +583,8 @@ tsp benchmark  [--cities N] [--pattern random|circle|grid] [--seed S] [--algorit
 tsp algorithms
 tsp --help | --version
 ```
+
+Running `tsp` (or the container image) without a command prints the help and exits with code 1.
 
 | Option | Default | Description |
 |---|---|---|
@@ -625,7 +626,7 @@ Every solver starts from city 0, honours cancellation (Ctrl+C exits with code 13
 
 ## Development
 
-Requirements: the .NET 10 SDK (`sudo dnf install dotnet-sdk-10.0` on Fedora). Optional: `clang zlib-devel` for Native AOT, `podman` for the container image, `ShellCheck` for script linting.
+Requirements: the .NET 10 SDK (`sudo dnf install dotnet-sdk-10.0` on Fedora). Optional: `clang zlib-ng-compat-devel` for Native AOT, `podman` for the container image, `ShellCheck` for script linting.
 
 Everything runs through bash scripts in `scripts/`, which need no execute bit. One command runs the whole pipeline locally:
 
@@ -1421,10 +1422,10 @@ fi
 
 ================================================================================
 FILE:     scripts/publish.sh
-SIZE:     1.05 KB (1080 bytes)
+SIZE:     1.06 KB (1090 bytes)
 LINES:    37
-SHA256:   750845c773f0159696945cdf47d502b0345af3bf76c17830983553a7aa474bd9
-MODIFIED: 2026-11-04 14:00:47 (UTC)
+SHA256:   9ae3a87f577611de4787767aa607e5de7c0c3413166fed0a36f80f2d0c8d9109
+MODIFIED: 2026-11-04 14:59:45 (UTC)
 ================================================================================
 
 #!/usr/bin/env bash
@@ -1443,7 +1444,7 @@ case "$rid" in
 esac
 
 if [[ "$rid" == linux-* && "$(host_rid)" == linux-* ]]; then
-    require_command clang "Native AOT needs clang and zlib headers; on Fedora run: sudo dnf install clang zlib-devel"
+    require_command clang "Native AOT needs clang and zlib headers; on Fedora run: sudo dnf install clang zlib-ng-compat-devel"
 fi
 
 log_step "Publishing Native AOT binary for $rid (version $version)"
@@ -5020,9 +5021,9 @@ MODIFIED: 2026-11-04 13:49:30 (UTC)
 
 
 ===============================================================================
-EXPORT COMPLETED (UTC): 2026-11-04 14:36:24
+EXPORT COMPLETED (UTC): 2026-11-04 15:07:42
 Total Files Exported:   92
-Total Source Size:      0.13 MB (132164 bytes)
+Total Source Size:      0.13 MB (132266 bytes)
 Output File:            /home/kushal/src/dotnet/tsp/docs/llm/dump.txt
 ===============================================================================
-DUMP SHA256 (of all lines above this one): 799a08ec5b1094711d0e5e9132da83a011d4b17da14a5de2d446f5f62e88e6f7
+DUMP SHA256 (of all lines above this one): 1ac49d67bc477cf7c6802efc949f46078c23070cda3cae47f7a533dfbed2099e
