@@ -1,0 +1,19 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Containerfile" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/TravelingSalesman.Cli/TravelingSalesman.Cli.csproj" />
+    <Project Path="src/TravelingSalesman.Core/TravelingSalesman.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TravelingSalesman.Cli.Tests/TravelingSalesman.Cli.Tests.csproj" />
+    <Project Path="tests/TravelingSalesman.Core.Tests/TravelingSalesman.Core.Tests.csproj" />
+    <Project Path="tests/TravelingSalesman.Specs/TravelingSalesman.Specs.csproj" />
+  </Folder>
+</Solution>

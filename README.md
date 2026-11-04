@@ -1,333 +1,127 @@
-# TSP Solver
+# tsp
 
-[![Build Status](https://github.com/kusl/tsp/actions/workflows/build.yml/badge.svg)](https://github.com/kusl/tsp/actions/workflows/build.yml)
+[![CI](https://github.com/kusl/tsp/actions/workflows/ci.yml/badge.svg)](https://github.com/kusl/tsp/actions/workflows/ci.yml)
 [![Release](https://github.com/kusl/tsp/actions/workflows/release.yml/badge.svg)](https://github.com/kusl/tsp/actions/workflows/release.yml)
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
-[![.NET 9](https://img.shields.io/badge/.NET-9.0-512BD4)](https://dotnet.microsoft.com/download/dotnet/9.0)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE.txt)
 
-A high-performance, production-ready Traveling Salesman Problem (TSP) solver written in .NET 9, featuring multiple optimization algorithms, comprehensive logging, native AOT compilation, and cross-platform support.
+A Traveling Salesman Problem solver for the command line, written in C# 14 on .NET 10 and shipped as a single Native AOT binary.
 
-## 🌟 Key Features
+It generates a problem (random, circle or grid layouts), solves it with one of four algorithms and prints the route, or benchmarks every algorithm against the same problem.
 
-### Core Capabilities
-- **🧠 Multiple Algorithms**: Four distinct TSP solving approaches with different trade-offs
-- **⚡ Native AOT**: Single-file executable with no runtime dependencies
-- **📊 Comprehensive Logging**: Structured logging with Serilog (console + rotating file logs)
-- **🔄 Cross-Platform**: Windows, Linux, macOS (x64 & ARM64)
-- **🐳 Docker Ready**: Multi-stage optimized container builds
-- **✅ Well-Tested**: 99 unit tests + BDD scenarios with Reqnroll
+## Quick start
 
-### Solver Features
-- **Interactive Mode**: User-friendly console interface
-- **Benchmark Suite**: Side-by-side algorithm comparison
-- **Visual Demonstration**: Step-by-step algorithm visualization
-- **Progress Tracking**: Real-time algorithm progress reporting
-- **Cancellation Support**: Graceful interruption of long-running operations
-- **Multiple City Patterns**: Random, circular, and grid generation
-
-## 🚀 Quick Start
-
-### Option 1: Download Pre-built Binaries
-
-Get the latest release from [GitHub Releases](https://github.com/kusl/tsp/releases/latest):
-
-| Platform | Binary | Size |
-|----------|--------|------|
-| Windows x64 | `TSP-win-x64-{sha}.exe` | ~3-5 MB |
-| Linux x64 | `TSP-linux-x64-{sha}` | ~3-5 MB |
-| macOS Intel | `TSP-osx-x64-{sha}` | ~3-5 MB |
-| macOS ARM64 | `TSP-osx-arm64-{sha}` | ~3-5 MB |
+Install the latest release on Linux (x64 or arm64):
 
 ```bash
-# Linux/macOS
-chmod +x TSP-linux-x64-*
-./TSP-linux-x64-*
-
-# Windows
-TSP-win-x64-*.exe
+curl -fsSL https://raw.githubusercontent.com/kusl/tsp/master/scripts/install.sh | sudo bash
+kusl-tsp benchmark --cities 30 --seed 42
 ```
 
-### Option 2: Docker
+The installer verifies the binary against the release `SHA256SUMS`, installs it to `/opt/kusl-tsp/tsp` and links it as `/usr/local/bin/kusl-tsp`. Binaries for Linux, macOS and Windows are attached to every [release](https://github.com/kusl/tsp/releases/latest).
+
+Or run it in a container with Podman:
 
 ```bash
-# Build and run
-docker build -t tsp-solver .
-docker run --rm -it tsp-solver
-
-# With persistent logs
-docker run --rm -it -v $(pwd)/logs:/app/logs tsp-solver
-
-# Benchmark mode (non-interactive)
-echo -e "2\n15\n5\n" | docker run --rm -i tsp-solver
+podman build --file Containerfile --tag localhost/tsp .
+podman run --rm localhost/tsp solve --cities 20 --algorithm genetic --plot
 ```
 
-### Option 3: Build from Source
+## Usage
+
+```text
+tsp solve      [--cities N] [--pattern random|circle|grid] [--seed S] [--algorithm KEY] [--route] [--plot]
+tsp benchmark  [--cities N] [--pattern random|circle|grid] [--seed S] [--algorithm KEY ...]
+tsp algorithms
+tsp --help | --version
+```
+
+| Option | Default | Description |
+|---|---|---|
+| `-n`, `--cities` | `20` | Number of cities, 2 to 5000 |
+| `-p`, `--pattern` | `random` | City layout |
+| `-s`, `--seed` | random | Seed for reproducible layouts and solver runs |
+| `-a`, `--algorithm` | `two-opt` (solve), all (benchmark) | Algorithm key, see below |
+| `--route` | off | Print the whole route instead of the first ten stops |
+| `--plot` | off | Draw the route as an ASCII plot |
+
+Example:
+
+```text
+$ tsp benchmark --cities 25 --seed 42
+Benchmark of 4 algorithms on 25 cities
+
+Rank  Algorithm                  Distance   vs best   Time (ms)
+---------------------------------------------------------------
+1     Simulated Annealing          402.13    0.00 %        41.7
+2     Genetic Algorithm            402.13    0.00 %        35.2
+3     2-Opt                        419.66    4.36 %         0.3
+4     Nearest Neighbor             478.25   18.93 %         0.1
+
+Best: Simulated Annealing (402.13)
+```
+
+The numbers above are illustrative; exact values depend on the seed.
+
+## Algorithms
+
+| Key | Algorithm | Cost | Notes |
+|---|---|---|---|
+| `nearest-neighbor` | Nearest Neighbor | O(n²) | Greedy construction, deterministic |
+| `two-opt` | 2-Opt | O(n²) per pass | Starts from Nearest Neighbor, reverses segments until no improving move remains |
+| `simulated-annealing` | Simulated Annealing | O(steps × iterations) | Random 2-opt moves with a geometric cooling schedule |
+| `genetic` | Genetic Algorithm | O(generations × population × n) | Tournament selection, order crossover, inversion mutation, elitism, early stop on stagnation |
+
+Every solver starts from city 0, honours cancellation (Ctrl+C exits with code 130) and is reproducible when a seed is given. 2-Opt, Simulated Annealing and the Genetic Algorithm are seeded with the Nearest Neighbor tour, so they never return anything longer than it.
+
+## Development
+
+Requirements: the .NET 10 SDK (`sudo dnf install dotnet-sdk-10.0` on Fedora). Optional: `clang zlib-devel` for Native AOT, `podman` for the container image, `ShellCheck` for script linting.
+
+Everything runs through bash scripts in `scripts/`, which need no execute bit. One command runs the whole pipeline locally:
 
 ```bash
-# Clone
-git clone https://github.com/kusl/tsp.git
-cd tsp
-
-# Build & Test
-dotnet build TSP.sln
-dotnet test TSP.sln
-
-# Run
-dotnet run --project TravelingSalesman.ConsoleApp
-
-# Publish native AOT
-dotnet publish TravelingSalesman.ConsoleApp \
-  -c Release \
-  -r linux-x64 \
-  --self-contained \
-  -p:PublishAot=true
+time bash scripts/ci.sh
 ```
 
-## 📊 Algorithm Comparison
+| Script | Purpose |
+|---|---|
+| `ci.sh` | Lint, build, test, smoke test, run, publish, container and export, in that order. Accepts `--clean`, `--skip-publish`, `--skip-container`, `--skip-export` |
+| `lint.sh` | `bash -n` and ShellCheck over every script |
+| `build.sh` | Restore and build the solution in Release |
+| `test.sh` | Run every test project on Microsoft Testing Platform with Cobertura coverage into `artifacts/test-results` |
+| `smoke.sh` | Exercise the CLI end to end; pass a command (a binary or `podman run --rm image`) to smoke test something else |
+| `run.sh` | Run the CLI; defaults to `benchmark --cities 25 --pattern random --seed 42` |
+| `publish.sh [rid]` | Native AOT publish to `artifacts/release/tsp-<rid>` and smoke test it when it runs on this machine |
+| `container.sh` | Build the `Containerfile` with Podman (or Docker) and smoke test the image |
+| `export.sh` | Write every tracked source file to `docs/llm/dump.txt` |
+| `install.sh` | Install the latest release binary |
+| `version.sh` | Print the version derived from the commit date and count |
+| `checksums.sh [dir]` | Write `SHA256SUMS` for release binaries |
 
-| Algorithm | Time Complexity | Solution Quality | Speed | Best For |
-|-----------|----------------|------------------|-------|----------|
-| **Nearest Neighbor** | O(n²) | ★★★☆☆ | ⚡⚡⚡⚡⚡ | Real-time, initial solutions |
-| **2-Opt** | O(n²) per iteration | ★★★★☆ | ⚡⚡⚡⚡ | Quick improvements |
-| **Simulated Annealing** | O(n × iterations) | ★★★★☆ | ⚡⚡⚡ | Escaping local optima |
-| **Genetic Algorithm** | O(pop × gen × n) | ★★★★★ | ⚡ | Best quality, large problems |
+The GitHub workflows only call these scripts, so a green local `ci.sh` means a green CI.
 
-### Performance Guidelines
+## Layout
 
-- **< 20 cities**: Nearest Neighbor + 2-Opt (< 100ms)
-- **20-50 cities**: Simulated Annealing (< 5s)
-- **50-100 cities**: Tuned Genetic Algorithm (< 30s)
-- **> 100 cities**: Scaled Genetic Algorithm with early stopping
-
-## 🎮 Usage
-
-### Interactive Mode
-
-```
-╔═══════════════════════════════════════════════════════════════╗
-║      TRAVELING SALESMAN PROBLEM SOLVER v1.2.0                 ║
-║                   .NET 9 Implementation                       ║
-╚═══════════════════════════════════════════════════════════════╝
-
-📍 Main Menu:
-
-  1. Interactive Solver - Solve custom TSP instances
-  2. Algorithm Benchmark - Compare all algorithms
-  3. Visual Demonstration - See algorithms in action
-  4. Algorithm Information - Learn about each algorithm
-  5. Exit
-
-➤ Select an option (1-5):
+```text
+src/TravelingSalesman.Core      Domain model, solvers, generators and benchmark runner (no dependencies)
+src/TravelingSalesman.Cli       The tsp command line, built on System.CommandLine
+tests/TravelingSalesman.Core.Tests   xUnit v3 unit tests
+tests/TravelingSalesman.Cli.Tests    xUnit v3 tests that run the CLI in-process
+tests/TravelingSalesman.Specs        Reqnroll scenarios on xUnit v3
+scripts/                        Build, test, release and maintenance scripts
 ```
 
-### Command Line
+Design notes:
 
-```bash
-# Version information
-./TSP-linux-x64-* --version
+- `ITspSolver` is the only abstraction the CLI and benchmark depend on. Algorithms register in `SolverCatalog`; adding one does not touch any command.
+- Solvers work on index permutations over a precomputed `DistanceMatrix`, report progress through `IProgress<SolverProgress>` and keep no state between calls.
+- `Tour` and `TspProblem` validate their input and are immutable.
+- Time is measured through `TimeProvider`, so benchmarks are testable.
+- Options are validated records (C# 14 `field` accessors). Formatting uses C# 14 extension members.
+- The build uses `tsp.slnx`, central package management, `UseArtifactsOutput`, `TreatWarningsAsErrors` and the latest analyzers. `global.json` pins the .NET 10 SDK band and opts `dotnet test` into Microsoft Testing Platform.
 
-# Help
-./TSP-linux-x64-* --help
+## License
 
-# View logs
-tail -f logs/tsp-solver-$(date +%Y-%m-%d).log
-```
+[GNU Affero General Public License v3.0](LICENSE.txt).
 
-## 🏗️ Architecture
-
-```
-TSP/
-├── TravelingSalesman.Core/          # Core algorithms & data structures
-│   ├── City                        # Immutable city record
-│   ├── Tour                        # Tour with distance caching
-│   ├── ITspSolver                  # Solver interface
-│   ├── TspSolverBase               # Base solver with common logic
-│   ├── NearestNeighborSolver       # Greedy heuristic
-│   ├── TwoOptSolver                # Local search improvement
-│   ├── SimulatedAnnealingSolver    # Metaheuristic with cooling
-│   ├── GeneticAlgorithmSolver      # Population-based evolution
-│   ├── TspDataGenerator            # Test data generation
-│   └── TspBenchmark                # Performance comparison
-│
-├── TravelingSalesman.ConsoleApp/    # Interactive console UI
-│   └── Program.cs                   # Main entry point with menus
-│
-├── TravelingSalesman.Tests/         # xUnit tests (99 tests)
-│   └── Tests.cs                     # Comprehensive test coverage
-│
-├── TravelingSalesman.Specs/         # BDD tests with Reqnroll
-│   ├── Features/                    # Gherkin scenarios
-│   └── StepDefinitions/             # Test implementations
-│
-├── Directory.Build.props            # Centralized MSBuild settings
-├── Directory.Packages.props         # Central package management
-├── Dockerfile                       # Multi-stage container build
-└── .github/workflows/               # CI/CD automation
-```
-
-## 🔧 Development
-
-### Prerequisites
-
-- .NET 9 SDK ([Download](https://dotnet.microsoft.com/download/dotnet/9.0))
-- Docker (optional)
-- Git
-
-### Testing
-
-```bash
-# Run all tests
-dotnet test TSP.sln
-
-# With coverage
-dotnet test TSP.sln \
-  --collect:"XPlat Code Coverage" \
-  --results-directory ./coverage
-
-# Run specific tests
-dotnet test --filter "FullyQualifiedName~TspBenchmark"
-
-# Run BDD tests only
-dotnet test TravelingSalesman.Specs
-```
-
-### Code Quality
-
-The project enforces:
-- ✅ `TreatWarningsAsErrors: true`
-- ✅ `AnalysisLevel: latest`
-- ✅ Nullable reference types
-- ✅ Latest C# language features
-- ✅ Central package management
-
-## 📈 Performance Characteristics
-
-### Memory Usage
-- Native AOT reduces memory footprint by ~50%
-- Tour distance caching prevents recalculation
-- Efficient distance matrix for O(1) lookups
-
-### Execution Speed (10 cities, Release build)
-- Nearest Neighbor: < 1ms
-- 2-Opt: < 10ms
-- Simulated Annealing: < 100ms
-- Genetic Algorithm: < 500ms
-
-## 🐳 Docker Details
-
-Multi-stage Dockerfile with:
-- Native AOT compilation in build stage
-- Minimal runtime dependencies
-- Log directory auto-creation
-- Support for VS debugging
-- Optimized layer caching
-
-```dockerfile
-# Build
-docker build -t tsp-solver .
-
-# Run with resource limits
-docker run --rm -it \
-  --memory="512m" \
-  --cpus="1.0" \
-  tsp-solver
-```
-
-## 📝 Logging
-
-Structured logging with Serilog:
-
-```
-logs/
-├── tsp-solver-2025-01-17.log    # Today's detailed logs
-├── tsp-solver-2025-01-16.log    # Yesterday's logs
-└── ...                           # 30-day retention
-```
-
-Log levels:
-- **Information**: User actions, results
-- **Debug**: Algorithm internals
-- **Trace**: Detailed execution flow
-- **Warning**: Performance issues
-- **Error**: Exceptions and failures
-
-## 🚀 CI/CD Pipeline
-
-GitHub Actions workflow:
-1. **Build & Test**: Every push/PR
-2. **Docker validation**: Container testing
-3. **Native AOT**: Multi-platform compilation
-4. **Release automation**: Tagged releases
-5. **Artifact upload**: Binaries & logs
-
-## ⚖️ License
-
-This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.
-
-### What this means:
-
-- ✅ **You CAN**: Use, modify, distribute, use privately
-- ✅ **You CAN**: Use commercially (with source disclosure)
-- ⚠️ **You MUST**: Disclose source code
-- ⚠️ **You MUST**: Include copyright & license notices
-- ⚠️ **You MUST**: State changes made
-- ⚠️ **You MUST**: Share under same license (AGPL-3.0)
-- ❌ **You CANNOT**: Hold liable or remove warranty disclaimers
-
-**Important**: If you use this software as a network service, you must provide source code to users.
-
-See [LICENSE.txt](LICENSE.txt) for full terms.
-
-## 🤝 Contributing
-
-We welcome contributions! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Write tests for new functionality
-4. Ensure all tests pass (`dotnet test`)
-5. Commit with clear messages (`git commit -m 'Add amazing feature'`)
-6. Push to your fork (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
-
-### Coding Standards
-- Follow existing code style
-- Add XML documentation for public APIs
-- Write unit tests for new features
-- Update README for significant changes
-
-## 🐛 Known Issues
-
-1. **Simulated Annealing Performance**: May take >20s for small problems with default parameters
-   - **Workaround**: Reduce `initialTemperature` and `iterationsPerTemperature`
-   - **Fix**: Adaptive parameter tuning based on city count (planned)
-
-## 📚 Resources
-
-- [TSP on Wikipedia](https://en.wikipedia.org/wiki/Travelling_salesman_problem)
-- [TSPLIB Benchmark Sets](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/)
-- [.NET Native AOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/)
-- [Serilog Documentation](https://serilog.net/)
-
-## 👤 Author
-
-**Kushal Hada**
-- GitHub: [@kusl](https://github.com/kusl)
-- Repository: [github.com/kusl/tsp](https://github.com/kusl/tsp)
-
-## 🙏 Acknowledgments
-
-- .NET team for excellent Native AOT support
-- Serilog contributors for robust logging
-- xUnit and Reqnroll teams for testing frameworks
-- All contributors and issue reporters
-
----
-
-**⚠️ AI Disclosure**: This project includes code generated with assistance from Large Language Models (LLMs) including Claude. All generated code has been reviewed, tested, and validated. Use at your own discretion.
-
-**🔬 Academic Use**: If you use this software in research, please cite:
-```
-Hada, K. (2025). TSP Solver: A Multi-Algorithm Approach. 
-GitHub. https://github.com/kusl/tsp
-```
+This project includes code written with the help of large language models, including Claude. All of it is reviewed and covered by tests.

@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
-set -euo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-PROJECT_PATH="${1:-$SCRIPT_DIR/..}"
+PROJECT_PATH="${1:-$TSP_ROOT}"
 OUTPUT_FILE="${2:-docs/llm/dump.txt}"
 
-INCLUDE_EXTENSIONS="cs csproj slnx props targets json razor js mjs css html svg yml yaml sh md toml"
-INCLUDE_NAMES=".gitignore .gitattributes .editorconfig"
+INCLUDE_EXTENSIONS="cs csproj slnx props targets json feature js css html svg yml yaml sh md toml"
+INCLUDE_NAMES=".gitignore .gitattributes .editorconfig .containerignore .shellcheckrc Containerfile"
 EXCLUDE_NAMES="package-lock.json LICENSE"
-EXCLUDE_DIRS="bin obj .vs .git node_modules .vscode .idea TestResults artifacts coverage .velixir"
+EXCLUDE_DIRS="bin obj .vs .git node_modules .vscode .idea TestResults artifacts coverage"
 EXCLUDE_PREFIXES="docs/llm/"
 
 PROJECT_PATH="$(cd "$PROJECT_PATH" && pwd)"
@@ -24,12 +22,8 @@ mkdir -p "$OUTPUT_DIR"
 
 OUTPUT_REL="${OUTPUT_PATH#"$PROJECT_PATH"/}"
 
-if [ -t 1 ]; then
-    GREEN='\033[0;32m'; YELLOW='\033[0;33m'; CYAN='\033[0;36m'; NC='\033[0m'
-else
-    GREEN=''; YELLOW=''; CYAN=''; NC=''
-fi
-log() { printf "%b%s%b\n" "$1" "$2" "$NC"; }
+GREEN="$TSP_GREEN"; YELLOW="$TSP_YELLOW"; CYAN="$TSP_BLUE"; NC="$TSP_RESET"
+log() { printf "%s%s%s\n" "$1" "$2" "$NC"; }
 
 sha256_of() {
     if command -v sha256sum >/dev/null 2>&1; then
