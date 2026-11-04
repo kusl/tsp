@@ -542,4 +542,44 @@ kushal@fedora:~/src/dotnet/tsp$ git branch --set-upstream-to=origin/master maste
 branch 'master' set up to track 'origin/master'.
 kushal@fedora:~/src/dotnet/tsp$ git pull
 Already up to date.
+kushal@fedora:~/src/dotnet/tsp$ cd ~/src/dotnet/tsp/; time bash scripts/export.sh 
+Starting project export...
+Project Path: /home/kushal/src/dotnet/tsp
+Output File:  /home/kushal/src/dotnet/tsp/docs/llm/dump.txt
+Listing files via git...
+Found 26 files to export
+Processing (1/26): .gitattributes
+Processing (2/26): .github/workflows/build.yml
+Processing (3/26): .github/workflows/release.yml
+Processing (4/26): .gitignore
+Processing (5/26): Directory.Build.props
+Processing (6/26): Directory.Packages.props
+Processing (7/26): README.md
+Processing (8/26): TravelingSalesman.ConsoleApp/Program.cs
+Processing (9/26): TravelingSalesman.ConsoleApp/Properties/launchSettings.json
+Processing (10/26): TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj
+Processing (11/26): TravelingSalesman.Core/TravelingSalesman.Core.csproj
+Processing (12/26): TravelingSalesman.Core/TravelingSalesmanLibrary.cs
+Processing (13/26): TravelingSalesman.Specs/StepDefinitions/BenchmarkingSteps.cs
+Processing (14/26): TravelingSalesman.Specs/StepDefinitions/CityOperationSteps.cs
+Processing (15/26): TravelingSalesman.Specs/StepDefinitions/DataGenerationSteps.cs
+Processing (16/26): TravelingSalesman.Specs/StepDefinitions/TspSolverSteps.cs
+Processing (17/26): TravelingSalesman.Specs/Support/Hooks.cs
+Processing (18/26): TravelingSalesman.Specs/TravelingSalesman.Specs.csproj
+Processing (19/26): TravelingSalesman.Specs/reqnroll.json
+Processing (20/26): TravelingSalesman.Tests/Tests.cs
+Processing (21/26): TravelingSalesman.Tests/TravelingSalesman.Tests.csproj
+Processing (22/26): docs/index.html
+Processing (23/26): docs/results.html
+Processing (24/26): scripts/export.sh
+Processing (25/26): scripts/install-kusl-tsp-simple.sh
+Processing (26/26): scripts/install-linux.sh
+
+Export completed successfully!
+Output file: /home/kushal/src/dotnet/tsp/docs/llm/dump.txt
+Total source size: 0.26 MB across 26 files
+
+real	0m0.544s
+user	0m0.263s
+sys	0m0.294s
 kushal@fedora:~/src/dotnet/tsp$ 
