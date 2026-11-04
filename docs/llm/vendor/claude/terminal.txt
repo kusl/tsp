@@ -1,0 +1,545 @@
+kushal@fedora:~/src/dotnet/HelloXUnit$ cd ~/src/dotnet/ && { GIT_TRACE=1 GIT_TRACE_PACKET=1 GIT_CURL_VERBOSE=1 time git clone --progress https://github.com/kusl/tsp.git; } 2>&1 | tee tsp.txt
+08:17:00.197965 git.c:506               trace: built-in: git clone --progress https://github.com/kusl/tsp.git
+Cloning into 'tsp'...
+08:17:00.202083 run-command.c:673       trace: run_command: git remote-https origin https://github.com/kusl/tsp.git
+08:17:00.202360 run-command.c:765       trace: start_command: /usr/libexec/git-core/git remote-https origin https://github.com/kusl/tsp.git
+08:17:00.203747 git.c:815               trace: exec: git-remote-https origin https://github.com/kusl/tsp.git
+08:17:00.203780 run-command.c:673       trace: run_command: git-remote-https origin https://github.com/kusl/tsp.git
+08:17:00.204167 run-command.c:765       trace: start_command: /usr/libexec/git-core/git-remote-https origin https://github.com/kusl/tsp.git
+08:17:00.211707 http.c:994              == Info: Could not find host github.com in the .netrc file; using defaults
+08:17:00.253825 http.c:994              == Info: Host github.com:443 was resolved.
+08:17:00.253837 http.c:994              == Info: IPv6: (none)
+08:17:00.253844 http.c:994              == Info: IPv4: 140.82.113.4
+08:17:00.253896 http.c:994              == Info:   Trying 140.82.113.4:443...
+08:17:00.265575 http.c:994              == Info: ALPN: curl offers h2,http/1.1
+08:17:00.265848 http.c:994              == Info: TLSv1.3 (OUT), TLS handshake, Client hello (1):
+08:17:00.265906 http.c:994              == Info: SSL Trust Anchors:
+08:17:00.270947 http.c:994              == Info:   CAfile: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+08:17:00.285346 http.c:994              == Info: TLSv1.3 (IN), TLS handshake, Server hello (2):
+08:17:00.285553 http.c:994              == Info: TLSv1.3 (IN), TLS change cipher, Change cipher spec (1):
+08:17:00.285574 http.c:994              == Info: TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+08:17:00.285615 http.c:994              == Info: TLSv1.3 (IN), TLS handshake, Certificate (11):
+08:17:00.286601 http.c:994              == Info: TLSv1.3 (IN), TLS handshake, CERT verify (15):
+08:17:00.286691 http.c:994              == Info: TLSv1.3 (IN), TLS handshake, Finished (20):
+08:17:00.286713 http.c:994              == Info: TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+08:17:00.286729 http.c:994              == Info: TLSv1.3 (OUT), TLS handshake, Finished (20):
+08:17:00.286774 http.c:994              == Info: SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256 / x25519 / id-ecPublicKey
+08:17:00.286780 http.c:994              == Info: ALPN: server accepted h2
+08:17:00.286784 http.c:994              == Info: Server certificate:
+08:17:00.286788 http.c:994              == Info:   subject: CN=github.com
+08:17:00.286791 http.c:994              == Info:   start date: Oct 30 00:00:00 2026 GMT
+08:17:00.286793 http.c:994              == Info:   expire date: Jan 27 23:59:59 2027 GMT
+08:17:00.286797 http.c:994              == Info:   issuer: C=GB; O=Sectigo Limited; CN=Sectigo Public Server Authentication CA DV E36
+08:17:00.286801 http.c:994              == Info:   Certificate level 0: Public key type EC/prime256v1 (256/128 Bits/secBits), signed using ecdsa-with-SHA256
+08:17:00.286803 http.c:994              == Info:   Certificate level 1: Public key type EC/prime256v1 (256/128 Bits/secBits), signed using ecdsa-with-SHA384
+08:17:00.286805 http.c:994              == Info:   Certificate level 2: Public key type EC/secp384r1 (384/192 Bits/secBits), signed using ecdsa-with-SHA384
+08:17:00.286810 http.c:994              == Info:   subjectAltName: "github.com" matches cert's "github.com"
+08:17:00.286811 http.c:994              == Info: SSL certificate verified via OpenSSL.
+08:17:00.286836 http.c:994              == Info: Established connection to github.com (140.82.113.4 port 443) from 192.168.0.209 port 60066 
+08:17:00.286845 http.c:994              == Info: using HTTP/2
+08:17:00.286869 http.c:994              == Info: [HTTP/2] [1] OPENED stream for https://github.com/kusl/tsp.git/info/refs?service=git-upload-pack
+08:17:00.286871 http.c:994              == Info: [HTTP/2] [1] [:method: GET]
+08:17:00.286872 http.c:994              == Info: [HTTP/2] [1] [:scheme: https]
+08:17:00.286873 http.c:994              == Info: [HTTP/2] [1] [:authority: github.com]
+08:17:00.286874 http.c:994              == Info: [HTTP/2] [1] [:path: /kusl/tsp.git/info/refs?service=git-upload-pack]
+08:17:00.286875 http.c:994              == Info: [HTTP/2] [1] [user-agent: git/2.56.0]
+08:17:00.286876 http.c:994              == Info: [HTTP/2] [1] [accept: */*]
+08:17:00.286878 http.c:994              == Info: [HTTP/2] [1] [accept-encoding: deflate, gzip, br]
+08:17:00.286879 http.c:994              == Info: [HTTP/2] [1] [accept-language: en-US, *;q=0.9]
+08:17:00.286880 http.c:994              == Info: [HTTP/2] [1] [pragma: no-cache]
+08:17:00.286881 http.c:994              == Info: [HTTP/2] [1] [git-protocol: version=2]
+08:17:00.286918 http.c:941              => Send header, 0000000229 bytes (0x000000e5)
+08:17:00.286921 http.c:953              => Send header: GET /kusl/tsp.git/info/refs?service=git-upload-pack HTTP/2
+08:17:00.286923 http.c:953              => Send header: Host: github.com
+08:17:00.286924 http.c:953              => Send header: User-Agent: git/2.56.0
+08:17:00.286924 http.c:953              => Send header: Accept: */*
+08:17:00.286925 http.c:953              => Send header: Accept-Encoding: deflate, gzip, br
+08:17:00.286926 http.c:953              => Send header: Accept-Language: en-US, *;q=0.9
+08:17:00.286929 http.c:953              => Send header: Pragma: no-cache
+08:17:00.286930 http.c:953              => Send header: Git-Protocol: version=2
+08:17:00.286931 http.c:953              => Send header:
+08:17:00.286932 http.c:994              == Info: Request completely sent off
+08:17:00.303885 http.c:994              == Info: TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+08:17:00.304232 http.c:994              == Info: TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+08:17:00.365701 http.c:941              <= Recv header, 0000000013 bytes (0x0000000d)
+08:17:00.365710 http.c:953              <= Recv header: HTTP/2 200
+08:17:00.365718 http.c:941              <= Recv header, 0000000026 bytes (0x0000001a)
+08:17:00.365719 http.c:953              <= Recv header: server: GitHub-Babel/3.0
+08:17:00.365724 http.c:941              <= Recv header, 0000000059 bytes (0x0000003b)
+08:17:00.365726 http.c:953              <= Recv header: content-type: application/x-git-upload-pack-advertisement
+08:17:00.365729 http.c:941              <= Recv header, 0000000054 bytes (0x00000036)
+08:17:00.365730 http.c:953              <= Recv header: content-security-policy: default-src 'none'; sandbox
+08:17:00.365732 http.c:941              <= Recv header, 0000000040 bytes (0x00000028)
+08:17:00.365734 http.c:953              <= Recv header: expires: Fri, 01 Jan 1980 00:00:00 GMT
+08:17:00.365736 http.c:941              <= Recv header, 0000000018 bytes (0x00000012)
+08:17:00.365738 http.c:953              <= Recv header: pragma: no-cache
+08:17:00.365740 http.c:941              <= Recv header, 0000000053 bytes (0x00000035)
+08:17:00.365741 http.c:953              <= Recv header: cache-control: no-cache, max-age=0, must-revalidate
+08:17:00.365743 http.c:941              <= Recv header, 0000000023 bytes (0x00000017)
+08:17:00.365744 http.c:953              <= Recv header: vary: Accept-Encoding
+08:17:00.365747 http.c:941              <= Recv header, 0000000045 bytes (0x0000002d)
+08:17:00.365749 http.c:953              <= Recv header: strict-transport-security: max-age=31536000
+08:17:00.365752 http.c:941              <= Recv header, 0000000037 bytes (0x00000025)
+08:17:00.365753 http.c:953              <= Recv header: date: Wed, 04 Nov 2026 13:17:00 GMT
+08:17:00.365756 http.c:941              <= Recv header, 0000000056 bytes (0x00000038)
+08:17:00.365758 http.c:953              <= Recv header: x-github-request-id: EAA2:E6036:14D4CE:1D5363:6AEB304C
+08:17:00.365760 http.c:941              <= Recv header, 0000000027 bytes (0x0000001b)
+08:17:00.365762 http.c:953              <= Recv header: x-github-edge-region: iad
+08:17:00.365764 http.c:941              <= Recv header, 0000000023 bytes (0x00000017)
+08:17:00.365766 http.c:953              <= Recv header: x-frame-options: DENY
+08:17:00.365770 http.c:941              <= Recv header, 0000000002 bytes (0x00000002)
+08:17:00.365771 http.c:953              <= Recv header:
+08:17:00.365787 http.c:994              == Info: Connection #0 to host github.com:443 left intact
+08:17:00.365801 pkt-line.c:85           packet:          git< # service=git-upload-pack
+08:17:00.365804 pkt-line.c:85           packet:          git< 0000
+08:17:00.365805 pkt-line.c:85           packet:          git< version 2
+08:17:00.365809 pkt-line.c:85           packet:          git< agent=git/github-f6e509caf74d-Linux
+08:17:00.365810 pkt-line.c:85           packet:          git< ls-refs=unborn
+08:17:00.365812 pkt-line.c:85           packet:          git< fetch=shallow wait-for-done filter
+08:17:00.365814 pkt-line.c:85           packet:          git< server-option
+08:17:00.365816 pkt-line.c:85           packet:          git< object-format=sha1
+08:17:00.365817 pkt-line.c:85           packet:          git< 0000
+08:17:00.365883 pkt-line.c:85           packet:        clone< version 2
+08:17:00.365896 pkt-line.c:85           packet:        clone< agent=git/github-f6e509caf74d-Linux
+08:17:00.365899 pkt-line.c:85           packet:        clone< ls-refs=unborn
+08:17:00.365902 pkt-line.c:85           packet:        clone< fetch=shallow wait-for-done filter
+08:17:00.365905 pkt-line.c:85           packet:        clone< server-option
+08:17:00.365907 pkt-line.c:85           packet:        clone< object-format=sha1
+08:17:00.365909 pkt-line.c:85           packet:        clone< 0000
+08:17:00.365912 pkt-line.c:85           packet:        clone> command=ls-refs
+08:17:00.365919 pkt-line.c:85           packet:        clone> agent=git/2.56.0-Linux
+08:17:00.365922 pkt-line.c:85           packet:        clone> object-format=sha1
+08:17:00.365922 pkt-line.c:85           packet:          git< command=ls-refs
+08:17:00.365924 pkt-line.c:85           packet:        clone> 0001
+08:17:00.365926 pkt-line.c:85           packet:        clone> peel
+08:17:00.365927 pkt-line.c:85           packet:          git< agent=git/2.56.0-Linux
+08:17:00.365929 pkt-line.c:85           packet:        clone> symrefs
+08:17:00.365930 pkt-line.c:85           packet:          git< object-format=sha1
+08:17:00.365932 pkt-line.c:85           packet:          git< 0001
+08:17:00.365932 pkt-line.c:85           packet:        clone> unborn
+08:17:00.365935 pkt-line.c:85           packet:          git< peel
+08:17:00.365935 pkt-line.c:85           packet:        clone> ref-prefix refs/heads/
+08:17:00.365938 pkt-line.c:85           packet:        clone> ref-prefix refs/tags/
+08:17:00.365939 pkt-line.c:85           packet:          git< symrefs
+08:17:00.365941 pkt-line.c:85           packet:        clone> ref-prefix HEAD
+08:17:00.365942 pkt-line.c:85           packet:          git< unborn
+08:17:00.365943 pkt-line.c:85           packet:        clone> 0000
+08:17:00.365945 pkt-line.c:85           packet:          git< ref-prefix refs/heads/
+08:17:00.365949 pkt-line.c:85           packet:          git< ref-prefix refs/tags/
+08:17:00.365953 pkt-line.c:85           packet:          git< ref-prefix HEAD
+08:17:00.365955 pkt-line.c:85           packet:          git< 0000
+08:17:00.366000 http.c:994              == Info: Could not find host github.com in the .netrc file; using defaults
+08:17:00.366010 http.c:994              == Info: Reusing existing https: connection with host github.com
+08:17:00.366063 http.c:994              == Info: [HTTP/2] [3] OPENED stream for https://github.com/kusl/tsp.git/git-upload-pack
+08:17:00.366067 http.c:994              == Info: [HTTP/2] [3] [:method: POST]
+08:17:00.366069 http.c:994              == Info: [HTTP/2] [3] [:scheme: https]
+08:17:00.366072 http.c:994              == Info: [HTTP/2] [3] [:authority: github.com]
+08:17:00.366074 http.c:994              == Info: [HTTP/2] [3] [:path: /kusl/tsp.git/git-upload-pack]
+08:17:00.366076 http.c:994              == Info: [HTTP/2] [3] [user-agent: git/2.56.0]
+08:17:00.366078 http.c:994              == Info: [HTTP/2] [3] [accept-encoding: deflate, gzip, br]
+08:17:00.366081 http.c:994              == Info: [HTTP/2] [3] [content-type: application/x-git-upload-pack-request]
+08:17:00.366083 http.c:994              == Info: [HTTP/2] [3] [accept: application/x-git-upload-pack-result]
+08:17:00.366085 http.c:994              == Info: [HTTP/2] [3] [accept-language: en-US, *;q=0.9]
+08:17:00.366087 http.c:994              == Info: [HTTP/2] [3] [git-protocol: version=2]
+08:17:00.366089 http.c:994              == Info: [HTTP/2] [3] [content-length: 181]
+08:17:00.366164 http.c:941              => Send header, 0000000301 bytes (0x0000012d)
+08:17:00.366168 http.c:953              => Send header: POST /kusl/tsp.git/git-upload-pack HTTP/2
+08:17:00.366170 http.c:953              => Send header: Host: github.com
+08:17:00.366172 http.c:953              => Send header: User-Agent: git/2.56.0
+08:17:00.366173 http.c:953              => Send header: Accept-Encoding: deflate, gzip, br
+08:17:00.366175 http.c:953              => Send header: Content-Type: application/x-git-upload-pack-request
+08:17:00.366177 http.c:953              => Send header: Accept: application/x-git-upload-pack-result
+08:17:00.366178 http.c:953              => Send header: Accept-Language: en-US, *;q=0.9
+08:17:00.366180 http.c:953              => Send header: Git-Protocol: version=2
+08:17:00.366182 http.c:953              => Send header: Content-Length: 181
+08:17:00.366183 http.c:953              => Send header:
+08:17:00.366186 http.c:994              == Info: upload completely sent off: 181 bytes
+08:17:00.420752 http.c:941              <= Recv header, 0000000013 bytes (0x0000000d)
+08:17:00.420761 http.c:953              <= Recv header: HTTP/2 200
+08:17:00.420769 http.c:941              <= Recv header, 0000000026 bytes (0x0000001a)
+08:17:00.420771 http.c:953              <= Recv header: server: GitHub-Babel/3.0
+08:17:00.420775 http.c:941              <= Recv header, 0000000052 bytes (0x00000034)
+08:17:00.420777 http.c:953              <= Recv header: content-type: application/x-git-upload-pack-result
+08:17:00.420779 http.c:941              <= Recv header, 0000000054 bytes (0x00000036)
+08:17:00.420781 http.c:953              <= Recv header: content-security-policy: default-src 'none'; sandbox
+08:17:00.420783 http.c:941              <= Recv header, 0000000040 bytes (0x00000028)
+08:17:00.420784 http.c:953              <= Recv header: expires: Fri, 01 Jan 1980 00:00:00 GMT
+08:17:00.420786 http.c:941              <= Recv header, 0000000018 bytes (0x00000012)
+08:17:00.420787 http.c:953              <= Recv header: pragma: no-cache
+08:17:00.420789 http.c:941              <= Recv header, 0000000053 bytes (0x00000035)
+08:17:00.420790 http.c:953              <= Recv header: cache-control: no-cache, max-age=0, must-revalidate
+08:17:00.420792 http.c:941              <= Recv header, 0000000023 bytes (0x00000017)
+08:17:00.420794 http.c:953              <= Recv header: vary: Accept-Encoding
+08:17:00.420796 http.c:941              <= Recv header, 0000000045 bytes (0x0000002d)
+08:17:00.420797 http.c:953              <= Recv header: strict-transport-security: max-age=31536000
+08:17:00.420799 http.c:941              <= Recv header, 0000000037 bytes (0x00000025)
+08:17:00.420800 http.c:953              <= Recv header: date: Wed, 04 Nov 2026 13:17:00 GMT
+08:17:00.420802 http.c:941              <= Recv header, 0000000056 bytes (0x00000038)
+08:17:00.420803 http.c:953              <= Recv header: x-github-request-id: EAA2:E6036:14D519:1D53C8:6AEB304C
+08:17:00.420805 http.c:941              <= Recv header, 0000000027 bytes (0x0000001b)
+08:17:00.420806 http.c:953              <= Recv header: x-github-edge-region: iad
+08:17:00.420808 http.c:941              <= Recv header, 0000000023 bytes (0x00000017)
+08:17:00.420810 http.c:953              <= Recv header: x-frame-options: DENY
+08:17:00.420813 http.c:941              <= Recv header, 0000000002 bytes (0x00000002)
+08:17:00.420815 http.c:953              <= Recv header:
+08:17:00.420835 http.c:994              == Info: Connection #0 to host github.com:443 left intact
+08:17:00.420849 pkt-line.c:85           packet:          git> 0002
+08:17:00.420846 pkt-line.c:85           packet:        clone< ffc56b2deffec21fe89ea895fc73c0672decd097 HEAD symref-target:refs/heads/master
+08:17:00.420856 pkt-line.c:85           packet:        clone< ffc56b2deffec21fe89ea895fc73c0672decd097 refs/heads/master
+08:17:00.420859 pkt-line.c:85           packet:        clone< f64d7baca4dfe85f50a360219ca26feb6c9df588 refs/tags/v2025.08.16.40-f64d7ba
+08:17:00.420862 pkt-line.c:85           packet:        clone< b7f2c37e22881f6337da3b55776ce391513766b7 refs/tags/v25.8.16.1070-b7f2c37e
+08:17:00.420864 pkt-line.c:85           packet:        clone< fc5cbde29c44b956981e9ac1fa40955fe4256c65 refs/tags/v25.8.16.66-fc5cbde
+08:17:00.420866 pkt-line.c:85           packet:        clone< 792ae20166db7ec10b4789ab89ce45f5d4853743 refs/tags/v25.8.17.1083-792ae201
+08:17:00.420868 pkt-line.c:85           packet:        clone< 096db8fb90bc3efdf703351eab5222074767ef27 refs/tags/v25.8.17.1091-096db8fb
+08:17:00.420870 pkt-line.c:85           packet:        clone< 4b763bc50cb5d80641b340bd8b3f4714b9e704d8 refs/tags/v25.8.17.1099-4b763bc5
+08:17:00.420871 pkt-line.c:85           packet:        clone< ccb94c7ac0bceafb3c3334007570de4b9c588576 refs/tags/v25.8.17.1101-ccb94c7a
+08:17:00.420873 pkt-line.c:85           packet:        clone< 1a91458864fa1ad83f525b5c700c8439d0a39762 refs/tags/v25.8.17.1104-1a914588
+08:17:00.420875 pkt-line.c:85           packet:        clone< 76e0c2998b259883559919005b3e024036b8707b refs/tags/v25.8.18.1138-76e0c299
+08:17:00.420877 pkt-line.c:85           packet:        clone< e55eae06eaa6c61ba909ecf70e51000f9250c3ca refs/tags/v25.8.18.1139-e55eae06
+08:17:00.420879 pkt-line.c:85           packet:        clone< ec0be5c6bee5becb49367f85f340f92d9422c8a9 refs/tags/v25.8.18.1142-837b2958
+08:17:00.420880 pkt-line.c:85           packet:        clone< ec0be5c6bee5becb49367f85f340f92d9422c8a9 refs/tags/v25.8.18.1143-ec0be5c6
+08:17:00.420882 pkt-line.c:85           packet:        clone< 4e34ae323a40a8a1f1dced826eaf05a272382c9f refs/tags/v25.8.18.1144-4e34ae32
+08:17:00.420884 pkt-line.c:85           packet:        clone< 2e01c1ae00a8210b4686eb36f17118f91662a43d refs/tags/v25.8.18.1145-2e01c1ae
+08:17:00.420886 pkt-line.c:85           packet:        clone< 7de594b5c39768807ea337b2b6764fff94392305 refs/tags/v25.8.18.1147-7de594b5
+08:17:00.420888 pkt-line.c:85           packet:        clone< 0b4bbe0b953e6a3681b1f111b4663682daa13b76 refs/tags/v25.8.18.1150-0b4bbe0b
+08:17:00.420889 pkt-line.c:85           packet:        clone< 8c933f4bb6cd3087166cec98a8892147eef2f269 refs/tags/v25.8.18.1151-8c933f4b
+08:17:00.420891 pkt-line.c:85           packet:        clone< 018cc6722c40caff3b536450c81867a12f944749 refs/tags/v25.8.18.1153-018cc672
+08:17:00.420893 pkt-line.c:85           packet:        clone< 0ca2c1ad881f88f2793b772a3b14cb2d2b3ad652 refs/tags/v25.8.18.1156-0ca2c1ad
+08:17:00.420895 pkt-line.c:85           packet:        clone< d957a0c81010aa159a75f1818319fb5328419607 refs/tags/v25.8.18.1157-d957a0c8
+08:17:00.420903 pkt-line.c:85           packet:        clone< 4d31bef6e3a3fa5356030b120a24a378e6ecec97 refs/tags/v25.8.18.1174-4d31bef6
+08:17:00.420905 pkt-line.c:85           packet:        clone< d7e09c41083c72194654cd391727d0b7f9ca4a30 refs/tags/v25.8.18.1190-d7e09c41
+08:17:00.420907 pkt-line.c:85           packet:        clone< 4600c22cab9f1d341e5baffaf2431f007d17ebbc refs/tags/v25.8.19.1192-4600c22c
+08:17:00.420908 pkt-line.c:85           packet:        clone< 9b5215691562cbaaf318536c4fde000db38e9f94 refs/tags/v25.8.19.1195-9b521569
+08:17:00.420910 pkt-line.c:85           packet:        clone< 3352795cff7f314ef5f48ade8b94aa9b3003f41e refs/tags/v25.8.19.1204-3352795c
+08:17:00.420912 pkt-line.c:85           packet:        clone< 4eb20dd9969074f4312594be496c4b6ce9b76cb3 refs/tags/v25.8.19.1207-4eb20dd9
+08:17:00.420914 pkt-line.c:85           packet:        clone< 22de8bb8adf1407a2035e4c6891d3584dbabc569 refs/tags/v25.8.20.1208-22de8bb8
+08:17:00.420916 pkt-line.c:85           packet:        clone< 29a932ef976526ccaaa3e8221f1c005c6b4bad8c refs/tags/v25.8.21.1209-29a932ef
+08:17:00.420918 pkt-line.c:85           packet:        clone< 76ab86ea3a30193bcfde8be18e538ff295095512 refs/tags/v25.8.21.1211-76ab86ea
+08:17:00.420919 pkt-line.c:85           packet:        clone< 3867c4389fd8425ed51d0ecc43c51abda66b8127 refs/tags/v25.8.21.1213-3867c438
+08:17:00.420921 pkt-line.c:85           packet:        clone< 2065581d3f6870ee28331fbee30fa6ee321eba88 refs/tags/v25.8.21.1214-2065581d
+08:17:00.420923 pkt-line.c:85           packet:        clone< a98e00e85111a24ec983fafccbd5e6b7b94980f8 refs/tags/v25.8.21.1215-a98e00e8
+08:17:00.420925 pkt-line.c:85           packet:        clone< 3d535eb16a69b8452cb49b453647e179cd5d0761 refs/tags/v25.8.21.1216-3d535eb1
+08:17:00.420927 pkt-line.c:85           packet:        clone< fc271642ea6031c1abb97350a2c8f563b939696f refs/tags/v25.8.22.1217-fc271642
+08:17:00.420928 pkt-line.c:85           packet:        clone< ffc56b2deffec21fe89ea895fc73c0672decd097 refs/tags/v25.8.29.1218-ffc56b2d
+08:17:00.420930 pkt-line.c:85           packet:        clone< 0000
+08:17:00.420935 pkt-line.c:85           packet:        clone< 0002
+08:17:00.421956 pkt-line.c:85           packet:        clone> command=fetch
+08:17:00.421961 pkt-line.c:85           packet:        clone> agent=git/2.56.0-Linux
+08:17:00.421962 pkt-line.c:85           packet:        clone> object-format=sha1
+08:17:00.421963 pkt-line.c:85           packet:        clone> 0001
+08:17:00.421964 pkt-line.c:85           packet:        clone> thin-pack
+08:17:00.421965 pkt-line.c:85           packet:        clone> ofs-delta
+08:17:00.421967 pkt-line.c:85           packet:        clone> want ffc56b2deffec21fe89ea895fc73c0672decd097
+08:17:00.421968 pkt-line.c:85           packet:        clone> want ffc56b2deffec21fe89ea895fc73c0672decd097
+08:17:00.421969 pkt-line.c:85           packet:        clone> want f64d7baca4dfe85f50a360219ca26feb6c9df588
+08:17:00.421970 pkt-line.c:85           packet:        clone> want b7f2c37e22881f6337da3b55776ce391513766b7
+08:17:00.421971 pkt-line.c:85           packet:        clone> want fc5cbde29c44b956981e9ac1fa40955fe4256c65
+08:17:00.421972 pkt-line.c:85           packet:        clone> want 792ae20166db7ec10b4789ab89ce45f5d4853743
+08:17:00.421973 pkt-line.c:85           packet:        clone> want 096db8fb90bc3efdf703351eab5222074767ef27
+08:17:00.421974 pkt-line.c:85           packet:        clone> want 4b763bc50cb5d80641b340bd8b3f4714b9e704d8
+08:17:00.421975 pkt-line.c:85           packet:        clone> want ccb94c7ac0bceafb3c3334007570de4b9c588576
+08:17:00.421976 pkt-line.c:85           packet:        clone> want 1a91458864fa1ad83f525b5c700c8439d0a39762
+08:17:00.421977 pkt-line.c:85           packet:        clone> want 76e0c2998b259883559919005b3e024036b8707b
+08:17:00.421978 pkt-line.c:85           packet:        clone> want e55eae06eaa6c61ba909ecf70e51000f9250c3ca
+08:17:00.421978 pkt-line.c:85           packet:        clone> want ec0be5c6bee5becb49367f85f340f92d9422c8a9
+08:17:00.421979 pkt-line.c:85           packet:        clone> want ec0be5c6bee5becb49367f85f340f92d9422c8a9
+08:17:00.421980 pkt-line.c:85           packet:        clone> want 4e34ae323a40a8a1f1dced826eaf05a272382c9f
+08:17:00.421981 pkt-line.c:85           packet:        clone> want 2e01c1ae00a8210b4686eb36f17118f91662a43d
+08:17:00.421982 pkt-line.c:85           packet:        clone> want 7de594b5c39768807ea337b2b6764fff94392305
+08:17:00.421983 pkt-line.c:85           packet:        clone> want 0b4bbe0b953e6a3681b1f111b4663682daa13b76
+08:17:00.421984 pkt-line.c:85           packet:        clone> want 8c933f4bb6cd3087166cec98a8892147eef2f269
+08:17:00.421985 pkt-line.c:85           packet:        clone> want 018cc6722c40caff3b536450c81867a12f944749
+08:17:00.421986 pkt-line.c:85           packet:        clone> want 0ca2c1ad881f88f2793b772a3b14cb2d2b3ad652
+08:17:00.421987 pkt-line.c:85           packet:        clone> want d957a0c81010aa159a75f1818319fb5328419607
+08:17:00.421988 pkt-line.c:85           packet:        clone> want 4d31bef6e3a3fa5356030b120a24a378e6ecec97
+08:17:00.421988 pkt-line.c:85           packet:        clone> want d7e09c41083c72194654cd391727d0b7f9ca4a30
+08:17:00.421989 pkt-line.c:85           packet:        clone> want 4600c22cab9f1d341e5baffaf2431f007d17ebbc
+08:17:00.421990 pkt-line.c:85           packet:        clone> want 9b5215691562cbaaf318536c4fde000db38e9f94
+08:17:00.421991 pkt-line.c:85           packet:        clone> want 3352795cff7f314ef5f48ade8b94aa9b3003f41e
+08:17:00.421992 pkt-line.c:85           packet:        clone> want 4eb20dd9969074f4312594be496c4b6ce9b76cb3
+08:17:00.421993 pkt-line.c:85           packet:        clone> want 22de8bb8adf1407a2035e4c6891d3584dbabc569
+08:17:00.421994 pkt-line.c:85           packet:        clone> want 29a932ef976526ccaaa3e8221f1c005c6b4bad8c
+08:17:00.421995 pkt-line.c:85           packet:        clone> want 76ab86ea3a30193bcfde8be18e538ff295095512
+08:17:00.421995 pkt-line.c:85           packet:        clone> want 3867c4389fd8425ed51d0ecc43c51abda66b8127
+08:17:00.421996 pkt-line.c:85           packet:        clone> want 2065581d3f6870ee28331fbee30fa6ee321eba88
+08:17:00.421997 pkt-line.c:85           packet:        clone> want a98e00e85111a24ec983fafccbd5e6b7b94980f8
+08:17:00.421998 pkt-line.c:85           packet:        clone> want 3d535eb16a69b8452cb49b453647e179cd5d0761
+08:17:00.421999 pkt-line.c:85           packet:        clone> want fc271642ea6031c1abb97350a2c8f563b939696f
+08:17:00.422000 pkt-line.c:85           packet:        clone> want ffc56b2deffec21fe89ea895fc73c0672decd097
+08:17:00.422001 pkt-line.c:85           packet:        clone> done
+08:17:00.422002 pkt-line.c:85           packet:        clone> 0000
+08:17:00.422013 pkt-line.c:85           packet:          git< command=fetch
+08:17:00.422017 pkt-line.c:85           packet:          git< agent=git/2.56.0-Linux
+08:17:00.422020 pkt-line.c:85           packet:          git< object-format=sha1
+08:17:00.422022 pkt-line.c:85           packet:          git< 0001
+08:17:00.422024 pkt-line.c:85           packet:          git< thin-pack
+08:17:00.422050 pkt-line.c:85           packet:          git< ofs-delta
+08:17:00.422052 pkt-line.c:85           packet:          git< want ffc56b2deffec21fe89ea895fc73c0672decd097
+08:17:00.422054 pkt-line.c:85           packet:          git< want ffc56b2deffec21fe89ea895fc73c0672decd097
+08:17:00.422056 pkt-line.c:85           packet:          git< want f64d7baca4dfe85f50a360219ca26feb6c9df588
+08:17:00.422058 pkt-line.c:85           packet:          git< want b7f2c37e22881f6337da3b55776ce391513766b7
+08:17:00.422059 pkt-line.c:85           packet:          git< want fc5cbde29c44b956981e9ac1fa40955fe4256c65
+08:17:00.422061 pkt-line.c:85           packet:          git< want 792ae20166db7ec10b4789ab89ce45f5d4853743
+08:17:00.422063 pkt-line.c:85           packet:          git< want 096db8fb90bc3efdf703351eab5222074767ef27
+08:17:00.422065 pkt-line.c:85           packet:          git< want 4b763bc50cb5d80641b340bd8b3f4714b9e704d8
+08:17:00.422067 pkt-line.c:85           packet:          git< want ccb94c7ac0bceafb3c3334007570de4b9c588576
+08:17:00.422069 pkt-line.c:85           packet:          git< want 1a91458864fa1ad83f525b5c700c8439d0a39762
+08:17:00.422071 pkt-line.c:85           packet:          git< want 76e0c2998b259883559919005b3e024036b8707b
+08:17:00.422073 pkt-line.c:85           packet:          git< want e55eae06eaa6c61ba909ecf70e51000f9250c3ca
+08:17:00.422075 pkt-line.c:85           packet:          git< want ec0be5c6bee5becb49367f85f340f92d9422c8a9
+08:17:00.422077 pkt-line.c:85           packet:          git< want ec0be5c6bee5becb49367f85f340f92d9422c8a9
+08:17:00.422078 pkt-line.c:85           packet:          git< want 4e34ae323a40a8a1f1dced826eaf05a272382c9f
+08:17:00.422080 pkt-line.c:85           packet:          git< want 2e01c1ae00a8210b4686eb36f17118f91662a43d
+08:17:00.422082 pkt-line.c:85           packet:          git< want 7de594b5c39768807ea337b2b6764fff94392305
+08:17:00.422084 pkt-line.c:85           packet:          git< want 0b4bbe0b953e6a3681b1f111b4663682daa13b76
+08:17:00.422085 pkt-line.c:85           packet:          git< want 8c933f4bb6cd3087166cec98a8892147eef2f269
+08:17:00.422087 pkt-line.c:85           packet:          git< want 018cc6722c40caff3b536450c81867a12f944749
+08:17:00.422089 pkt-line.c:85           packet:          git< want 0ca2c1ad881f88f2793b772a3b14cb2d2b3ad652
+08:17:00.422091 pkt-line.c:85           packet:          git< want d957a0c81010aa159a75f1818319fb5328419607
+08:17:00.422093 pkt-line.c:85           packet:          git< want 4d31bef6e3a3fa5356030b120a24a378e6ecec97
+08:17:00.422094 pkt-line.c:85           packet:          git< want d7e09c41083c72194654cd391727d0b7f9ca4a30
+08:17:00.422096 pkt-line.c:85           packet:          git< want 4600c22cab9f1d341e5baffaf2431f007d17ebbc
+08:17:00.422098 pkt-line.c:85           packet:          git< want 9b5215691562cbaaf318536c4fde000db38e9f94
+08:17:00.422100 pkt-line.c:85           packet:          git< want 3352795cff7f314ef5f48ade8b94aa9b3003f41e
+08:17:00.422102 pkt-line.c:85           packet:          git< want 4eb20dd9969074f4312594be496c4b6ce9b76cb3
+08:17:00.422103 pkt-line.c:85           packet:          git< want 22de8bb8adf1407a2035e4c6891d3584dbabc569
+08:17:00.422105 pkt-line.c:85           packet:          git< want 29a932ef976526ccaaa3e8221f1c005c6b4bad8c
+08:17:00.422107 pkt-line.c:85           packet:          git< want 76ab86ea3a30193bcfde8be18e538ff295095512
+08:17:00.422109 pkt-line.c:85           packet:          git< want 3867c4389fd8425ed51d0ecc43c51abda66b8127
+08:17:00.422111 pkt-line.c:85           packet:          git< want 2065581d3f6870ee28331fbee30fa6ee321eba88
+08:17:00.422113 pkt-line.c:85           packet:          git< want a98e00e85111a24ec983fafccbd5e6b7b94980f8
+08:17:00.422115 pkt-line.c:85           packet:          git< want 3d535eb16a69b8452cb49b453647e179cd5d0761
+08:17:00.422116 pkt-line.c:85           packet:          git< want fc271642ea6031c1abb97350a2c8f563b939696f
+08:17:00.422118 pkt-line.c:85           packet:          git< want ffc56b2deffec21fe89ea895fc73c0672decd097
+08:17:00.422120 pkt-line.c:85           packet:          git< done
+08:17:00.422121 pkt-line.c:85           packet:          git< 0000
+08:17:00.422315 http.c:994              == Info: Could not find host github.com in the .netrc file; using defaults
+08:17:00.422323 http.c:994              == Info: Reusing existing https: connection with host github.com
+08:17:00.422343 http.c:994              == Info: [HTTP/2] [5] OPENED stream for https://github.com/kusl/tsp.git/git-upload-pack
+08:17:00.422345 http.c:994              == Info: [HTTP/2] [5] [:method: POST]
+08:17:00.422348 http.c:994              == Info: [HTTP/2] [5] [:scheme: https]
+08:17:00.422350 http.c:994              == Info: [HTTP/2] [5] [:authority: github.com]
+08:17:00.422351 http.c:994              == Info: [HTTP/2] [5] [:path: /kusl/tsp.git/git-upload-pack]
+08:17:00.422352 http.c:994              == Info: [HTTP/2] [5] [user-agent: git/2.56.0]
+08:17:00.422353 http.c:994              == Info: [HTTP/2] [5] [accept-encoding: deflate, gzip, br]
+08:17:00.422354 http.c:994              == Info: [HTTP/2] [5] [content-type: application/x-git-upload-pack-request]
+08:17:00.422355 http.c:994              == Info: [HTTP/2] [5] [accept: application/x-git-upload-pack-result]
+08:17:00.422357 http.c:994              == Info: [HTTP/2] [5] [accept-language: en-US, *;q=0.9]
+08:17:00.422358 http.c:994              == Info: [HTTP/2] [5] [git-protocol: version=2]
+08:17:00.422359 http.c:994              == Info: [HTTP/2] [5] [content-encoding: gzip]
+08:17:00.422360 http.c:994              == Info: [HTTP/2] [5] [content-length: 957]
+08:17:00.422419 http.c:941              => Send header, 0000000325 bytes (0x00000145)
+08:17:00.422421 http.c:953              => Send header: POST /kusl/tsp.git/git-upload-pack HTTP/2
+08:17:00.422423 http.c:953              => Send header: Host: github.com
+08:17:00.422423 http.c:953              => Send header: User-Agent: git/2.56.0
+08:17:00.422424 http.c:953              => Send header: Accept-Encoding: deflate, gzip, br
+08:17:00.422425 http.c:953              => Send header: Content-Type: application/x-git-upload-pack-request
+08:17:00.422426 http.c:953              => Send header: Accept: application/x-git-upload-pack-result
+08:17:00.422427 http.c:953              => Send header: Accept-Language: en-US, *;q=0.9
+08:17:00.422428 http.c:953              => Send header: Git-Protocol: version=2
+08:17:00.422428 http.c:953              => Send header: Content-Encoding: gzip
+08:17:00.422429 http.c:953              => Send header: Content-Length: 957
+08:17:00.422430 http.c:953              => Send header:
+08:17:00.422432 http.c:994              == Info: upload completely sent off: 957 bytes
+08:17:00.540826 http.c:941              <= Recv header, 0000000013 bytes (0x0000000d)
+08:17:00.540836 http.c:953              <= Recv header: HTTP/2 200
+08:17:00.540849 http.c:941              <= Recv header, 0000000026 bytes (0x0000001a)
+08:17:00.540851 http.c:953              <= Recv header: server: GitHub-Babel/3.0
+08:17:00.540857 http.c:941              <= Recv header, 0000000052 bytes (0x00000034)
+08:17:00.540858 http.c:953              <= Recv header: content-type: application/x-git-upload-pack-result
+08:17:00.540861 http.c:941              <= Recv header, 0000000054 bytes (0x00000036)
+08:17:00.540863 http.c:953              <= Recv header: content-security-policy: default-src 'none'; sandbox
+08:17:00.540865 http.c:941              <= Recv header, 0000000040 bytes (0x00000028)
+08:17:00.540867 http.c:953              <= Recv header: expires: Fri, 01 Jan 1980 00:00:00 GMT
+08:17:00.540869 http.c:941              <= Recv header, 0000000018 bytes (0x00000012)
+08:17:00.540871 http.c:953              <= Recv header: pragma: no-cache
+08:17:00.540873 http.c:941              <= Recv header, 0000000053 bytes (0x00000035)
+08:17:00.540875 http.c:953              <= Recv header: cache-control: no-cache, max-age=0, must-revalidate
+08:17:00.540877 http.c:941              <= Recv header, 0000000023 bytes (0x00000017)
+08:17:00.540878 http.c:953              <= Recv header: vary: Accept-Encoding
+08:17:00.540881 http.c:941              <= Recv header, 0000000045 bytes (0x0000002d)
+08:17:00.540882 http.c:953              <= Recv header: strict-transport-security: max-age=31536000
+08:17:00.540884 http.c:941              <= Recv header, 0000000037 bytes (0x00000025)
+08:17:00.540885 http.c:953              <= Recv header: date: Wed, 04 Nov 2026 13:17:00 GMT
+08:17:00.540887 http.c:941              <= Recv header, 0000000056 bytes (0x00000038)
+08:17:00.540888 http.c:953              <= Recv header: x-github-request-id: EAA2:E6036:14D554:1D5417:6AEB304C
+08:17:00.540891 http.c:941              <= Recv header, 0000000027 bytes (0x0000001b)
+08:17:00.540892 http.c:953              <= Recv header: x-github-edge-region: iad
+08:17:00.540894 http.c:941              <= Recv header, 0000000023 bytes (0x00000017)
+08:17:00.540896 http.c:953              <= Recv header: x-frame-options: DENY
+08:17:00.540899 http.c:941              <= Recv header, 0000000002 bytes (0x00000002)
+08:17:00.540901 http.c:953              <= Recv header:
+08:17:00.540937 pkt-line.c:85           packet:        clone< packfile
+08:17:00.541084 run-command.c:673       trace: run_command: git index-pack --stdin -v --fix-thin '--keep=fetch-pack 12065 on fedora' --check-self-contained-and-connected
+08:17:00.541111 run-command.c:765       trace: start_command: /usr/libexec/git-core/git index-pack --stdin -v --fix-thin '--keep=fetch-pack 12065 on fedora' --check-self-contained-and-connected
+08:17:00.541337 pkt-line.c:85           packet:     sideband< \2Enumerating objects: 1075, done.
+remote: Enumerating objects: 1075, done.        
+08:17:00.541368 pkt-line.c:85           packet:     sideband< \2Counting objects:   0% (1/348)\15Counting objects:   1% (4/348)\15Counting objects:   2% (7/348)\15Counting objects:   3% (11/348)\15Cou
+08:17:00.541375 pkt-line.c:85           packet:     sideband< \2nting objects:   4% (14/348)\15Counting objects:   5% (18/348)\15Counting objects:   6% (21/348)\15Counting objects:   7% (25/348)\15Cou
+08:17:00.541382 pkt-line.c:85           packet:     sideband< \2nting objects:   8% (28/348)\15Counting objects:   9% (32/348)\15Counting objects:  10% (35/348)\15Counting objects:  11% (39/348)\15Cou
+08:17:00.541391 pkt-line.c:85           packet:     sideband< \2nting objects:  12% (42/348)\15Counting objects:  13% (46/348)\15Counting objects:  14% (49/348)\15Counting objects:  15% (53/348)\15Cou
+08:17:00.541397 pkt-line.c:85           packet:     sideband< \2nting objects:  16% (56/348)\15Counting objects:  17% (60/348)\15Counting objects:  18% (63/348)\15Counting objects:  19% (67/348)\15Cou
+08:17:00.541403 pkt-line.c:85           packet:     sideband< \2nting objects:  20% (70/348)\15Counting objects:  21% (74/348)\15Counting objects:  22% (77/348)\15Counting objects:  23% (81/348)\15Cou
+08:17:00.541409 pkt-line.c:85           packet:     sideband< \2nting objects:  24% (84/348)\15Counting objects:  25% (87/348)\15Counting objects:  26% (91/348)\15Counting objects:  27% (94/348)\15Cou
+08:17:00.541415 pkt-line.c:85           packet:     sideband< \2nting objects:  28% (98/348)\15Counting objects:  29% (101/348)\15Counting objects:  30% (105/348)\15Counting objects:  31% (108/348)\15
+08:17:00.541420 pkt-line.c:85           packet:     sideband< \2Counting objects:  32% (112/348)\15Counting objects:  33% (115/348)\15Counting objects:  34% (119/348)\15Counting objects:  35% (122/3
+08:17:00.541426 pkt-line.c:85           packet:     sideband< \248)\15Counting objects:  36% (126/348)\15Counting objects:  37% (129/348)\15Counting objects:  38% (133/348)\15Counting objects:  39% (1
+08:17:00.541432 pkt-line.c:85           packet:     sideband< \236/348)\15
+08:17:00.541435 pkt-line.c:85           packet:     sideband< \2Counting objects:  40% (140/348)\15Counting objects:  41% (143/348)\15Counting objects:  42% (147/348)\15Counting objects:  43% (150/3
+08:17:00.541441 pkt-line.c:85           packet:     sideband< \248)\15
+08:17:00.541444 pkt-line.c:85           packet:     sideband< \2Counting objects:  44% (154/348)\15Counting objects:  45% (157/348)\15Counting objects:  46% (161/348)\15Counting objects:  47% (164/3
+08:17:00.541450 pkt-line.c:85           packet:     sideband< \248)\15Counting objects:  48% (168/348)\15
+08:17:00.541454 pkt-line.c:85           packet:     sideband< \2Counting objects:  49% (171/348)\15Counting objects:  50% (174/348)\15Counting objects:  51% (178/348)\15Counting objects:  52% (181/3
+08:17:00.541459 pkt-line.c:85           packet:     sideband< \248)\15Counting objects:  53% (185/348)\15Counting objects:  54% (188/348)\15Counting objects:  55% (192/348)\15Counting objects:  56% (1
+08:17:00.541465 pkt-line.c:85           packet:     sideband< \295/348)\15Counting objects:  57% (199/348)\15Counting objects:  58% (202/348)\15Counting objects:  59% (206/348)\15Counting objects:  60
+08:17:00.541471 pkt-line.c:85           packet:     sideband< \2% (209/348)\15Counting objects:  61% (213/348)\15Counting objects:  62% (216/348)\15Counting objects:  63% (220/348)\15Counting objects:
+08:17:00.541477 pkt-line.c:85           packet:     sideband< \2  64% (223/348)\15Counting objects:  65% (227/348)\15Counting objects:  66% (230/348)\15Counting objects:  67% (234/348)\15Counting obje
+08:17:00.541483 pkt-line.c:85           packet:     sideband< \2cts:  68% (237/348)\15Counting objects:  69% (241/348)\15Counting objects:  70% (244/348)\15Counting objects:  71% (248/348)\15Counting 
+08:17:00.541489 pkt-line.c:85           packet:     sideband< \2objects:  72% (251/348)\15Counting objects:  73% (255/348)\15
+08:17:00.541494 pkt-line.c:85           packet:     sideband< \2Counting objects:  74% (258/348)\15Counting objects:  75% (261/348)\15Counting objects:  76% (265/348)\15
+08:17:00.541501 pkt-line.c:85           packet:     sideband< \2Counting objects:  77% (268/348)\15Counting objects:  78% (272/348)\15Counting objects:  79% (275/348)\15Counting objects:  80% (279/3
+08:17:00.541507 pkt-line.c:85           packet:     sideband< \248)\15Counting objects:  81% (282/348)\15Counting objects:  82% (286/348)\15Counting objects:  83% (289/348)\15
+08:17:00.541513 pkt-line.c:85           packet:     sideband< \2Counting objects:  84% (293/348)\15Counting objects:  85% (296/348)\15Counting objects:  86% (300/348)\15Counting objects:  87% (303/3
+08:17:00.541518 pkt-line.c:85           packet:     sideband< \248)\15
+08:17:00.541521 pkt-line.c:85           packet:     sideband< \2Counting objects:  88% (307/348)\15Counting objects:  89% (310/348)\15Counting objects:  90% (314/348)\15Counting objects:  91% (317/3
+08:17:00.541526 pkt-line.c:85           packet:     sideband< \248)\15Counting objects:  92% (321/348)\15Counting objects:  93% (324/348)\15Counting objects:  94% (328/348)\15
+08:17:00.541532 pkt-line.c:85           packet:     sideband< \2Counting objects:  95% (331/348)\15Counting objects:  96% (335/348)\15
+08:17:00.541536 pkt-line.c:85           packet:     sideband< \2Counting objects:  97% (338/348)\15Counting objects:  98% (342/348)\15Counting objects:  99% (345/348)\15Counting objects: 100% (348/3
+08:17:00.541541 pkt-line.c:85           packet:     sideband< \248)\15
+08:17:00.541545 pkt-line.c:85           packet:     sideband< \2Counting objects: 100% (348/348), done.
+remote: Counting objects: 100% (348/348), done.        
+08:17:00.541548 pkt-line.c:85           packet:     sideband< \2Compressing objects:   0% (1/151)\15Compressing objects:   1% (2/151)\15
+08:17:00.541553 pkt-line.c:85           packet:     sideband< \2Compressing objects:   2% (4/151)\15
+08:17:00.541556 pkt-line.c:85           packet:     sideband< \2Compressing objects:   3% (5/151)\15
+08:17:00.541560 pkt-line.c:85           packet:     sideband< \2Compressing objects:   4% (7/151)\15
+08:17:00.541563 pkt-line.c:85           packet:     sideband< \2Compressing objects:   5% (8/151)\15
+08:17:00.541567 pkt-line.c:85           packet:     sideband< \2Compressing objects:   6% (10/151)\15
+08:17:00.541570 pkt-line.c:85           packet:     sideband< \2Compressing objects:   7% (11/151)\15
+08:17:00.541574 pkt-line.c:85           packet:     sideband< \2Compressing objects:   8% (13/151)\15
+08:17:00.541577 pkt-line.c:85           packet:     sideband< \2Compressing objects:   9% (14/151)\15
+08:17:00.541581 pkt-line.c:85           packet:     sideband< \2Compressing objects:  10% (16/151)\15
+08:17:00.541584 pkt-line.c:85           packet:     sideband< \2Compressing objects:  11% (17/151)\15
+08:17:00.541587 pkt-line.c:85           packet:     sideband< \2Compressing objects:  12% (19/151)\15
+08:17:00.541591 pkt-line.c:85           packet:     sideband< \2Compressing objects:  13% (20/151)\15
+08:17:00.541594 pkt-line.c:85           packet:     sideband< \2Compressing objects:  14% (22/151)\15
+08:17:00.541598 pkt-line.c:85           packet:     sideband< \2Compressing objects:  15% (23/151)\15
+08:17:00.541601 pkt-line.c:85           packet:     sideband< \2Compressing objects:  16% (25/151)\15
+08:17:00.541605 pkt-line.c:85           packet:     sideband< \2Compressing objects:  17% (26/151)\15
+08:17:00.541608 pkt-line.c:85           packet:     sideband< \2Compressing objects:  18% (28/151)\15
+08:17:00.541611 pkt-line.c:85           packet:     sideband< \2Compressing objects:  19% (29/151)\15
+08:17:00.541615 pkt-line.c:85           packet:     sideband< \2Compressing objects:  20% (31/151)\15
+08:17:00.541618 pkt-line.c:85           packet:     sideband< \2Compressing objects:  21% (32/151)\15
+08:17:00.541621 pkt-line.c:85           packet:     sideband< \2Compressing objects:  22% (34/151)\15
+08:17:00.541625 pkt-line.c:85           packet:     sideband< \2Compressing objects:  23% (35/151)\15
+08:17:00.541628 pkt-line.c:85           packet:     sideband< \2Compressing objects:  24% (37/151)\15
+08:17:00.541632 pkt-line.c:85           packet:     sideband< \2Compressing objects:  25% (38/151)\15
+08:17:00.541635 pkt-line.c:85           packet:     sideband< \2Compressing objects:  26% (40/151)\15
+08:17:00.541638 pkt-line.c:85           packet:     sideband< \2Compressing objects:  27% (41/151)\15
+08:17:00.541642 pkt-line.c:85           packet:     sideband< \2Compressing objects:  28% (43/151)\15
+08:17:00.541645 pkt-line.c:85           packet:     sideband< \2Compressing objects:  29% (44/151)\15
+08:17:00.541649 pkt-line.c:85           packet:     sideband< \2Compressing objects:  30% (46/151)\15
+08:17:00.541652 pkt-line.c:85           packet:     sideband< \2Compressing objects:  31% (47/151)\15
+08:17:00.541655 pkt-line.c:85           packet:     sideband< \2Compressing objects:  32% (49/151)\15
+08:17:00.541659 pkt-line.c:85           packet:     sideband< \2Compressing objects:  33% (50/151)\15
+08:17:00.541662 pkt-line.c:85           packet:     sideband< \2Compressing objects:  34% (52/151)\15
+08:17:00.541666 pkt-line.c:85           packet:     sideband< \2Compressing objects:  35% (53/151)\15
+08:17:00.541669 pkt-line.c:85           packet:     sideband< \2Compressing objects:  36% (55/151)\15Compressing objects:  37% (56/151)\15
+08:17:00.541674 pkt-line.c:85           packet:     sideband< \2Compressing objects:  38% (58/151)\15
+08:17:00.541677 pkt-line.c:85           packet:     sideband< \2Compressing objects:  39% (59/151)\15Compressing objects:  40% (61/151)\15
+08:17:00.541681 pkt-line.c:85           packet:     sideband< \2Compressing objects:  41% (62/151)\15
+08:17:00.541685 pkt-line.c:85           packet:     sideband< \2Compressing objects:  42% (64/151)\15Compressing objects:  43% (65/151)\15
+08:17:00.541690 pkt-line.c:85           packet:     sideband< \2Compressing objects:  44% (67/151)\15
+08:17:00.541695 pkt-line.c:85           packet:     sideband< \2Compressing objects:  45% (68/151)\15
+08:17:00.541698 pkt-line.c:85           packet:     sideband< \2Compressing objects:  46% (70/151)\15
+08:17:00.541702 pkt-line.c:85           packet:     sideband< \2Compressing objects:  47% (71/151)\15
+08:17:00.541705 pkt-line.c:85           packet:     sideband< \2Compressing objects:  48% (73/151)\15
+08:17:00.541708 pkt-line.c:85           packet:     sideband< \2Compressing objects:  49% (74/151)\15
+08:17:00.541712 pkt-line.c:85           packet:     sideband< \2Compressing objects:  50% (76/151)\15
+08:17:00.541715 pkt-line.c:85           packet:     sideband< \2Compressing objects:  51% (78/151)\15
+08:17:00.541718 pkt-line.c:85           packet:     sideband< \2Compressing objects:  52% (79/151)\15
+08:17:00.541722 pkt-line.c:85           packet:     sideband< \2Compressing objects:  53% (81/151)\15
+08:17:00.541725 pkt-line.c:85           packet:     sideband< \2Compressing objects:  54% (82/151)\15
+08:17:00.541729 pkt-line.c:85           packet:     sideband< \2Compressing objects:  55% (84/151)\15
+08:17:00.541732 pkt-line.c:85           packet:     sideband< \2Compressing objects:  56% (85/151)\15
+08:17:00.541736 pkt-line.c:85           packet:     sideband< \2Compressing objects:  57% (87/151)\15Compressing objects:  58% (88/151)\15
+08:17:00.541740 pkt-line.c:85           packet:     sideband< \2Compressing objects:  59% (90/151)\15
+08:17:00.541746 pkt-line.c:85           packet:     sideband< \2Compressing objects:  60% (91/151)\15
+08:17:00.541749 pkt-line.c:85           packet:     sideband< \2Compressing objects:  61% (93/151)\15
+08:17:00.541753 pkt-line.c:85           packet:     sideband< \2Compressing objects:  62% (94/151)\15
+08:17:00.541756 pkt-line.c:85           packet:     sideband< \2Compressing objects:  63% (96/151)\15
+08:17:00.541759 pkt-line.c:85           packet:     sideband< \2Compressing objects:  64% (97/151)\15
+08:17:00.541763 pkt-line.c:85           packet:     sideband< \2Compressing objects:  65% (99/151)\15
+08:17:00.541766 pkt-line.c:85           packet:     sideband< \2Compressing objects:  66% (100/151)\15
+08:17:00.541770 pkt-line.c:85           packet:     sideband< \2Compressing objects:  67% (102/151)\15
+08:17:00.541773 pkt-line.c:85           packet:     sideband< \2Compressing objects:  68% (103/151)\15
+08:17:00.541776 pkt-line.c:85           packet:     sideband< \2Compressing objects:  69% (105/151)\15
+08:17:00.541780 pkt-line.c:85           packet:     sideband< \2Compressing objects:  70% (106/151)\15
+08:17:00.541783 pkt-line.c:85           packet:     sideband< \2Compressing objects:  71% (108/151)\15
+08:17:00.541787 pkt-line.c:85           packet:     sideband< \2Compressing objects:  72% (109/151)\15
+08:17:00.541790 pkt-line.c:85           packet:     sideband< \2Compressing objects:  73% (111/151)\15
+08:17:00.541794 pkt-line.c:85           packet:     sideband< \2Compressing objects:  74% (112/151)\15
+08:17:00.541798 pkt-line.c:85           packet:     sideband< \2Compressing objects:  75% (114/151)\15
+08:17:00.541802 pkt-line.c:85           packet:     sideband< \2Compressing objects:  76% (115/151)\15
+08:17:00.541805 pkt-line.c:85           packet:     sideband< \2Compressing objects:  77% (117/151)\15
+08:17:00.541808 pkt-line.c:85           packet:     sideband< \2Compressing objects:  78% (118/151)\15
+08:17:00.541812 pkt-line.c:85           packet:     sideband< \2Compressing objects:  79% (120/151)\15
+08:17:00.541815 pkt-line.c:85           packet:     sideband< \2Compressing objects:  80% (121/151)\15
+08:17:00.541818 pkt-line.c:85           packet:     sideband< \2Compressing objects:  81% (123/151)\15
+08:17:00.541822 pkt-line.c:85           packet:     sideband< \2Compressing objects:  82% (124/151)\15
+08:17:00.541825 pkt-line.c:85           packet:     sideband< \2Compressing objects:  83% (126/151)\15
+08:17:00.541828 pkt-line.c:85           packet:     sideband< \2Compressing objects:  84% (127/151)\15
+08:17:00.541832 pkt-line.c:85           packet:     sideband< \2Compressing objects:  85% (129/151)\15
+08:17:00.541835 pkt-line.c:85           packet:     sideband< \2Compressing objects:  86% (130/151)\15
+08:17:00.541847 pkt-line.c:85           packet:     sideband< \2Compressing objects:  87% (132/151)\15
+08:17:00.541851 pkt-line.c:85           packet:     sideband< \2Compressing objects:  88% (133/151)\15
+08:17:00.541854 pkt-line.c:85           packet:     sideband< \2Compressing objects:  89% (135/151)\15
+08:17:00.541858 pkt-line.c:85           packet:     sideband< \2Compressing objects:  90% (136/151)\15
+08:17:00.541861 pkt-line.c:85           packet:     sideband< \2Compressing objects:  91% (138/151)\15
+08:17:00.541864 pkt-line.c:85           packet:     sideband< \2Compressing objects:  92% (139/151)\15
+08:17:00.541868 pkt-line.c:85           packet:     sideband< \2Compressing objects:  93% (141/151)\15
+08:17:00.541871 pkt-line.c:85           packet:     sideband< \2Compressing objects:  94% (142/151)\15
+08:17:00.541875 pkt-line.c:85           packet:     sideband< \2Compressing objects:  95% (144/151)\15
+08:17:00.541878 pkt-line.c:85           packet:     sideband< \2Compressing objects:  96% (145/151)\15
+08:17:00.541882 pkt-line.c:85           packet:     sideband< \2Compressing objects:  97% (147/151)\15
+08:17:00.541885 pkt-line.c:85           packet:     sideband< \2Compressing objects:  98% (148/151)\15
+08:17:00.541888 pkt-line.c:85           packet:     sideband< \2Compressing objects:  99% (150/151)\15
+08:17:00.541892 pkt-line.c:85           packet:     sideband< \2Compressing objects: 100% (151/151)\15
+08:17:00.541896 pkt-line.c:85           packet:     sideband< \2Compressing objects: 100% (151/151), done.
+remote: Compressing objects: 100% (151/151), done.        
+08:17:00.541902 pkt-line.c:85           packet:     sideband< PACK ...
+08:17:00.542469 git.c:506               trace: built-in: git index-pack --stdin -v --fix-thin '--keep=fetch-pack 12065 on fedora' --check-self-contained-and-connected
+08:17:00.727590 http.c:994              == Info: Connection #0 to host github.com:443 left intact
+08:17:00.727603 pkt-line.c:85           packet:          git> 0002
+08:17:00.727604 pkt-line.c:85           packet:     sideband< \2Total 1075 (delta 248), reused 288 (delta 192), pack-reused 727 (from 1)
+remote: Total 1075 (delta 248), reused 288 (delta 192), pack-reused 727 (from 1)        
+08:17:00.727611 pkt-line.c:85           packet:     sideband< 0000
+Receiving objects: 100% (1075/1075), 590.46 KiB | 3.12 MiB/s, done.
+Resolving deltas: 100% (645/645), done.
+08:17:00.753530 pkt-line.c:85           packet:        clone< 0002
+08:17:00.753624 run-command.c:673       trace: run_command: git rev-list --objects --stdin --not --all --quiet --alternate-refs '--progress=Checking connectivity'
+08:17:00.753639 run-command.c:765       trace: start_command: /usr/libexec/git-core/git rev-list --objects --stdin --not --all --quiet --alternate-refs '--progress=Checking connectivity'
+08:17:00.754897 git.c:506               trace: built-in: git rev-list --objects --stdin --not --all --quiet --alternate-refs '--progress=Checking connectivity'
+0.07user 0.03system 0:00.56elapsed 18%CPU (0avgtext+0avgdata 16440maxresident)k
+2696inputs+3264outputs (1major+6069minor)pagefaults 0swaps
+kushal@fedora:~/src/dotnet$ cd ~/src/dotnet/tsp/
+kushal@fedora:~/src/dotnet/tsp$ git remote show origin
+* remote origin
+  Fetch URL: https://github.com/kusl/tsp.git
+  Push  URL: https://github.com/kusl/tsp.git
+  HEAD branch: master
+  Remote branch:
+    master tracked
+  Local branch configured for 'git pull':
+    master merges with remote master
+  Local ref configured for 'git push':
+    master pushes to master (up to date)
+kushal@fedora:~/src/dotnet/tsp$ git remote remove origin
+kushal@fedora:~/src/dotnet/tsp$ git remote add origin git@github.com:kusl/tsp.git
+kushal@fedora:~/src/dotnet/tsp$ git fetch origin
+From github.com:kusl/tsp
+ * [new branch]      master     -> origin/master
+kushal@fedora:~/src/dotnet/tsp$ git branch --set-upstream-to=origin/master master
+branch 'master' set up to track 'origin/master'.
+kushal@fedora:~/src/dotnet/tsp$ git pull
+Already up to date.
+kushal@fedora:~/src/dotnet/tsp$ 
