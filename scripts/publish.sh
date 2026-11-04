@@ -14,7 +14,7 @@ case "$rid" in
 esac
 
 if [[ "$rid" == linux-* && "$(host_rid)" == linux-* ]]; then
-    require_command clang "Native AOT needs clang and zlib headers; on Fedora run: sudo dnf install clang zlib-devel"
+    require_command clang "Native AOT needs clang and zlib headers; on Fedora run: sudo dnf install clang zlib-ng-compat-devel"
 fi
 
 log_step "Publishing Native AOT binary for $rid (version $version)"

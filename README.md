@@ -35,6 +35,8 @@ tsp algorithms
 tsp --help | --version
 ```
 
+Running `tsp` (or the container image) without a command prints the help and exits with code 1.
+
 | Option | Default | Description |
 |---|---|---|
 | `-n`, `--cities` | `20` | Number of cities, 2 to 5000 |
@@ -75,7 +77,7 @@ Every solver starts from city 0, honours cancellation (Ctrl+C exits with code 13
 
 ## Development
 
-Requirements: the .NET 10 SDK (`sudo dnf install dotnet-sdk-10.0` on Fedora). Optional: `clang zlib-devel` for Native AOT, `podman` for the container image, `ShellCheck` for script linting.
+Requirements: the .NET 10 SDK (`sudo dnf install dotnet-sdk-10.0` on Fedora). Optional: `clang zlib-ng-compat-devel` for Native AOT, `podman` for the container image, `ShellCheck` for script linting.
 
 Everything runs through bash scripts in `scripts/`, which need no execute bit. One command runs the whole pipeline locally:
 

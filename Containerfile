@@ -29,4 +29,3 @@ WORKDIR /app
 COPY --from=build /app/tsp ./tsp
 USER $APP_UID
 ENTRYPOINT ["/app/tsp"]
-CMD ["--help"]
