@@ -2,76 +2,100 @@ Starting project export...
 Project Path: /home/kushal/src/dotnet/tsp
 Output File:  /home/kushal/src/dotnet/tsp/docs/llm/dump.txt
 Listing files via git...
-Found 26 files to export
-Processing (1/26): .gitattributes
-Processing (2/26): .github/workflows/build.yml
-Processing (3/26): .github/workflows/release.yml
-Processing (4/26): .gitignore
-Processing (5/26): Directory.Build.props
-Processing (6/26): Directory.Packages.props
-Processing (7/26): README.md
-Processing (8/26): TravelingSalesman.ConsoleApp/Program.cs
-Processing (9/26): TravelingSalesman.ConsoleApp/Properties/launchSettings.json
-Processing (10/26): TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj
-Processing (11/26): TravelingSalesman.Core/TravelingSalesman.Core.csproj
-Processing (12/26): TravelingSalesman.Core/TravelingSalesmanLibrary.cs
-Processing (13/26): TravelingSalesman.Specs/StepDefinitions/BenchmarkingSteps.cs
-Processing (14/26): TravelingSalesman.Specs/StepDefinitions/CityOperationSteps.cs
-Processing (15/26): TravelingSalesman.Specs/StepDefinitions/DataGenerationSteps.cs
-Processing (16/26): TravelingSalesman.Specs/StepDefinitions/TspSolverSteps.cs
-Processing (17/26): TravelingSalesman.Specs/Support/Hooks.cs
-Processing (18/26): TravelingSalesman.Specs/TravelingSalesman.Specs.csproj
-Processing (19/26): TravelingSalesman.Specs/reqnroll.json
-Processing (20/26): TravelingSalesman.Tests/Tests.cs
-Processing (21/26): TravelingSalesman.Tests/TravelingSalesman.Tests.csproj
-Processing (22/26): docs/index.html
-Processing (23/26): docs/results.html
-Processing (24/26): scripts/export.sh
-Processing (25/26): scripts/install-kusl-tsp-simple.sh
-Processing (26/26): scripts/install-linux.sh
+Found 92 files to export
+Processing (1/92): .containerignore
+Processing (2/92): .editorconfig
+Processing (3/92): .gitattributes
+Processing (4/92): .github/dependabot.yml
+Processing (5/92): .github/workflows/ci.yml
+Processing (6/92): .github/workflows/release.yml
+Processing (7/92): .gitignore
+Processing (8/92): .shellcheckrc
+Processing (9/92): Containerfile
+Processing (10/92): Directory.Build.props
+Processing (11/92): Directory.Packages.props
+Processing (12/92): README.md
+Processing (13/92): docs/index.html
+Processing (14/92): global.json
+Processing (15/92): scripts/build.sh
+Processing (16/92): scripts/checksums.sh
+Processing (17/92): scripts/ci.sh
+Processing (18/92): scripts/container.sh
+Processing (19/92): scripts/export.sh
+Processing (20/92): scripts/install.sh
+Processing (21/92): scripts/lib.sh
+Processing (22/92): scripts/lint.sh
+Processing (23/92): scripts/publish.sh
+Processing (24/92): scripts/run.sh
+Processing (25/92): scripts/smoke.sh
+Processing (26/92): scripts/test.sh
+Processing (27/92): scripts/version.sh
+Processing (28/92): src/TravelingSalesman.Cli/CliApplication.cs
+Processing (29/92): src/TravelingSalesman.Cli/Commands/AlgorithmsCommand.cs
+Processing (30/92): src/TravelingSalesman.Cli/Commands/BenchmarkCommand.cs
+Processing (31/92): src/TravelingSalesman.Cli/Commands/SolveCommand.cs
+Processing (32/92): src/TravelingSalesman.Cli/ExitCodes.cs
+Processing (33/92): src/TravelingSalesman.Cli/ProblemOptions.cs
+Processing (34/92): src/TravelingSalesman.Cli/Program.cs
+Processing (35/92): src/TravelingSalesman.Cli/Rendering/AsciiPlot.cs
+Processing (36/92): src/TravelingSalesman.Cli/Rendering/ConsoleRenderer.cs
+Processing (37/92): src/TravelingSalesman.Cli/Rendering/TourFormatting.cs
+Processing (38/92): src/TravelingSalesman.Cli/TravelingSalesman.Cli.csproj
+Processing (39/92): src/TravelingSalesman.Core/Benchmarking/BenchmarkResult.cs
+Processing (40/92): src/TravelingSalesman.Core/Benchmarking/BenchmarkRunner.cs
+Processing (41/92): src/TravelingSalesman.Core/City.cs
+Processing (42/92): src/TravelingSalesman.Core/CityGenerator.cs
+Processing (43/92): src/TravelingSalesman.Core/CityPattern.cs
+Processing (44/92): src/TravelingSalesman.Core/DistanceMatrix.cs
+Processing (45/92): src/TravelingSalesman.Core/Solvers/GeneticAlgorithmOptions.cs
+Processing (46/92): src/TravelingSalesman.Core/Solvers/GeneticAlgorithmSolver.cs
+Processing (47/92): src/TravelingSalesman.Core/Solvers/ITspSolver.cs
+Processing (48/92): src/TravelingSalesman.Core/Solvers/NearestNeighborSolver.cs
+Processing (49/92): src/TravelingSalesman.Core/Solvers/SimulatedAnnealingOptions.cs
+Processing (50/92): src/TravelingSalesman.Core/Solvers/SimulatedAnnealingSolver.cs
+Processing (51/92): src/TravelingSalesman.Core/Solvers/SolverCatalog.cs
+Processing (52/92): src/TravelingSalesman.Core/Solvers/SolverDescriptor.cs
+Processing (53/92): src/TravelingSalesman.Core/Solvers/SolverProgress.cs
+Processing (54/92): src/TravelingSalesman.Core/Solvers/TwoOptOptions.cs
+Processing (55/92): src/TravelingSalesman.Core/Solvers/TwoOptSolver.cs
+Processing (56/92): src/TravelingSalesman.Core/Tour.cs
+Processing (57/92): src/TravelingSalesman.Core/TourMath.cs
+Processing (58/92): src/TravelingSalesman.Core/TravelingSalesman.Core.csproj
+Processing (59/92): src/TravelingSalesman.Core/TspProblem.cs
+Processing (60/92): tests/TravelingSalesman.Cli.Tests/CliResult.cs
+Processing (61/92): tests/TravelingSalesman.Cli.Tests/CliRunner.cs
+Processing (62/92): tests/TravelingSalesman.Cli.Tests/CommandTests.cs
+Processing (63/92): tests/TravelingSalesman.Cli.Tests/ExecuteTests.cs
+Processing (64/92): tests/TravelingSalesman.Cli.Tests/RenderingTests.cs
+Processing (65/92): tests/TravelingSalesman.Cli.Tests/TravelingSalesman.Cli.Tests.csproj
+Processing (66/92): tests/TravelingSalesman.Core.Tests/BenchmarkRunnerTests.cs
+Processing (67/92): tests/TravelingSalesman.Core.Tests/CityGeneratorTests.cs
+Processing (68/92): tests/TravelingSalesman.Core.Tests/CityTests.cs
+Processing (69/92): tests/TravelingSalesman.Core.Tests/DistanceMatrixTests.cs
+Processing (70/92): tests/TravelingSalesman.Core.Tests/RecordingProgress.cs
+Processing (71/92): tests/TravelingSalesman.Core.Tests/SolverBehaviorTests.cs
+Processing (72/92): tests/TravelingSalesman.Core.Tests/SolverCatalogTests.cs
+Processing (73/92): tests/TravelingSalesman.Core.Tests/SolverContractTests.cs
+Processing (74/92): tests/TravelingSalesman.Core.Tests/SolverOptionsTests.cs
+Processing (75/92): tests/TravelingSalesman.Core.Tests/SteppingTimeProvider.cs
+Processing (76/92): tests/TravelingSalesman.Core.Tests/TestProblems.cs
+Processing (77/92): tests/TravelingSalesman.Core.Tests/TourMathTests.cs
+Processing (78/92): tests/TravelingSalesman.Core.Tests/TourTests.cs
+Processing (79/92): tests/TravelingSalesman.Core.Tests/TravelingSalesman.Core.Tests.csproj
+Processing (80/92): tests/TravelingSalesman.Core.Tests/TspProblemTests.cs
+Processing (81/92): tests/TravelingSalesman.Specs/Drivers/SolverWorld.cs
+Processing (82/92): tests/TravelingSalesman.Specs/Features/Benchmarking.feature
+Processing (83/92): tests/TravelingSalesman.Specs/Features/Cities.feature
+Processing (84/92): tests/TravelingSalesman.Specs/Features/DataGeneration.feature
+Processing (85/92): tests/TravelingSalesman.Specs/Features/Solvers.feature
+Processing (86/92): tests/TravelingSalesman.Specs/StepDefinitions/BenchmarkSteps.cs
+Processing (87/92): tests/TravelingSalesman.Specs/StepDefinitions/CitySteps.cs
+Processing (88/92): tests/TravelingSalesman.Specs/StepDefinitions/GenerationSteps.cs
+Processing (89/92): tests/TravelingSalesman.Specs/StepDefinitions/SolverSteps.cs
+Processing (90/92): tests/TravelingSalesman.Specs/TravelingSalesman.Specs.csproj
+Processing (91/92): tests/TravelingSalesman.Specs/reqnroll.json
+Processing (92/92): tsp.slnx
 
 Export completed successfully!
 Output file: /home/kushal/src/dotnet/tsp/docs/llm/dump.txt
-Total source size: 0.26 MB across 26 files
-kushal@fedora:~/src/dotnet/tsp$ cd ~/src/dotnet/tsp; time git rm -r TSP.sln Dockerfile .dockerignore TravelingSalesman.ConsoleApp TravelingSalesman.Core TravelingSalesman.Specs TravelingSalesman.Tests .github/workflows/build.yml docs/build.txt docs/results.html scripts/PowerShell.txt scripts/bash.txt scripts/cat.ps1 scripts/push.ps1 scripts/linux-installation-command.txt scripts/install-linux.sh scripts/install-kusl-tsp-simple.sh
-rm '.dockerignore'
-rm '.github/workflows/build.yml'
-rm 'Dockerfile'
-rm 'TSP.sln'
-rm 'TravelingSalesman.ConsoleApp/Program.cs'
-rm 'TravelingSalesman.ConsoleApp/Properties/launchSettings.json'
-rm 'TravelingSalesman.ConsoleApp/TravelingSalesman.ConsoleApp.csproj'
-rm 'TravelingSalesman.Core/TravelingSalesman.Core.csproj'
-rm 'TravelingSalesman.Core/TravelingSalesmanLibrary.cs'
-rm 'TravelingSalesman.Specs/Features/Benchmarking.feature'
-rm 'TravelingSalesman.Specs/Features/CityOperations.feature'
-rm 'TravelingSalesman.Specs/Features/DataGeneration.feature'
-rm 'TravelingSalesman.Specs/Features/TspSolvers.feature'
-rm 'TravelingSalesman.Specs/StepDefinitions/BenchmarkingSteps.cs'
-rm 'TravelingSalesman.Specs/StepDefinitions/CityOperationSteps.cs'
-rm 'TravelingSalesman.Specs/StepDefinitions/DataGenerationSteps.cs'
-rm 'TravelingSalesman.Specs/StepDefinitions/TspSolverSteps.cs'
-rm 'TravelingSalesman.Specs/Support/Hooks.cs'
-rm 'TravelingSalesman.Specs/TravelingSalesman.Specs.csproj'
-rm 'TravelingSalesman.Specs/reqnroll.json'
-rm 'TravelingSalesman.Tests/Tests.cs'
-rm 'TravelingSalesman.Tests/TravelingSalesman.Tests.csproj'
-rm 'docs/build.txt'
-rm 'docs/results.html'
-rm 'scripts/PowerShell.txt'
-rm 'scripts/bash.txt'
-rm 'scripts/cat.ps1'
-rm 'scripts/install-kusl-tsp-simple.sh'
-rm 'scripts/install-linux.sh'
-rm 'scripts/linux-installation-command.txt'
-rm 'scripts/push.ps1'
-
-real	0m0.005s
-user	0m0.001s
-sys	0m0.003s
-kushal@fedora:~/src/dotnet/tsp$ cd ~/src/dotnet/tsp/; time rm -rf TravelingSalesman.ConsoleApp TravelingSalesman.Core TravelingSalesman.Specs TravelingSalesman.Tests
-
-real	0m0.001s
-user	0m0.001s
-sys	0m0.000s
-kushal@fedora:~/src/dotnet/tsp$ 
+Total source size: 0.13 MB across 92 files
