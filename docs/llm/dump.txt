@@ -1,10 +1,10 @@
 ===============================================================================
 PROJECT EXPORT
-Generated (UTC): 2026-11-04 13:23:50
+Generated (UTC): 2026-11-04 13:30:16
 Project Path:    /home/kushal/src/dotnet/tsp
-Git Commit:      d64d96e3bb59f2a6a019f89834434eb7d30ec056
+Git Commit:      335494fa2d0c7ef5d0afaf58bd52d7fd39a5257c
 Git Branch:      master
-Git Dirty:       no
+Git Dirty:       yes (uncommitted changes are included below)
 .NET SDK:        10.0.113
 Files Exported:  26
 ===============================================================================
@@ -7839,9 +7839,9 @@ main "$@"
 
 
 ===============================================================================
-EXPORT COMPLETED (UTC): 2026-11-04 13:23:50
+EXPORT COMPLETED (UTC): 2026-11-04 13:30:16
 Total Files Exported:   26
 Total Source Size:      0.26 MB (277468 bytes)
 Output File:            /home/kushal/src/dotnet/tsp/docs/llm/dump.txt
 ===============================================================================
-DUMP SHA256 (of all lines above this one): 0cc5039b140b803d23d12e8f35be88a8c9d2766fdbf454d47b10ce7b5e7cd856
+DUMP SHA256 (of all lines above this one): 67f0477b4a5e3bdf5f167c6b2e4220c40b65281f69fd6020c0a201b6baf1e303
