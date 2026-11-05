@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: 10.0.x
+          global-json-file: global.json
       - run: bash scripts/ci.sh --skip-publish --skip-container --skip-export
 
   publish:
@@ -51,7 +51,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: 10.0.x
+          global-json-file: global.json
       - run: bash scripts/publish.sh ${{ matrix.rid }}
         shell: bash
       - uses: actions/upload-artifact@v7
@@ -63,6 +63,7 @@ jobs:
   release:
     name: GitHub release
     needs: publish
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
