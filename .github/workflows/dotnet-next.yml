@@ -24,7 +24,7 @@ jobs:
       - name: Point this runner's checkout at .NET 11
         run: |
           sed -i 's|<TargetFramework>net10.0</TargetFramework>|<TargetFramework>net11.0</TargetFramework>|' Directory.Build.props
-          sed -i 's|ARG DOTNET_VERSION=10.0|ARG DOTNET_VERSION=11.0|' Containerfile
+          sed -i 's|ARG DOTNET_VERSION=10.0|ARG DOTNET_VERSION=11.0-preview|' Containerfile
           printf '{\n  "test": {\n    "runner": "Microsoft.Testing.Platform"\n  }\n}\n' > global.json
       - run: bash scripts/ci.sh --skip-export
       - uses: actions/upload-artifact@v7
