@@ -1,3 +1,423 @@
+==> [lint]
+==> Checking shell scripts
+shellcheck passed
+==> [build]
+==> Restoring /home/kushal/src/dotnet/tsp/tsp.slnx
+  Determining projects to restore...
+/home/kushal/src/dotnet/tsp/src/TravelingSalesman.Cli/TravelingSalesman.Cli.csproj : warning NU1903: Package 'Microsoft.DotNet.ILCompiler' 10.0.13 has a known high severity vulnerability, https://github.com/advisories/GHSA-p3jp-9v83-76w9 [/home/kushal/src/dotnet/tsp/tsp.slnx]
+  Restored /home/kushal/src/dotnet/tsp/tests/TravelingSalesman.Specs/TravelingSalesman.Specs.csproj (in 425 ms).
+  Restored /home/kushal/src/dotnet/tsp/src/TravelingSalesman.Core/TravelingSalesman.Core.csproj (in 425 ms).
+  Restored /home/kushal/src/dotnet/tsp/tests/TravelingSalesman.Core.Tests/TravelingSalesman.Core.Tests.csproj (in 425 ms).
+  Restored /home/kushal/src/dotnet/tsp/tests/TravelingSalesman.Cli.Tests/TravelingSalesman.Cli.Tests.csproj (in 425 ms).
+  Restored /home/kushal/src/dotnet/tsp/src/TravelingSalesman.Cli/TravelingSalesman.Cli.csproj (in 425 ms).
+==> Building Release (version 2026.11.5.246)
+/home/kushal/src/dotnet/tsp/src/TravelingSalesman.Cli/TravelingSalesman.Cli.csproj : warning NU1903: Package 'Microsoft.DotNet.ILCompiler' 10.0.13 has a known high severity vulnerability, https://github.com/advisories/GHSA-p3jp-9v83-76w9
+  TravelingSalesman.Core -> /home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Core/release/TravelingSalesman.Core.dll
+  TravelingSalesman.Cli -> /home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Cli/release/tsp.dll
+  TravelingSalesman.Specs -> /home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Specs/release/TravelingSalesman.Specs.dll
+  TravelingSalesman.Core.Tests -> /home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Core.Tests/release/TravelingSalesman.Core.Tests.dll
+  TravelingSalesman.Cli.Tests -> /home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Cli.Tests/release/TravelingSalesman.Cli.Tests.dll
+
+Build succeeded.
+
+/home/kushal/src/dotnet/tsp/src/TravelingSalesman.Cli/TravelingSalesman.Cli.csproj : warning NU1903: Package 'Microsoft.DotNet.ILCompiler' 10.0.13 has a known high severity vulnerability, https://github.com/advisories/GHSA-p3jp-9v83-76w9
+    1 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.64
+==> [test]
+==> Testing Release
+Running tests from /home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Core.Tests/release/TravelingSalesman.Core.Tests.dll (net10.0|x64)
+Running tests from /home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Specs/release/TravelingSalesman.Specs.dll (net10.0|x64)
+Running tests from /home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Cli.Tests/release/TravelingSalesman.Cli.Tests.dll (net10.0|x64)
+/home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Cli.Tests/release/TravelingSalesman.Cli.Tests.dll (net10.0|x64) passed (777ms)
+/home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Core.Tests/release/TravelingSalesman.Core.Tests.dll (net10.0|x64) passed (897ms)
+/home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Specs/release/TravelingSalesman.Specs.dll (net10.0|x64) passed (1s 189ms)
+
+  In process file artifacts produced:
+    - /home/kushal/src/dotnet/tsp/artifacts/test-results/9b7df614-572b-423a-9c16-eb55dbaaf04e.cobertura.xml
+    - /home/kushal/src/dotnet/tsp/artifacts/test-results/9888e994-f4a5-45d8-b7d8-a36954d07cfe.cobertura.xml
+    - /home/kushal/src/dotnet/tsp/artifacts/test-results/b5f08b0b-5969-4e6c-a026-981860684756.cobertura.xml
+
+Test run summary: Passed!
+  /home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Specs/release/TravelingSalesman.Specs.dll (net10.0|x64) passed (1s 189ms)
+  /home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Cli.Tests/release/TravelingSalesman.Cli.Tests.dll (net10.0|x64) passed (777ms)
+  /home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Core.Tests/release/TravelingSalesman.Core.Tests.dll (net10.0|x64) passed (897ms)
+
+  total: 176
+  failed: 0
+  succeeded: 176
+  skipped: 0
+  duration: 2s 037ms
+Test results and coverage: /home/kushal/src/dotnet/tsp/artifacts/test-results
+==> [smoke]
+==> Smoke testing the CLI
+  ok    tsp --version
+  ok    tsp --help
+  ok    tsp algorithms
+  ok    tsp solve --cities 15 --seed 7 --algorithm nearest-neighbor
+  ok    tsp solve --cities 15 --seed 7 --algorithm two-opt
+  ok    tsp solve --cities 15 --seed 7 --algorithm simulated-annealing
+  ok    tsp solve --cities 15 --seed 7 --algorithm genetic
+  ok    tsp solve --cities 9 --pattern grid --route
+  ok    tsp solve --cities 12 --pattern circle --plot
+  ok    tsp benchmark --cities 15 --seed 42
+  ok    tsp solve --cities 1 (rejected)
+  ok    tsp solve --pattern spiral (rejected)
+  ok    tsp solve --algorithm brute-force (rejected)
+  ok    tsp  (rejected)
+All smoke checks passed
+==> [run]
+==> tsp benchmark --cities 25 --pattern random --seed 42
+Benchmark of 4 algorithms on 25 cities
+
+Rank  Algorithm                  Distance   vs best   Time (ms)
+---------------------------------------------------------------
+1     Simulated Annealing          397.30    0.00 %        33.0
+2     2-Opt                        413.20    4.00 %         0.5
+3     Genetic Algorithm            414.67    4.37 %         9.5
+4     Nearest Neighbor             429.83    8.19 %         1.3
+
+Best: Simulated Annealing (397.30)
+==> [publish]
+==> Publishing Native AOT binary for linux-x64 (version 2026.11.5.246)
+  Determining projects to restore...
+/home/kushal/src/dotnet/tsp/src/TravelingSalesman.Cli/TravelingSalesman.Cli.csproj : warning NU1903: Package 'Microsoft.DotNet.ILCompiler' 10.0.13 has a known high severity vulnerability, https://github.com/advisories/GHSA-p3jp-9v83-76w9
+  Restored /home/kushal/src/dotnet/tsp/src/TravelingSalesman.Core/TravelingSalesman.Core.csproj (in 184 ms).
+  Restored /home/kushal/src/dotnet/tsp/src/TravelingSalesman.Cli/TravelingSalesman.Cli.csproj (in 184 ms).
+/home/kushal/src/dotnet/tsp/src/TravelingSalesman.Cli/TravelingSalesman.Cli.csproj : warning NU1903: Package 'Microsoft.DotNet.ILCompiler' 10.0.13 has a known high severity vulnerability, https://github.com/advisories/GHSA-p3jp-9v83-76w9
+  TravelingSalesman.Core -> /home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Core/release/TravelingSalesman.Core.dll
+  TravelingSalesman.Cli -> /home/kushal/src/dotnet/tsp/artifacts/bin/TravelingSalesman.Cli/release_linux-x64/tsp.dll
+  Generating native code
+  TravelingSalesman.Cli -> /home/kushal/src/dotnet/tsp/artifacts/publish/linux-x64/
+Created /home/kushal/src/dotnet/tsp/artifacts/release/tsp-linux-x64 (3.3M)
+==> Smoke testing the CLI
+  ok    tsp --version
+  ok    tsp --help
+  ok    tsp algorithms
+  ok    tsp solve --cities 15 --seed 7 --algorithm nearest-neighbor
+  ok    tsp solve --cities 15 --seed 7 --algorithm two-opt
+  ok    tsp solve --cities 15 --seed 7 --algorithm simulated-annealing
+  ok    tsp solve --cities 15 --seed 7 --algorithm genetic
+  ok    tsp solve --cities 9 --pattern grid --route
+  ok    tsp solve --cities 12 --pattern circle --plot
+  ok    tsp benchmark --cities 15 --seed 42
+  ok    tsp solve --cities 1 (rejected)
+  ok    tsp solve --pattern spiral (rejected)
+  ok    tsp solve --algorithm brute-force (rejected)
+  ok    tsp  (rejected)
+All smoke checks passed
+==> [container]
+==> Building localhost/tsp:dev with podman (version 2026.11.5.246)
+[1/2] STEP 1/11: FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+[1/2] STEP 2/11: ARG TARGETARCH
+--> Using cache 4f190fc25ae47c3049e0a07205872a86742d8937bc8a8d0290195055bba4d833
+--> 4f190fc25ae4
+[1/2] STEP 3/11: ARG VERSION=2.0.0
+--> Using cache e84f7b3e27230d244c5291d3407334d20b6a39892c8282a027e8a12cb0eba39b
+--> e84f7b3e2723
+[1/2] STEP 4/11: RUN apt-get update     && apt-get install --yes --no-install-recommends clang zlib1g-dev     && rm -rf /var/lib/apt/lists/*
+Get:1 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]
+Get:2 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:3 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:4 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:5 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]
+Get:6 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [55.6 kB]
+Get:7 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]
+Get:8 http://archive.ubuntu.com/ubuntu noble/restricted amd64 Packages [117 kB]
+Get:9 http://archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [331 kB]
+Get:10 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [61.8 kB]
+Get:11 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1743 kB]
+Get:12 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2240 kB]
+Get:13 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1425 kB]
+Get:14 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2173 kB]
+Get:15 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [36.0 kB]
+Get:16 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.0 kB]
+Get:17 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [669 B]
+Get:18 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1553 kB]
+Get:19 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [2132 kB]
+Fetched 33.7 MB in 2s (21.5 MB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  binutils binutils-common binutils-x86-64-linux-gnu clang-18 gcc-13-base
+  libasan8 libbinutils libbsd0 libc-dev-bin libc6-dev libclang-common-18-dev
+  libclang-cpp18 libclang1-18 libcrypt-dev libctf-nobfd0 libctf0 libedit2
+  libgc1 libgcc-13-dev libgomp1 libgprofng0 libhwasan0 libitm1 libjansson4
+  libllvm18 liblsan0 libobjc-13-dev libobjc4 libquadmath0 libsframe1
+  libstdc++-13-dev libtsan2 libubsan1 libxml2 linux-libc-dev
+  llvm-18-linker-tools rpcsvc-proto
+Suggested packages:
+  binutils-doc gprofng-gui clang-18-doc wasi-libc glibc-doc manpages-dev
+  libstdc++-13-doc
+Recommended packages:
+  llvm-18-dev python3 manpages manpages-dev libc-devtools libclang-rt-18-dev
+The following NEW packages will be installed:
+  binutils binutils-common binutils-x86-64-linux-gnu clang clang-18
+  gcc-13-base libasan8 libbinutils libbsd0 libc-dev-bin libc6-dev
+  libclang-common-18-dev libclang-cpp18 libclang1-18 libcrypt-dev
+  libctf-nobfd0 libctf0 libedit2 libgc1 libgcc-13-dev libgomp1 libgprofng0
+  libhwasan0 libitm1 libjansson4 libllvm18 liblsan0 libobjc-13-dev libobjc4
+  libquadmath0 libsframe1 libstdc++-13-dev libtsan2 libubsan1 libxml2
+  linux-libc-dev llvm-18-linker-tools rpcsvc-proto zlib1g-dev
+0 upgraded, 39 newly installed, 0 to remove and 5 not upgraded.
+Need to get 76.8 MB of archives.
+After this operation, 361 MB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libbsd0 amd64 0.12.1-1build1.1 [41.2 kB]
+Get:2 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libxml2 amd64 2.9.14+dfsg-1.3ubuntu3.10 [764 kB]
+Get:3 http://archive.ubuntu.com/ubuntu noble/main amd64 libedit2 amd64 3.1-20230828-1build1 [97.6 kB]
+Get:4 http://archive.ubuntu.com/ubuntu noble/main amd64 libjansson4 amd64 2.14-2build2 [32.8 kB]
+Get:5 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 binutils-common amd64 2.42-4ubuntu2.10 [240 kB]
+Get:6 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsframe1 amd64 2.42-4ubuntu2.10 [15.7 kB]
+Get:7 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libbinutils amd64 2.42-4ubuntu2.10 [577 kB]
+Get:8 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libctf-nobfd0 amd64 2.42-4ubuntu2.10 [98.0 kB]
+Get:9 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libctf0 amd64 2.42-4ubuntu2.10 [94.5 kB]
+Get:10 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libgprofng0 amd64 2.42-4ubuntu2.10 [849 kB]
+Get:11 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 binutils-x86-64-linux-gnu amd64 2.42-4ubuntu2.10 [2463 kB]
+Get:12 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 binutils amd64 2.42-4ubuntu2.10 [18.2 kB]
+Get:13 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libllvm18 amd64 1:18.1.3-1ubuntu1 [27.5 MB]
+Get:14 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libclang-cpp18 amd64 1:18.1.3-1ubuntu1 [13.5 MB]
+Get:15 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 gcc-13-base amd64 13.3.0-6ubuntu2~24.04.1 [51.6 kB]
+Get:16 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libgomp1 amd64 14.2.0-4ubuntu2~24.04.1 [148 kB]
+Get:17 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libitm1 amd64 14.2.0-4ubuntu2~24.04.1 [29.7 kB]
+Get:18 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libasan8 amd64 14.2.0-4ubuntu2~24.04.1 [3027 kB]
+Get:19 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 liblsan0 amd64 14.2.0-4ubuntu2~24.04.1 [1322 kB]
+Get:20 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libtsan2 amd64 14.2.0-4ubuntu2~24.04.1 [2772 kB]
+Get:21 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libubsan1 amd64 14.2.0-4ubuntu2~24.04.1 [1184 kB]
+Get:22 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libhwasan0 amd64 14.2.0-4ubuntu2~24.04.1 [1641 kB]
+Get:23 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libquadmath0 amd64 14.2.0-4ubuntu2~24.04.1 [153 kB]
+Get:24 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libgcc-13-dev amd64 13.3.0-6ubuntu2~24.04.1 [2681 kB]
+Get:25 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libc-dev-bin amd64 2.39-0ubuntu8.9 [20.4 kB]
+Get:26 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 linux-libc-dev amd64 6.8.0-147.147 [1595 kB]
+Get:27 http://archive.ubuntu.com/ubuntu noble/main amd64 libcrypt-dev amd64 1:4.4.36-4build1 [112 kB]
+Get:28 http://archive.ubuntu.com/ubuntu noble/main amd64 rpcsvc-proto amd64 1.4.2-0ubuntu7 [67.4 kB]
+Get:29 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libc6-dev amd64 2.39-0ubuntu8.9 [2126 kB]
+Get:30 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libstdc++-13-dev amd64 13.3.0-6ubuntu2~24.04.1 [2420 kB]
+Get:31 http://archive.ubuntu.com/ubuntu noble/main amd64 libgc1 amd64 1:8.2.6-1build1 [90.3 kB]
+Get:32 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 libobjc4 amd64 14.2.0-4ubuntu2~24.04.1 [47.1 kB]
+Get:33 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 libobjc-13-dev amd64 13.3.0-6ubuntu2~24.04.1 [194 kB]
+Get:34 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 libclang-common-18-dev amd64 1:18.1.3-1ubuntu1 [736 kB]
+Get:35 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 llvm-18-linker-tools amd64 1:18.1.3-1ubuntu1 [1314 kB]
+Get:36 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libclang1-18 amd64 1:18.1.3-1ubuntu1 [7803 kB]
+Get:37 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 clang-18 amd64 1:18.1.3-1ubuntu1 [80.0 kB]
+Get:38 http://archive.ubuntu.com/ubuntu noble/universe amd64 clang amd64 1:18.0-59~exp2 [5846 B]
+Get:39 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 zlib1g-dev amd64 1:1.3.dfsg-3.1ubuntu2.3 [894 kB]
+Fetched 76.8 MB in 2s (34.0 MB/s)
+Selecting previously unselected package libbsd0:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 9344 files and directories currently installed.)
+Preparing to unpack .../00-libbsd0_0.12.1-1build1.1_amd64.deb ...
+Unpacking libbsd0:amd64 (0.12.1-1build1.1) ...
+Selecting previously unselected package libxml2:amd64.
+Preparing to unpack .../01-libxml2_2.9.14+dfsg-1.3ubuntu3.10_amd64.deb ...
+Unpacking libxml2:amd64 (2.9.14+dfsg-1.3ubuntu3.10) ...
+Selecting previously unselected package libedit2:amd64.
+Preparing to unpack .../02-libedit2_3.1-20230828-1build1_amd64.deb ...
+Unpacking libedit2:amd64 (3.1-20230828-1build1) ...
+Selecting previously unselected package libjansson4:amd64.
+Preparing to unpack .../03-libjansson4_2.14-2build2_amd64.deb ...
+Unpacking libjansson4:amd64 (2.14-2build2) ...
+Selecting previously unselected package binutils-common:amd64.
+Preparing to unpack .../04-binutils-common_2.42-4ubuntu2.10_amd64.deb ...
+Unpacking binutils-common:amd64 (2.42-4ubuntu2.10) ...
+Selecting previously unselected package libsframe1:amd64.
+Preparing to unpack .../05-libsframe1_2.42-4ubuntu2.10_amd64.deb ...
+Unpacking libsframe1:amd64 (2.42-4ubuntu2.10) ...
+Selecting previously unselected package libbinutils:amd64.
+Preparing to unpack .../06-libbinutils_2.42-4ubuntu2.10_amd64.deb ...
+Unpacking libbinutils:amd64 (2.42-4ubuntu2.10) ...
+Selecting previously unselected package libctf-nobfd0:amd64.
+Preparing to unpack .../07-libctf-nobfd0_2.42-4ubuntu2.10_amd64.deb ...
+Unpacking libctf-nobfd0:amd64 (2.42-4ubuntu2.10) ...
+Selecting previously unselected package libctf0:amd64.
+Preparing to unpack .../08-libctf0_2.42-4ubuntu2.10_amd64.deb ...
+Unpacking libctf0:amd64 (2.42-4ubuntu2.10) ...
+Selecting previously unselected package libgprofng0:amd64.
+Preparing to unpack .../09-libgprofng0_2.42-4ubuntu2.10_amd64.deb ...
+Unpacking libgprofng0:amd64 (2.42-4ubuntu2.10) ...
+Selecting previously unselected package binutils-x86-64-linux-gnu.
+Preparing to unpack .../10-binutils-x86-64-linux-gnu_2.42-4ubuntu2.10_amd64.deb ...
+Unpacking binutils-x86-64-linux-gnu (2.42-4ubuntu2.10) ...
+Selecting previously unselected package binutils.
+Preparing to unpack .../11-binutils_2.42-4ubuntu2.10_amd64.deb ...
+Unpacking binutils (2.42-4ubuntu2.10) ...
+Selecting previously unselected package libllvm18:amd64.
+Preparing to unpack .../12-libllvm18_1%3a18.1.3-1ubuntu1_amd64.deb ...
+Unpacking libllvm18:amd64 (1:18.1.3-1ubuntu1) ...
+Selecting previously unselected package libclang-cpp18.
+Preparing to unpack .../13-libclang-cpp18_1%3a18.1.3-1ubuntu1_amd64.deb ...
+Unpacking libclang-cpp18 (1:18.1.3-1ubuntu1) ...
+Selecting previously unselected package gcc-13-base:amd64.
+Preparing to unpack .../14-gcc-13-base_13.3.0-6ubuntu2~24.04.1_amd64.deb ...
+Unpacking gcc-13-base:amd64 (13.3.0-6ubuntu2~24.04.1) ...
+Selecting previously unselected package libgomp1:amd64.
+Preparing to unpack .../15-libgomp1_14.2.0-4ubuntu2~24.04.1_amd64.deb ...
+Unpacking libgomp1:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Selecting previously unselected package libitm1:amd64.
+Preparing to unpack .../16-libitm1_14.2.0-4ubuntu2~24.04.1_amd64.deb ...
+Unpacking libitm1:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Selecting previously unselected package libasan8:amd64.
+Preparing to unpack .../17-libasan8_14.2.0-4ubuntu2~24.04.1_amd64.deb ...
+Unpacking libasan8:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Selecting previously unselected package liblsan0:amd64.
+Preparing to unpack .../18-liblsan0_14.2.0-4ubuntu2~24.04.1_amd64.deb ...
+Unpacking liblsan0:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Selecting previously unselected package libtsan2:amd64.
+Preparing to unpack .../19-libtsan2_14.2.0-4ubuntu2~24.04.1_amd64.deb ...
+Unpacking libtsan2:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Selecting previously unselected package libubsan1:amd64.
+Preparing to unpack .../20-libubsan1_14.2.0-4ubuntu2~24.04.1_amd64.deb ...
+Unpacking libubsan1:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Selecting previously unselected package libhwasan0:amd64.
+Preparing to unpack .../21-libhwasan0_14.2.0-4ubuntu2~24.04.1_amd64.deb ...
+Unpacking libhwasan0:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Selecting previously unselected package libquadmath0:amd64.
+Preparing to unpack .../22-libquadmath0_14.2.0-4ubuntu2~24.04.1_amd64.deb ...
+Unpacking libquadmath0:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Selecting previously unselected package libgcc-13-dev:amd64.
+Preparing to unpack .../23-libgcc-13-dev_13.3.0-6ubuntu2~24.04.1_amd64.deb ...
+Unpacking libgcc-13-dev:amd64 (13.3.0-6ubuntu2~24.04.1) ...
+Selecting previously unselected package libc-dev-bin.
+Preparing to unpack .../24-libc-dev-bin_2.39-0ubuntu8.9_amd64.deb ...
+Unpacking libc-dev-bin (2.39-0ubuntu8.9) ...
+Selecting previously unselected package linux-libc-dev:amd64.
+Preparing to unpack .../25-linux-libc-dev_6.8.0-147.147_amd64.deb ...
+Unpacking linux-libc-dev:amd64 (6.8.0-147.147) ...
+Selecting previously unselected package libcrypt-dev:amd64.
+Preparing to unpack .../26-libcrypt-dev_1%3a4.4.36-4build1_amd64.deb ...
+Unpacking libcrypt-dev:amd64 (1:4.4.36-4build1) ...
+Selecting previously unselected package rpcsvc-proto.
+Preparing to unpack .../27-rpcsvc-proto_1.4.2-0ubuntu7_amd64.deb ...
+Unpacking rpcsvc-proto (1.4.2-0ubuntu7) ...
+Selecting previously unselected package libc6-dev:amd64.
+Preparing to unpack .../28-libc6-dev_2.39-0ubuntu8.9_amd64.deb ...
+Unpacking libc6-dev:amd64 (2.39-0ubuntu8.9) ...
+Selecting previously unselected package libstdc++-13-dev:amd64.
+Preparing to unpack .../29-libstdc++-13-dev_13.3.0-6ubuntu2~24.04.1_amd64.deb ...
+Unpacking libstdc++-13-dev:amd64 (13.3.0-6ubuntu2~24.04.1) ...
+Selecting previously unselected package libgc1:amd64.
+Preparing to unpack .../30-libgc1_1%3a8.2.6-1build1_amd64.deb ...
+Unpacking libgc1:amd64 (1:8.2.6-1build1) ...
+Selecting previously unselected package libobjc4:amd64.
+Preparing to unpack .../31-libobjc4_14.2.0-4ubuntu2~24.04.1_amd64.deb ...
+Unpacking libobjc4:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Selecting previously unselected package libobjc-13-dev:amd64.
+Preparing to unpack .../32-libobjc-13-dev_13.3.0-6ubuntu2~24.04.1_amd64.deb ...
+Unpacking libobjc-13-dev:amd64 (13.3.0-6ubuntu2~24.04.1) ...
+Selecting previously unselected package libclang-common-18-dev:amd64.
+Preparing to unpack .../33-libclang-common-18-dev_1%3a18.1.3-1ubuntu1_amd64.deb ...
+Unpacking libclang-common-18-dev:amd64 (1:18.1.3-1ubuntu1) ...
+Selecting previously unselected package llvm-18-linker-tools.
+Preparing to unpack .../34-llvm-18-linker-tools_1%3a18.1.3-1ubuntu1_amd64.deb ...
+Unpacking llvm-18-linker-tools (1:18.1.3-1ubuntu1) ...
+Selecting previously unselected package libclang1-18.
+Preparing to unpack .../35-libclang1-18_1%3a18.1.3-1ubuntu1_amd64.deb ...
+Unpacking libclang1-18 (1:18.1.3-1ubuntu1) ...
+Selecting previously unselected package clang-18.
+Preparing to unpack .../36-clang-18_1%3a18.1.3-1ubuntu1_amd64.deb ...
+Unpacking clang-18 (1:18.1.3-1ubuntu1) ...
+Selecting previously unselected package clang.
+Preparing to unpack .../37-clang_1%3a18.0-59~exp2_amd64.deb ...
+Unpacking clang (1:18.0-59~exp2) ...
+Selecting previously unselected package zlib1g-dev:amd64.
+Preparing to unpack .../38-zlib1g-dev_1%3a1.3.dfsg-3.1ubuntu2.3_amd64.deb ...
+Unpacking zlib1g-dev:amd64 (1:1.3.dfsg-3.1ubuntu2.3) ...
+Setting up binutils-common:amd64 (2.42-4ubuntu2.10) ...
+Setting up linux-libc-dev:amd64 (6.8.0-147.147) ...
+Setting up libctf-nobfd0:amd64 (2.42-4ubuntu2.10) ...
+Setting up libgomp1:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Setting up libsframe1:amd64 (2.42-4ubuntu2.10) ...
+Setting up libjansson4:amd64 (2.14-2build2) ...
+Setting up rpcsvc-proto (1.4.2-0ubuntu7) ...
+Setting up gcc-13-base:amd64 (13.3.0-6ubuntu2~24.04.1) ...
+Setting up libquadmath0:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Setting up libclang-common-18-dev:amd64 (1:18.1.3-1ubuntu1) ...
+Setting up libgc1:amd64 (1:8.2.6-1build1) ...
+Setting up libubsan1:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Setting up libhwasan0:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Setting up libcrypt-dev:amd64 (1:4.4.36-4build1) ...
+Setting up libasan8:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Setting up libtsan2:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Setting up libbinutils:amd64 (2.42-4ubuntu2.10) ...
+Setting up libc-dev-bin (2.39-0ubuntu8.9) ...
+Setting up libbsd0:amd64 (0.12.1-1build1.1) ...
+Setting up libxml2:amd64 (2.9.14+dfsg-1.3ubuntu3.10) ...
+Setting up liblsan0:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Setting up libitm1:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Setting up libctf0:amd64 (2.42-4ubuntu2.10) ...
+Setting up libedit2:amd64 (3.1-20230828-1build1) ...
+Setting up libobjc4:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Setting up libgprofng0:amd64 (2.42-4ubuntu2.10) ...
+Setting up libgcc-13-dev:amd64 (13.3.0-6ubuntu2~24.04.1) ...
+Setting up libc6-dev:amd64 (2.39-0ubuntu8.9) ...
+Setting up libobjc-13-dev:amd64 (13.3.0-6ubuntu2~24.04.1) ...
+Setting up libstdc++-13-dev:amd64 (13.3.0-6ubuntu2~24.04.1) ...
+Setting up libllvm18:amd64 (1:18.1.3-1ubuntu1) ...
+Setting up binutils-x86-64-linux-gnu (2.42-4ubuntu2.10) ...
+Setting up libclang1-18 (1:18.1.3-1ubuntu1) ...
+Setting up binutils (2.42-4ubuntu2.10) ...
+Setting up llvm-18-linker-tools (1:18.1.3-1ubuntu1) ...
+Setting up zlib1g-dev:amd64 (1:1.3.dfsg-3.1ubuntu2.3) ...
+Setting up libclang-cpp18 (1:18.1.3-1ubuntu1) ...
+Setting up clang-18 (1:18.1.3-1ubuntu1) ...
+Setting up clang (1:18.0-59~exp2) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+--> d47c83fdd581
+[1/2] STEP 5/11: WORKDIR /source
+--> e7999bc2c1e5
+[1/2] STEP 6/11: COPY global.json .editorconfig Directory.Build.props Directory.Packages.props ./
+--> 56d3d7a72d45
+[1/2] STEP 7/11: COPY src/TravelingSalesman.Core/TravelingSalesman.Core.csproj src/TravelingSalesman.Core/
+--> 9d57d5d49402
+[1/2] STEP 8/11: COPY src/TravelingSalesman.Cli/TravelingSalesman.Cli.csproj src/TravelingSalesman.Cli/
+--> 151a94a91773
+[1/2] STEP 9/11: RUN case "${TARGETARCH:-amd64}" in arm64) rid=linux-arm64 ;; *) rid=linux-x64 ;; esac     && echo "$rid" > /tmp/rid     && dotnet restore src/TravelingSalesman.Cli/TravelingSalesman.Cli.csproj --runtime "$rid"
+  Determining projects to restore...
+  Restored /source/src/TravelingSalesman.Core/TravelingSalesman.Core.csproj (in 4.12 sec).
+  Restored /source/src/TravelingSalesman.Cli/TravelingSalesman.Cli.csproj (in 4.39 sec).
+--> c40b7dcf331e
+[1/2] STEP 10/11: COPY src/ src/
+--> d5d0c29160ae
+[1/2] STEP 11/11: RUN dotnet publish src/TravelingSalesman.Cli/TravelingSalesman.Cli.csproj         --configuration Release         --runtime "$(cat /tmp/rid)"         --no-restore         --output /app         -p:Version="${VERSION}"
+  TravelingSalesman.Core -> /source/artifacts/bin/TravelingSalesman.Core/release/TravelingSalesman.Core.dll
+  TravelingSalesman.Cli -> /source/artifacts/bin/TravelingSalesman.Cli/release_linux-x64/tsp.dll
+  Generating native code
+  TravelingSalesman.Cli -> /app/
+--> 068ce07c8a1c
+[2/2] STEP 1/6: FROM mcr.microsoft.com/dotnet/runtime-deps:10.0-noble-chiseled AS final
+[2/2] STEP 2/6: LABEL org.opencontainers.image.title="tsp"       org.opencontainers.image.description="Traveling Salesman Problem solver"       org.opencontainers.image.source="https://github.com/kusl/tsp"
+--> Using cache 272927ec4715320a7e7b16036ad3ead95a93fb86f837a6b1983a503e3473716d
+--> 272927ec4715
+[2/2] STEP 3/6: WORKDIR /app
+--> Using cache d32bf527c68d67e4da37c041c4308fc0a88b940db95594602f71711e8dd76e1f
+--> d32bf527c68d
+[2/2] STEP 4/6: COPY --from=build /app/tsp ./tsp
+--> 416abfc0f052
+[2/2] STEP 5/6: USER $APP_UID
+--> 0f347b3598e8
+[2/2] STEP 6/6: ENTRYPOINT ["/app/tsp"]
+[2/2] COMMIT localhost/tsp:dev
+--> 383edd7bb8e9
+Successfully tagged localhost/tsp:dev
+383edd7bb8e91ba647cad1df16ac6a4b2d3409ed83714e0e06219930b5443f79
+==> Smoke testing the CLI
+  ok    tsp --version
+  ok    tsp --help
+  ok    tsp algorithms
+  ok    tsp solve --cities 15 --seed 7 --algorithm nearest-neighbor
+  ok    tsp solve --cities 15 --seed 7 --algorithm two-opt
+  ok    tsp solve --cities 15 --seed 7 --algorithm simulated-annealing
+  ok    tsp solve --cities 15 --seed 7 --algorithm genetic
+  ok    tsp solve --cities 9 --pattern grid --route
+  ok    tsp solve --cities 12 --pattern circle --plot
+  ok    tsp benchmark --cities 15 --seed 42
+  ok    tsp solve --cities 1 (rejected)
+  ok    tsp solve --pattern spiral (rejected)
+  ok    tsp solve --algorithm brute-force (rejected)
+  ok    tsp  (rejected)
+All smoke checks passed
+==> [export]
 Starting project export...
 Project Path: /home/kushal/src/dotnet/tsp
 Output File:  /home/kushal/src/dotnet/tsp/docs/llm/dump.txt
@@ -99,3 +519,13 @@ Processing (92/92): tsp.slnx
 Export completed successfully!
 Output file: /home/kushal/src/dotnet/tsp/docs/llm/dump.txt
 Total source size: 0.13 MB across 92 files
+==> Summary
+  lint          1s
+  build         5s
+  test          3s
+  smoke         7s
+  run           0s
+  publish       5s
+  container    32s
+  export        1s
+All steps completed successfully
